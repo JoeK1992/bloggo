@@ -4,4 +4,4 @@ const add = (num1, num2) => {
 
 add(1, 2);
 
-console.log('yes', 'no');
+console.log('yes', 'yes');
