@@ -5,7 +5,9 @@
     "android": "expo start --android",
     "ios": "expo start --ios",
     "web": "expo start --web",
-    "eject": "expo eject"
+    "eject": "expo eject",
+    "lint": "eslint .",
+    "format": "prettier --check ."
   },
   "dependencies": {
     "expo": "~41.0.0",
@@ -17,6 +19,8 @@
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
+    "@typescript-eslint/eslint-plugin": "^4.22.0",
+    "@typescript-eslint/parser": "^4.22.0",
     "eslint": "^7.24.0",
     "eslint-config-airbnb": "^18.2.1",
     "eslint-config-prettier": "^8.2.0",
@@ -30,15 +34,18 @@
     "prettier": "2.2.1"
   },
   "private": true,
+  "lint-staged": {
+    "*.{js,jsx}": [
+      "npx prettier --write",
+      "eslint src/*.js --fix-dry-run"
+    ],
+    ".*": [
+      "prettier --write ."
+    ]
+  },
   "husky": {
     "hooks": {
       "pre-commit": "lint-staged"
     }
-  },
-  "lint-staged": {
-    "**/*.js": [
-      "eslint --fix",
-      "git add"
-    ]
   }
 }
