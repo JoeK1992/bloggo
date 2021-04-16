@@ -27,7 +27,7 @@
   },
   "husky": {
     "hooks": {
-      "precommit": "npm t",
+      "precommit": "echo hello",
       "posttest": "eslint ./ --fix"
     }
   },
