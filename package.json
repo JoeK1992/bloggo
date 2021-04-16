@@ -27,8 +27,8 @@
   },
   "husky": {
     "hooks": {
-      "precommit": "echo hello",
-      "posttest": "eslint ./ --fix"
+      "precommit": "eslint ./ --fix"
+      
     }
   },
   "private": true
