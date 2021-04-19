@@ -21,6 +21,7 @@
          "react/prop-types": ["error", { "ignore": ["navigation"] }],
     "react/jsx-filename-extension": "off",
         "react/jsx-props-no-spreading": "off",
-        "react/no-unescaped-entities": 0
+        "react/no-unescaped-entities": 0,
+        "react/prefer-stateless-function": [<disabled>],
   }
 }

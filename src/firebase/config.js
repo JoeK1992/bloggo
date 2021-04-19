@@ -10,11 +10,11 @@ const firebaseConfig = {
   projectId: 'bloggo-6cda0',
   storageBucket: 'bloggo-6cda0.appspot.com',
   messagingSenderId: '808236892039',
-  appId: '1:808236892039:android:dc66e184ad26a67c431d22',
+  appId: '1:808236892039:android:dc66e184ad26a67c431d22'
 };
 
 if (!firebase.apps.length) {
   firebase.initializeApp(firebaseConfig);
 }
 
-export default { firebase };
+export default firebase;
