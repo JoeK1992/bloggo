@@ -1,20 +1,29 @@
 import React, { useState } from 'react';
-import {
-  View, Text, TextInput, Alert,
-} from 'react-native';
+import { View, Text, TextInput, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
 import 'firebase/firestore';
 import 'firebase/auth';
+import CalendarPicker from 'react-native-calendar-picker';
 
 export default function AddTripScreen() {
   const db = firebase.firestore();
   const [tripName, setName] = useState('');
   const [summary, setSummary] = useState('');
-  const [startDate, setStartDate] = useState('');
-  const [endDate, setEndDate] = useState('');
+  // const [startDate, setStartDate] = useState('');
+  // const [endDate, setEndDate] = useState('');
   const currentUserUID = firebase.auth().currentUser.uid;
-  // console.log(currentUserUID);
+  const [selectedStartDate, setStartDate] = useState(null);
+  const [selectedEndDate, setEndDate] = useState(null);
+
+  const onDateChange = (date, type) => {
+    if (type === 'END_DATE') {
+      setEndDate(date);
+    } else {
+      setStartDate(date);
+      setEndDate(null);
+    }
+  };
 
   const handlePress = () => {
     if (!tripName) {
@@ -36,13 +45,16 @@ export default function AddTripScreen() {
       summary,
       name: tripName,
       startDate,
-      endDate,
+      endDate
     });
     setName('');
     setSummary('');
     setStartDate('');
     setEndDate('');
   };
+
+  const startDate = selectedStartDate ? selectedStartDate.toString() : '';
+  const endDate = selectedEndDate ? selectedEndDate.toString() : '';
 
   return (
     <View>
@@ -58,16 +70,24 @@ export default function AddTripScreen() {
         value={summary}
         onChangeText={(summary) => setSummary(summary)}
       />
-      <TextInput
-        placeholder="Enter the Start Date of your trip"
-        value={startDate}
-        onChangeText={(startDate) => setStartDate(startDate)}
+
+      <Text>Select your trip dates</Text>
+
+      <CalendarPicker
+        startFromMonday={true}
+        allowRangeSelection={true}
+        todayBackgroundColor="#f2e6ff"
+        selectedDayColor="#7300e6"
+        selectedDayTextColor="#FFFFFF"
+        onDateChange={onDateChange}
+        scaleFactor="700"
       />
-      <TextInput
-        placeholder="Enter the End Date of your trip"
-        value={endDate}
-        onChangeText={(endDate) => setEndDate(endDate)}
-      />
+
+      <View>
+        <Text>SELECTED START DATE:{startDate}</Text>
+        <Text>SELECTED END DATE:{endDate}</Text>
+      </View>
+
       <TouchableOpacity onPress={handlePress}>
         <Text>Sumbit</Text>
       </TouchableOpacity>
