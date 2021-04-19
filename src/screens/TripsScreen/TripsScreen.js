@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
+import { View, Text } from 'react-native';
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
-import { View, Text } from 'react-native';
 
 class TripsScreen extends Component {
   render() {
