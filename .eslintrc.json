@@ -18,10 +18,11 @@
     "quotes": ["error", "single"],
     "indent": ["error", 2],
     "no-unused-vars": ["error"],
-         "react/prop-types": ["error", { "ignore": ["navigation"] }],
+    "react/prop-types": ["error", { "ignore": ["navigation"] }],
     "react/jsx-filename-extension": "off",
-        "react/jsx-props-no-spreading": "off",
-        "react/no-unescaped-entities": 0,
-        "react/prefer-stateless-function": [<disabled>],
+    "react/jsx-props-no-spreading": "off",
+    "react/no-unescaped-entities": 0,
+    "react/prefer-stateless-function": [0],
+    "no-use-before-define": ["off"]
   }
 }
