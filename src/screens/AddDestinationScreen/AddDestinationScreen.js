@@ -4,17 +4,15 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CalendarPicker from 'react-native-calendar-picker';
-
+import UploadImage from './UploadImage';
 import firebase from '../../firebase/config';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-export default function AddTripScreen() {
+export default function AddDestinationScreen() {
   const db = firebase.firestore();
-  const [tripName, setName] = useState('');
-  const [summary, setSummary] = useState('');
-  // const [startDate, setStartDate] = useState('');
-  // const [endDate, setEndDate] = useState('');
+  const [blogPost, setBlog] = useState('');
+
   const currentUserUID = firebase.auth().currentUser.uid;
   const [selectedStartDate, setStartDate] = useState(null);
   const [selectedEndDate, setEndDate] = useState(null);
@@ -30,13 +28,6 @@ export default function AddTripScreen() {
   };
 
   const handlePress = () => {
-    if (!tripName) {
-      Alert.alert('Name field is required.');
-    }
-
-    if (!summary) {
-      Alert.alert('Summary field is required.');
-    }
     if (!startDate) {
       Alert.alert('Start Date field is required.');
     }
@@ -46,13 +37,12 @@ export default function AddTripScreen() {
 
     db.collection('trips').add({
       user: currentUserUID,
-      summary,
-      name: tripName,
+      trip: 'KNC4mJjToxN1jp8XTYOb',
+      blogPost,
       startDate,
       endDate,
     });
-    setName('');
-    setSummary('');
+    setBlog('');
     setStartDate('');
     setEndDate('');
   };
@@ -60,19 +50,8 @@ export default function AddTripScreen() {
   return (
     <View>
       <Text>Add trip:</Text>
-      <TextInput
-        placeholder="Enter your trip name"
-        value={tripName}
-        onChangeText={(tripName) => setName(tripName)}
-        autoCapitalize="none"
-      />
-      <TextInput
-        placeholder="Enter a summary of your trip"
-        value={summary}
-        onChangeText={(summary) => setSummary(summary)}
-      />
-
-      <Text>Select your trip dates</Text>
+      <Text>Destination Name</Text>
+      <Text>Select the dates of your stay</Text>
 
       <CalendarPicker
         startFromMonday
@@ -94,7 +73,13 @@ export default function AddTripScreen() {
           {endDate}
         </Text>
       </View>
-
+      <TextInput
+        placeholder="Enter your blog post"
+        value={blogPost}
+        onChangeText={(blogPost) => setBlog(blogPost)}
+        autoCapitalize="none"
+      />
+      <UploadImage />
       <TouchableOpacity onPress={handlePress}>
         <Text>Sumbit</Text>
       </TouchableOpacity>
