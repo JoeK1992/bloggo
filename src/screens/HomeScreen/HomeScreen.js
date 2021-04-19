@@ -1,5 +1,7 @@
 import React from 'react';
-import { Text, View, TouchableOpacity, StyleSheet } from 'react-native';
+import {
+  Text, View, TouchableOpacity, StyleSheet,
+} from 'react-native';
 import NavBar from '../../components/NavBar';
 import firebase from '../../firebase/config';
 // import { NavigationContainer } from '@react-navigation/native';
@@ -64,12 +66,12 @@ const styles = StyleSheet.create({
     padding: 5,
     borderRadius: 5,
     borderColor: 'green',
-    borderWidth: 2
+    borderWidth: 2,
   },
   header: {
     padding: 5,
     borderRadius: 5,
     borderColor: 'blue',
-    borderWidth: 2
-  }
+    borderWidth: 2,
+  },
 });
