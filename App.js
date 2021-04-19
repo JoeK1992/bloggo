@@ -9,6 +9,9 @@ import { LoginScreen, HomeScreen, RegistrationScreen } from './src/screens';
 import AddTripScreen from './src/screens/AddTripScreen/AddTripScreen';
 import 'firebase/firestore';
 import firebase from './src/firebase/config';
+import TripsScreen from './src/screens/TripsScreen/TripsScreen';
+import UserScreen from './src/screens/UserScreen/UserScreen';
+import SingleTripScreen from './src/screens/SingleTripScreen/SingleTripScreen';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -55,6 +58,9 @@ export default function App() {
               {(props) => <HomeScreen {...props} extraData={user} />}
             </Stack.Screen>
             <Stack.Screen name="Add Trip" component={AddTripScreen} />
+            <Stack.Screen name="My Trips" component={TripsScreen} />
+            <Stack.Screen name="Profile Page" component={UserScreen} />
+            <Stack.Screen name="Single Trip" component={SingleTripScreen} />
           </>
         ) : (
           <>

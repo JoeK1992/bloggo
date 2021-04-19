@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { Button, Image, View, Platform } from 'react-native';
+import {
+  Button, Image, View, Platform,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 
 export default function UploadImage() {
@@ -9,7 +11,7 @@ export default function UploadImage() {
     (async () => {
       if (Platform.OS !== 'web') {
         const {
-          status
+          status,
         } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
           alert('Sorry, we need camera roll permissions to make this work!');
@@ -22,7 +24,7 @@ export default function UploadImage() {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
-      base64: true
+      base64: true,
     });
 
     if (!result.cancelled) {
@@ -35,15 +37,15 @@ export default function UploadImage() {
 
       const data = {
         file: base64Img,
-        upload_preset: 'eqvu0yhl'
+        upload_preset: 'eqvu0yhl',
       };
 
       fetch(apiUrl, {
         body: JSON.stringify(data),
         headers: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
         },
-        method: 'POST'
+        method: 'POST',
       })
         .then(async (r) => {
           const data = await r.json();
