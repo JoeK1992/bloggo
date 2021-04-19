@@ -14,9 +14,13 @@
   },
   "plugins": ["react"],
   "rules": {
+    "no-shadow": "off",
     "quotes": ["error", "single"],
     "indent": ["error", 2],
     "no-unused-vars": ["error"],
-    "react/jsx-filename-extension": "off"
+         "react/prop-types": ["error", { "ignore": ["navigation"] }],
+    "react/jsx-filename-extension": "off",
+        "react/jsx-props-no-spreading": "off",
+        "react/no-unescaped-entities": 0
   }
 }
