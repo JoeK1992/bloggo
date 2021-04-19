@@ -1,10 +1,13 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Alert } from 'react-native';
+import {
+  View, Text, TextInput, Alert,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import CalendarPicker from 'react-native-calendar-picker';
+
 import firebase from '../../firebase/config';
 import 'firebase/firestore';
 import 'firebase/auth';
-import CalendarPicker from 'react-native-calendar-picker';
 
 export default function AddTripScreen() {
   const db = firebase.firestore();
@@ -15,7 +18,8 @@ export default function AddTripScreen() {
   const currentUserUID = firebase.auth().currentUser.uid;
   const [selectedStartDate, setStartDate] = useState(null);
   const [selectedEndDate, setEndDate] = useState(null);
-
+  const startDate = selectedStartDate ? selectedStartDate.toString() : '';
+  const endDate = selectedEndDate ? selectedEndDate.toString() : '';
   const onDateChange = (date, type) => {
     if (type === 'END_DATE') {
       setEndDate(date);
@@ -45,16 +49,13 @@ export default function AddTripScreen() {
       summary,
       name: tripName,
       startDate,
-      endDate
+      endDate,
     });
     setName('');
     setSummary('');
     setStartDate('');
     setEndDate('');
   };
-
-  const startDate = selectedStartDate ? selectedStartDate.toString() : '';
-  const endDate = selectedEndDate ? selectedEndDate.toString() : '';
 
   return (
     <View>
@@ -74,8 +75,8 @@ export default function AddTripScreen() {
       <Text>Select your trip dates</Text>
 
       <CalendarPicker
-        startFromMonday={true}
-        allowRangeSelection={true}
+        startFromMonday
+        allowRangeSelection
         todayBackgroundColor="#f2e6ff"
         selectedDayColor="#7300e6"
         selectedDayTextColor="#FFFFFF"
@@ -84,8 +85,14 @@ export default function AddTripScreen() {
       />
 
       <View>
-        <Text>SELECTED START DATE:{startDate}</Text>
-        <Text>SELECTED END DATE:{endDate}</Text>
+        <Text>
+          SELECTED START DATE:
+          {startDate}
+        </Text>
+        <Text>
+          SELECTED END DATE:
+          {endDate}
+        </Text>
       </View>
 
       <TouchableOpacity onPress={handlePress}>
