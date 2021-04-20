@@ -9,12 +9,11 @@ import firebase from '../../firebase/config';
 import 'firebase/firestore';
 import 'firebase/auth';
 
-export default function AddTripScreen() {
+export default function AddTripScreen({ navigation }) {
   const db = firebase.firestore();
   const [tripName, setName] = useState('');
   const [summary, setSummary] = useState('');
-  // const [startDate, setStartDate] = useState('');
-  // const [endDate, setEndDate] = useState('');
+
   const currentUserUID = firebase.auth().currentUser.uid;
   const [selectedStartDate, setStartDate] = useState(null);
   const [selectedEndDate, setEndDate] = useState(null);
@@ -27,6 +26,10 @@ export default function AddTripScreen() {
       setStartDate(date);
       setEndDate(null);
     }
+  };
+
+  const onLinkPress = () => {
+    navigation.navigate('Add Destination');
   };
 
   const handlePress = () => {
@@ -98,6 +101,7 @@ export default function AddTripScreen() {
       <TouchableOpacity onPress={handlePress}>
         <Text>Sumbit</Text>
       </TouchableOpacity>
+      <Text onPress={onLinkPress}>Add Destination</Text>
     </View>
   );
 }
