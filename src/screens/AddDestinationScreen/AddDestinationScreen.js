@@ -58,6 +58,7 @@ export default function AddDestinationScreen() {
   };
 
   const handlePress = () => {
+    console.log(blogPost, startDate, endDate, uploadedUrl);
     if (!startDate) {
       Alert.alert('Start Date field is required.');
     }
@@ -65,14 +66,18 @@ export default function AddDestinationScreen() {
       Alert.alert('End Date field is required.');
     }
 
-    db.collection('trips').add({
-      user: 'VJY8OX8cq7hGKjZYxaH3S7dkmDE2',
-      trip: 'KNC4mJjToxN1jp8XTYOb',
-      blogPost,
-      startDate,
-      endDate,
-      uploadedUrl,
-    });
+    db.collection('trips')
+      .doc('KNC4mJjToxN1jp8XTYOb')
+      .collection('destination')
+      .add({
+        destination,
+        user: 'VJY8OX8cq7hGKjZYxaH3S7dkmDE2',
+        trip: 'KNC4mJjToxN1jp8XTYOb',
+        blogPost,
+        startDate,
+        endDate,
+        uploadedUrl,
+      });
     setBlog('');
     setStartDate('');
     setEndDate('');
@@ -109,6 +114,8 @@ export default function AddDestinationScreen() {
         </Text>
       </View>
       <TextInput
+        multiline
+        numberOfLines={6}
         placeholder="Enter your blog post"
         value={blogPost}
         onChangeText={(blogPost) => setBlog(blogPost)}

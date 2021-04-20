@@ -1,5 +1,7 @@
 import React, { useEffect } from 'react';
-import { Button, View, Platform } from 'react-native';
+import {
+  Text, View, Platform, TouchableOpacity,
+} from 'react-native';
 
 import * as ImagePicker from 'expo-image-picker';
 
@@ -26,7 +28,6 @@ export default function UploadImage(props) {
       base64: true,
 
       // allowsMultipleSelection: true
-
     });
 
     if (!result.cancelled) {
@@ -47,7 +48,6 @@ export default function UploadImage(props) {
       })
         .then(async (r) => {
           const data = await r.json();
-          console.log(data.secure_url);
           props.setUrl(data.secure_url);
           return data.secure_url;
         })
@@ -56,8 +56,17 @@ export default function UploadImage(props) {
   };
 
   return (
-    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
-      <Button title="Pick a Cover image" onPress={pickImage} />
+    <View
+      style={{
+        display: 'block',
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}
+    >
+      <TouchableOpacity onPress={pickImage}>
+        <Text>Pick a Cover image</Text>
+      </TouchableOpacity>
       {/* <Button title="Add more images of your holiday" onPress={pickImage} /> */}
       {/* {image && (
 
