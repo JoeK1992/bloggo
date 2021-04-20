@@ -1,17 +1,20 @@
-import 'react-native-gesture-handler';
-import React, { useEffect, useState } from 'react';
-import { Text } from 'react-native';
-
-import { NavigationContainer } from '@react-navigation/native';
-import { createStackNavigator } from '@react-navigation/stack';
-import { decode, encode } from 'base-64';
-import { LoginScreen, HomeScreen, RegistrationScreen } from './src/screens';
-import AddTripScreen from './src/screens/AddTripScreen/AddTripScreen';
-import 'firebase/firestore';
-import firebase from './src/firebase/config';
-import TripsScreen from './src/screens/TripsScreen/TripsScreen';
-import UserScreen from './src/screens/UserScreen/UserScreen';
-import SingleTripScreen from './src/screens/SingleTripScreen/SingleTripScreen';
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator } from "@react-navigation/stack";
+import { decode, encode } from "base-64";
+import "firebase/firestore";
+import React, { useEffect, useState } from "react";
+import { Text } from "react-native";
+import "react-native-gesture-handler";
+import firebase from "./src/firebase/config";
+import {
+  AddTripScreen,
+  HomeScreen,
+  LoginScreen,
+  RegistrationScreen,
+  SingleTripScreen,
+  TripsScreen,
+  UserScreen,
+} from "./src/screens";
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -27,7 +30,7 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const usersRef = firebase.firestore().collection('users');
+    const usersRef = firebase.firestore().collection("users");
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         usersRef
