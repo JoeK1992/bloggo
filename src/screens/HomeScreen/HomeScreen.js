@@ -22,6 +22,7 @@ export default function HomeScreen({ navigation }) {
   const onLinkPress = () => {
     navigation.navigate('Add Trip');
   };
+
   // const Stack = createStackNavigator();
 
   return (

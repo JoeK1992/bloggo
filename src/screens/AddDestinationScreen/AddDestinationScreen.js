@@ -14,6 +14,8 @@ export default function AddDestinationScreen() {
   const [blogPost, setBlog] = useState('');
 
   const currentUserUID = firebase.auth().currentUser.uid;
+  const [uploadedUrl, setUrl] = useState(null);
+
   const [selectedStartDate, setStartDate] = useState(null);
   const [selectedEndDate, setEndDate] = useState(null);
   const startDate = selectedStartDate ? selectedStartDate.toString() : '';
@@ -46,7 +48,7 @@ export default function AddDestinationScreen() {
     setStartDate('');
     setEndDate('');
   };
-
+  console.log(uploadedUrl, 'here');
   return (
     <View>
       <Text>Add trip:</Text>
@@ -60,7 +62,7 @@ export default function AddDestinationScreen() {
         selectedDayColor="#7300e6"
         selectedDayTextColor="#FFFFFF"
         onDateChange={onDateChange}
-        scaleFactor="700"
+        scaleFactor="800"
       />
 
       <View>
@@ -79,7 +81,7 @@ export default function AddDestinationScreen() {
         onChangeText={(blogPost) => setBlog(blogPost)}
         autoCapitalize="none"
       />
-      <UploadImage />
+      <UploadImage setUrl={setUrl} />
       <TouchableOpacity onPress={handlePress}>
         <Text>Sumbit</Text>
       </TouchableOpacity>

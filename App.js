@@ -1,3 +1,4 @@
+
 import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import { decode, encode } from "base-64";
@@ -5,7 +6,6 @@ import "firebase/firestore";
 import React, { useEffect, useState } from "react";
 import { Text } from "react-native";
 import "react-native-gesture-handler";
-import firebase from "./src/firebase/config";
 import {
   AddTripScreen,
   HomeScreen,
@@ -15,6 +15,12 @@ import {
   TripsScreen,
   UserScreen,
 } from "./src/screens";
+
+
+
+import 'firebase/auth';
+import firebase from './src/firebase/config';
+
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -61,9 +67,16 @@ export default function App() {
               {(props) => <HomeScreen {...props} extraData={user} />}
             </Stack.Screen>
             <Stack.Screen name="Add Trip" component={AddTripScreen} />
+
+            <Stack.Screen
+              name="Add Destination"
+              component={AddDestinationScreen}
+            />
+
             <Stack.Screen name="My Trips" component={TripsScreen} />
             <Stack.Screen name="Profile Page" component={UserScreen} />
             <Stack.Screen name="Single Trip" component={SingleTripScreen} />
+
           </>
         ) : (
           <>
