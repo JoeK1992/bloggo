@@ -1,13 +1,21 @@
-import React from 'react';
-import { TouchableOpacity, Text, View, StyleSheet } from 'react-native';
+import { useNavigation } from "@react-navigation/native";
+import React from "react";
+import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 
 const NavBar = () => {
+  const navigation = useNavigation();
   return (
     <View style={styles.navbar}>
-      <TouchableOpacity style={styles.navbarBtn}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("Profile Page")}
+        style={styles.navbarBtn}
+      >
         <Text>Username</Text>
       </TouchableOpacity>
-      <TouchableOpacity style={styles.navbarBtn}>
+      <TouchableOpacity
+        onPress={() => navigation.navigate("My Trips")}
+        style={styles.navbarBtn}
+      >
         <Text>My Trips</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navbarBtn}>
@@ -22,12 +30,12 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 5,
     borderRadius: 5,
-    borderColor: 'red',
+    borderColor: "red",
     borderWidth: 2,
-    flexDirection: 'row'
+    flexDirection: "row",
   },
   navbarBtn: {
-    margin: 5
+    margin: 5,
   },
 });
 
