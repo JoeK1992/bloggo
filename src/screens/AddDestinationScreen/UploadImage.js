@@ -1,5 +1,7 @@
+
 import React, { useEffect } from 'react';
 import { Button, View, Platform } from 'react-native';
+
 import * as ImagePicker from 'expo-image-picker';
 
 export default function UploadImage(props) {
@@ -23,7 +25,9 @@ export default function UploadImage(props) {
       allowsEditing: true,
       aspect: [4, 3],
       base64: true,
+
       // allowsMultipleSelection: true
+
     });
 
     if (!result.cancelled) {
