@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Button, View, Platform } from 'react-native';
 

@@ -4,17 +4,45 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CalendarPicker from 'react-native-calendar-picker';
-import UploadImage from './UploadImage';
+import UploadImage from '../../components/UploadImage';
 import firebase from '../../firebase/config';
 import 'firebase/firestore';
 import 'firebase/auth';
+import DestinationInputBar from '../../components/DestinationInputBar';
+import getDestination from '../../utils/InputDestinationFuncs';
 
 export default function AddDestinationScreen() {
   const db = firebase.firestore();
   const [blogPost, setBlog] = useState('');
 
-  const currentUserUID = firebase.auth().currentUser.uid;
+  // const currentUserUID = firebase.auth().currentUser.uid;
   const [uploadedUrl, setUrl] = useState(null);
+  const [destination, setDestination] = useState({ formatted: '' });
+  const [results, setResults] = useState([]);
+  const [destinationInput, setDestinationInput] = useState('');
+  const [selectedId, setSelectedId] = useState(null);
+
+  const addDestination = (results, selectedId) => {
+    for (let i = 0; i < results.length; i += 1) {
+      if (selectedId === results[i].annotations.MGRS) {
+        setDestination(results[i]);
+        setResults([]);
+        setDestinationInput('');
+      }
+    }
+  };
+
+  React.useEffect(() => {
+    if (selectedId) {
+      addDestination(results, selectedId);
+    }
+    if (destinationInput.length > 1) {
+      const search = destinationInput.split(' ').join('+');
+      getDestination(search).then((results) => {
+        setResults(results);
+      });
+    }
+  });
 
   const [selectedStartDate, setStartDate] = useState(null);
   const [selectedEndDate, setEndDate] = useState(null);
@@ -38,23 +66,29 @@ export default function AddDestinationScreen() {
     }
 
     db.collection('trips').add({
-      user: currentUserUID,
+      user: 'VJY8OX8cq7hGKjZYxaH3S7dkmDE2',
       trip: 'KNC4mJjToxN1jp8XTYOb',
       blogPost,
       startDate,
       endDate,
+      uploadedUrl,
     });
     setBlog('');
     setStartDate('');
     setEndDate('');
   };
-  console.log(uploadedUrl, 'here');
   return (
     <View>
-      <Text>Add trip:</Text>
-      <Text>Destination Name</Text>
+      <DestinationInputBar
+        setDestination={setDestination}
+        destination={destination}
+        results={results}
+        destinationInput={destinationInput}
+        setDestinationInput={setDestinationInput}
+        selectedId={selectedId}
+        setSelectedId={setSelectedId}
+      />
       <Text>Select the dates of your stay</Text>
-
       <CalendarPicker
         startFromMonday
         allowRangeSelection
@@ -64,7 +98,6 @@ export default function AddDestinationScreen() {
         onDateChange={onDateChange}
         scaleFactor="800"
       />
-
       <View>
         <Text>
           SELECTED START DATE:

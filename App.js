@@ -1,11 +1,10 @@
-
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
-import { decode, encode } from "base-64";
-import "firebase/firestore";
-import React, { useEffect, useState } from "react";
-import { Text } from "react-native";
-import "react-native-gesture-handler";
+import { NavigationContainer } from '@react-navigation/native';
+import { createStackNavigator } from '@react-navigation/stack';
+import { decode, encode } from 'base-64';
+import 'firebase/firestore';
+import React, { useEffect, useState } from 'react';
+import { Text } from 'react-native';
+import 'react-native-gesture-handler';
 import {
   AddTripScreen,
   HomeScreen,
@@ -14,13 +13,11 @@ import {
   SingleTripScreen,
   TripsScreen,
   UserScreen,
-} from "./src/screens";
-
-
+  AddDestinationScreen,
+} from './src/screens';
 
 import 'firebase/auth';
 import firebase from './src/firebase/config';
-
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -36,7 +33,7 @@ export default function App() {
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const usersRef = firebase.firestore().collection("users");
+    const usersRef = firebase.firestore().collection('users');
     firebase.auth().onAuthStateChanged((user) => {
       if (user) {
         usersRef
@@ -76,7 +73,6 @@ export default function App() {
             <Stack.Screen name="My Trips" component={TripsScreen} />
             <Stack.Screen name="Profile Page" component={UserScreen} />
             <Stack.Screen name="Single Trip" component={SingleTripScreen} />
-
           </>
         ) : (
           <>
