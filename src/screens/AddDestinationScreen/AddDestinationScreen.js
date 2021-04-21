@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View, Text, TextInput, Alert,
-} from 'react-native';
+import { View, Text, TextInput, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CalendarPicker from 'react-native-calendar-picker';
 import UploadImage from '../../components/UploadImage';
@@ -12,12 +10,10 @@ import DestinationInputBar from '../../components/DestinationInputBar';
 import getDestination from '../../utils/InputDestinationFuncs';
 
 export default function AddDestinationScreen(props) {
-  console.log(props);
-
   const db = firebase.firestore();
   const [blogPost, setBlog] = useState('');
 
-  // const currentUserUID = firebase.auth().currentUser.uid;
+  const currentUserUID = firebase.auth().currentUser.uid;
   const [uploadedUrl, setUrl] = useState(null);
   const [destination, setDestination] = useState({ formatted: '' });
   const [results, setResults] = useState([]);
@@ -60,7 +56,10 @@ export default function AddDestinationScreen(props) {
   };
 
   const handlePress = () => {
-    console.log(blogPost, startDate, endDate, uploadedUrl);
+    const { route } = props;
+    console.log(props);
+    console.log(route);
+    const { tripUid } = route.params;
     if (!startDate) {
       Alert.alert('Start Date field is required.');
     }
@@ -68,18 +67,15 @@ export default function AddDestinationScreen(props) {
       Alert.alert('End Date field is required.');
     }
 
-    db.collection('trips')
-      .doc('KNC4mJjToxN1jp8XTYOb')
-      .collection('destinations')
-      .add({
-        destination,
-        user: 'VJY8OX8cq7hGKjZYxaH3S7dkmDE2',
-        trip: 'KNC4mJjToxN1jp8XTYOb',
-        blogPost,
-        startDate,
-        endDate,
-        uploadedUrl,
-      });
+    db.collection('trips').doc(tripUid).collection('destinations').add({
+      destination,
+      user: currentUserUID,
+      trip: tripUid,
+      blogPost,
+      startDate,
+      endDate,
+      uploadedUrl
+    });
     setBlog('');
     setStartDate('');
     setEndDate('');
@@ -125,7 +121,7 @@ export default function AddDestinationScreen(props) {
       />
       <UploadImage setUrl={setUrl} />
       <TouchableOpacity onPress={handlePress}>
-        <Text>Sumbit</Text>
+        <Text>Submit</Text>
       </TouchableOpacity>
     </View>
   );
