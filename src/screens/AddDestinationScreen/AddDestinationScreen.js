@@ -70,7 +70,7 @@ export default function AddDestinationScreen(props) {
 
     db.collection('trips')
       .doc('KNC4mJjToxN1jp8XTYOb')
-      .collection('destination')
+      .collection('destinations')
       .add({
         destination,
         user: 'VJY8OX8cq7hGKjZYxaH3S7dkmDE2',

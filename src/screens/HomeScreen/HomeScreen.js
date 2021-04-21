@@ -11,11 +11,13 @@ import 'firebase/firestore';
 
 export default function HomeScreen({ navigation }) {
   const handlePress = () => {
+    console.log('in here');
     firebase
       .auth()
       .signOut()
       .then(() => {
-        navigation.navigate('Home');
+        console.log('in navigate');
+        navigation.replace('Login');
       });
   };
 
@@ -54,7 +56,7 @@ export default function HomeScreen({ navigation }) {
         <TouchableOpacity style={styles.btn}>
           <Text onPress={() => navigation.navigate('My Trips')}>My Trips</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => handlePress}>
+        <TouchableOpacity onPress={handlePress}>
           <Text>Log Out</Text>
         </TouchableOpacity>
       </View>

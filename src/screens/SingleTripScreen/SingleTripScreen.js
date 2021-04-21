@@ -14,15 +14,16 @@ import 'firebase/auth';
 
 class SingleTripScreen extends Component {
   state = {
-    trip: {},
+    trip: {}
   };
 
   componentDidMount() {
     const db = firebase.firestore();
     // const currentUserUID = firebase.auth().currentUser.uid;
-    const route = this.props;
-
+    const { route } = this.props;
     const { tripUid } = route.params;
+    console.log(tripUid);
+
     const tripRef = db.collection('trips').doc(tripUid);
     tripRef.get().then((doc) => {
       if (!doc.exists) {
