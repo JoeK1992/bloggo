@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  View, Text, TextInput, Alert,
-} from 'react-native';
+import { View, Text, TextInput, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CalendarPicker from 'react-native-calendar-picker';
 
@@ -13,6 +11,8 @@ export default function AddTripScreen({ navigation }) {
   const db = firebase.firestore();
   const [tripName, setName] = useState('');
   const [summary, setSummary] = useState('');
+  const [submitted, setSubmitted] = useState(false);
+  const [tripUid, setTripUid] = useState('');
 
   const currentUserUID = firebase.auth().currentUser.uid;
   const [selectedStartDate, setStartDate] = useState(null);
@@ -29,7 +29,7 @@ export default function AddTripScreen({ navigation }) {
   };
 
   const onLinkPress = () => {
-    navigation.navigate('Add Destination');
+    navigation.navigate('Add Destination', { tripUid });
   };
 
   const handlePress = () => {
@@ -47,17 +47,22 @@ export default function AddTripScreen({ navigation }) {
       Alert.alert('End Date field is required.');
     }
 
-    db.collection('trips').add({
-      user: currentUserUID,
-      summary,
-      name: tripName,
-      startDate,
-      endDate,
-    });
+    db.collection('trips')
+      .add({
+        user: currentUserUID,
+        summary,
+        name: tripName,
+        startDate,
+        endDate
+      })
+      .then((data) => {
+        setTripUid(data.id);
+      });
     setName('');
     setSummary('');
     setStartDate('');
     setEndDate('');
+    setSubmitted(true);
   };
 
   return (
@@ -99,9 +104,17 @@ export default function AddTripScreen({ navigation }) {
       </View>
 
       <TouchableOpacity onPress={handlePress}>
-        <Text>Sumbit</Text>
+        <Text>Submit</Text>
       </TouchableOpacity>
-      <Text onPress={onLinkPress}>Add Destination</Text>
+      {!submitted ? (
+        <TouchableOpacity onPress={onLinkPress} disabled={true}>
+          <Text>Add Destination</Text>
+        </TouchableOpacity>
+      ) : (
+        <TouchableOpacity onPress={onLinkPress} disabled={false}>
+          <Text>Add Destination</Text>
+        </TouchableOpacity>
+      )}
     </View>
   );
 }

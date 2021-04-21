@@ -13,7 +13,7 @@ import {
   SingleTripScreen,
   TripsScreen,
   UserScreen,
-  AddDestinationScreen,
+  AddDestinationScreen
 } from './src/screens';
 import 'firebase/auth';
 import firebase from './src/firebase/config';
@@ -74,11 +74,11 @@ export default function App() {
             <Stack.Screen name="Single Trip" component={SingleTripScreen} />
           </>
         ) : (
-          <></>
+          <>
+            <Stack.Screen name="Registration" component={RegistrationScreen} />
+            <Stack.Screen name="Login" component={LoginScreen} />
+          </>
         )}
-        <Stack.Screen name="Registration" component={RegistrationScreen} />
-
-        <Stack.Screen name="Login" component={LoginScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
