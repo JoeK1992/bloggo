@@ -26,6 +26,8 @@ export default class DestinationScreen extends Component {
   }
 
   render() {
+    const { destination } = this.state;
+    console.log(destination);
     return <View />;
   }
 }

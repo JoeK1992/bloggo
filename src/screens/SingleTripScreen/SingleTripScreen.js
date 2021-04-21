@@ -14,7 +14,7 @@ import 'firebase/auth';
 
 class SingleTripScreen extends Component {
   state = {
-    trip: {}
+    trip: {},
   };
 
   componentDidMount() {
@@ -37,7 +37,9 @@ class SingleTripScreen extends Component {
     const { navigation, route } = this.props;
     const { tripUid } = route.params;
 
-    // console.log(this.state.trip);
+    const { trip } = this.state;
+    console.log(trip);
+
     return (
       <View>
         <ProfileHeader />
