@@ -1,12 +1,14 @@
+import 'firebase/auth';
+import 'firebase/firestore';
 import React, { useState } from 'react';
-import { View, Text, TextInput, Alert } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import {
+  Alert, Text, TextInput, View,
+} from 'react-native';
 import CalendarPicker from 'react-native-calendar-picker';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import DestinationInputBar from '../../components/DestinationInputBar';
 import UploadImage from '../../components/UploadImage';
 import firebase from '../../firebase/config';
-import 'firebase/firestore';
-import 'firebase/auth';
-import DestinationInputBar from '../../components/DestinationInputBar';
 import getDestination from '../../utils/InputDestinationFuncs';
 
 export default function AddDestinationScreen(props) {
@@ -19,7 +21,7 @@ export default function AddDestinationScreen(props) {
   const [results, setResults] = useState([]);
   const [destinationInput, setDestinationInput] = useState('');
   const [selectedId, setSelectedId] = useState(null);
-
+  console.log(destination.formatted);
   const addDestination = (results, selectedId) => {
     for (let i = 0; i < results.length; i += 1) {
       if (selectedId === results[i].annotations.MGRS) {
@@ -74,7 +76,7 @@ export default function AddDestinationScreen(props) {
       blogPost,
       startDate,
       endDate,
-      uploadedUrl
+      uploadedUrl,
     });
     setBlog('');
     setStartDate('');

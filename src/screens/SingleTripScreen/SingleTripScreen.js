@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
-import { View, Text } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import NavBar from '../../components/NavBar';
-import ProfileHeader from '../../components/ProfileHeader';
-import firebase from '../../firebase/config';
-import 'firebase/firestore';
-import 'firebase/auth';
+import "firebase/auth";
+import "firebase/firestore";
+import React, { Component } from "react";
+import { Text, View } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import NavBar from "../../components/NavBar";
+import ProfileHeader from "../../components/ProfileHeader";
+import firebase from "../../firebase/config";
 
 // const styles = StyleSheet.create( {
 //     tripDetails: {},
@@ -14,7 +14,7 @@ import 'firebase/auth';
 
 class SingleTripScreen extends Component {
   state = {
-    trip: {}
+    trip: {},
   };
 
   componentDidMount() {
@@ -22,12 +22,10 @@ class SingleTripScreen extends Component {
     // const currentUserUID = firebase.auth().currentUser.uid;
     const { route } = this.props;
     const { tripUid } = route.params;
-    console.log(tripUid);
-
-    const tripRef = db.collection('trips').doc(tripUid);
+    const tripRef = db.collection("trips").doc(tripUid);
     tripRef.get().then((doc) => {
       if (!doc.exists) {
-        console.log('No such document');
+        console.log("No such document");
       } else {
         this.setState({ trip: doc.data() });
       }
@@ -51,14 +49,23 @@ class SingleTripScreen extends Component {
         <View>
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Add Destination', { tripUid });
+              navigation.navigate("Add Destination", { tripUid });
             }}
           >
+            <TouchableOpacity />
             <Text> Add Destination</Text>
           </TouchableOpacity>
           <TouchableOpacity
             onPress={() => {
-              console.log('Delete Trip');
+              navigation.navigate("Single Destination");
+            }}
+          >
+            <Text> Display Destination</Text>
+          </TouchableOpacity>
+
+          <TouchableOpacity
+            onPress={() => {
+              console.log("Delete Trip");
             }}
           >
             <Text> Delete Trip </Text>
