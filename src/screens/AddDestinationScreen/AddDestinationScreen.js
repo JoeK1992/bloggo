@@ -2,8 +2,11 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
 import {
-  Alert, Text, TextInput, View,
+
+  View, Text, TextInput, Alert,
 } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+
 import CalendarPicker from 'react-native-calendar-picker';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import DestinationInputBar from '../../components/DestinationInputBar';

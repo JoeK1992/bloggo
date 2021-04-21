@@ -1,20 +1,33 @@
+
 import "firebase/auth";
 import "firebase/firestore";
 import React, { Component } from "react";
 import { FlatList, StatusBar, StyleSheet, Text, View } from "react-native";
+
 import { TouchableOpacity } from "react-native-gesture-handler";
 import NavBar from "../../components/NavBar";
 import ProfileHeader from "../../components/ProfileHeader";
 import firebase from "../../firebase/config";
 
-// const styles = StyleSheet.create( {
-//     tripDetails: {},
-//     tripButtons
-// });
+import "firebase/firestore";
+import "firebase/auth";
+import MapViewer from "../../components/MapViewer";
+
+
+const styles = StyleSheet.create({
+  map: {
+    height: 1000,
+    width: 1000,
+  },
+});
 
 class SingleTripScreen extends Component {
   state = {
+
     trip: {},
+
+  
+
     destinations: [],
   };
 
@@ -23,12 +36,32 @@ class SingleTripScreen extends Component {
     // const currentUserUID = firebase.auth().currentUser.uid;
     const { route } = this.props;
     const { tripUid } = route.params;
+
     const tripRef = db.collection("trips").doc(tripUid);
     tripRef.get().then((doc) => {
       if (!doc.exists) {
         console.log("No such document");
+
+         } else {
+           this.setState({ trip: doc.data() });
+      }
+    });
+
+    const destinationsRef = db
+      .collection("trips")
+      .doc(tripUid)
+      .collection("destinations");
+    destinationsRef.get().then((snapshot) => {
+      if (snapshot.empty) {
+        console.log("No matching documents.");
       } else {
-        this.setState({ trip: doc.data() });
+        const newDestinations = [];
+        snapshot.forEach((doc) => {
+          const destination = doc.data();
+          destination.id = doc.id;
+          newDestinations.push(destination);
+        });
+        this.setState({ destinations: newDestinations });
       }
     });
     const destinationsRef = db
@@ -64,6 +97,7 @@ class SingleTripScreen extends Component {
     const { navigation, route } = this.props;
     const { tripUid } = route.params;
 
+
     const { trip, destinations } = this.state;
 
     const Item = ({ title }) => (
@@ -89,9 +123,13 @@ class SingleTripScreen extends Component {
       </>
     );
 
+
     return (
       <View>
         <ProfileHeader />
+        <View style={styles.map}>
+          <MapViewer destinations={destinations} />
+        </View>
         <View>
           <Text>Map Goes Here</Text>
           <Text>Trip Stats go Here</Text>
@@ -106,7 +144,9 @@ class SingleTripScreen extends Component {
             <Text> Add Destination</Text>
           </TouchableOpacity>
 
+
           <TouchableOpacity onPress={this.deleteTrip}>
+
             <Text> Delete Trip </Text>
           </TouchableOpacity>
         </View>
