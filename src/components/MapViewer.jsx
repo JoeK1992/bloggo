@@ -1,8 +1,25 @@
-import React, { Component } from "react";
+import React, { Component } from 'react';
 
-import { GoogleApiWrapper, Map, Marker, InfoWindow } from "google-maps-react";
+import { GoogleApiWrapper, Map, Marker, InfoWindow } from 'google-maps-react';
 
-import { Modal, Text } from "react-native";
+import { Modal, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+
+const styles = StyleSheet.create({
+  mapContainer: {
+    postition: 'relative',
+    flex: 1
+  },
+  popUp: {
+    padding: 20,
+    position: 'absolute',
+    left: '50%',
+    top: '50%',
+    // bottom: '20vh',
+    // right: '20vh',
+    backgroundColor: 'blue',
+    fontSize: 40
+  }
+});
 
 class MapViewer extends Component {
   state = {
@@ -12,9 +29,10 @@ class MapViewer extends Component {
     selectedPlace: {},
     destinations: [],
     selecterCenter: null,
-    modelDestinationKey: "",
-    modelVisible: false,
-    modelDestination: {},
+    modalDestinationKey: '',
+    modalVisible: false,
+    modalDestination: {},
+    modalPlaceName: ''
   };
 
   // const
@@ -24,7 +42,22 @@ class MapViewer extends Component {
   // };
 
   clickMarker = (id, destination) => {
-    this.setState({ modelVisible: true, modelDestination: destination });
+    const { modalVisible } = this.state;
+    if (destination) {
+      const placeName = destination.formatted;
+      const commaIndex = placeName.indexOf(',');
+      const formattedPlaceName = placeName.slice(0, commaIndex);
+      //This function gets the first line of the address of each destination when a marker is clicked
+      this.setState({
+        modalVisible: !modalVisible,
+        modalDestination: destination,
+        modalPlaceName: formattedPlaceName
+      });
+    } else {
+      this.setState({
+        modalVisible: !modalVisible
+      });
+    }
   };
 
   displayMarkers = () => {
@@ -39,7 +72,7 @@ class MapViewer extends Component {
           key={id}
           initialCenter={{
             lat: -1.2884,
-            lng: 36.8233,
+            lng: 36.8233
           }}
           // icon={{
           //   url:
@@ -51,36 +84,49 @@ class MapViewer extends Component {
     });
   };
 
-  displayModal = (modalVisible) => {
-    this.setState({ modalVisible: !modalVisible });
-  };
-  // };
-
   render() {
-    const { modalVisible } = this.state;
+    const { modalVisible, modalDestination, modalPlaceName } = this.state;
+    let popUp;
+
+    if (modalVisible) {
+      popUp = (
+        <View style={styles.popUp}>
+          <Text>{modalPlaceName}</Text>
+          <TouchableOpacity
+            onPress={() => {
+              this.clickMarker();
+            }}
+          >
+            <Text>Close</Text>
+          </TouchableOpacity>
+          <TouchableOpacity
+            onPress={() => {
+              console.log('navigating to single trip page');
+            }}
+          >
+            <Text>This Trip</Text>
+          </TouchableOpacity>
+        </View>
+      );
+    } else {
+      popUp = <View />;
+    }
+
     return (
       <div>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={false}
-          onRequestClose={() => {
-            this.displayModal(modalVisible);
-          }}
-        >
-          <Text>Hello</Text>
-        </Modal>
         <Map
+          // style={styles.mapContainer}
           className="map"
           google={this.props.google}
           zoom={3}
           style={{
-            width: "50%",
-            height: "50%",
+            width: '50%',
+            height: '50%'
           }}
           initialCenter={this.props.destinations[0]}
         >
           {this.displayMarkers()}
+          {popUp}
         </Map>
       </div>
     );
@@ -88,5 +134,5 @@ class MapViewer extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: "AIzaSyBlzgz8XpUdCQgmvThnz6m5IDNf0ozT8R8",
+  apiKey: 'AIzaSyBlzgz8XpUdCQgmvThnz6m5IDNf0ozT8R8'
 })(MapViewer);
