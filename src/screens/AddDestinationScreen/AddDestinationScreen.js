@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Alert } from 'react-native';
+import {
+  View, Text, TextInput, Alert,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import CalendarPicker from 'react-native-calendar-picker';
 import UploadImage from '../../components/UploadImage';
@@ -74,7 +76,7 @@ export default function AddDestinationScreen(props) {
       blogPost,
       startDate,
       endDate,
-      uploadedUrl
+      uploadedUrl,
     });
     setBlog('');
     setStartDate('');

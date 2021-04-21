@@ -5,7 +5,7 @@
     "node": true
   },
   "extends": ["plugin:react/recommended", "airbnb"],
-    "parser": "babel-eslint",
+  "parser": "babel-eslint",
   "parserOptions": {
     "ecmaFeatures": {
       "jsx": true
@@ -29,7 +29,8 @@
     "react/prefer-stateless-function": [0],
     "no-use-before-define": ["off"],
     "arrow-body-style": ["off"],
-    "react/state-in-constructor": [0]
+    "react/state-in-constructor": [0],
+    "import/no-named-as-default": 0,
+    "import/no-named-as-default-member": 0
   }
-  
 }

@@ -13,7 +13,7 @@ import {
   SingleTripScreen,
   TripsScreen,
   UserScreen,
-  AddDestinationScreen
+  AddDestinationScreen,
 } from './src/screens';
 import 'firebase/auth';
 import firebase from './src/firebase/config';
