@@ -68,31 +68,32 @@ class TripsScreen extends Component {
           keyExtractor={(item) => item.id}
         />
       </View>
-      // <View>
-      //   <ProfileHeader />
-      // <TouchableOpacity
-      //   onPress={() => {
-      //     navigation.navigate('Single Trip');
-      //   }}
-      // >
-      //     <Text> Trip 1</Text>
-      //   </TouchableOpacity>
-      //   <TouchableOpacity
-      //     onPress={() => {
-      //       navigation.navigate('Single Trip');
-      //     }}
-      //   >
-      //     <Text> Trip 2</Text>
-      //   </TouchableOpacity>
-      //   <TouchableOpacity
-      //     onPress={() => {
-      //       navigation.navigate('Single Trip');
-      //     }}
-      //   >
-      //     <Text> Trip 3</Text>
-      //   </TouchableOpacity>
-      //   <NavBar />
-      // </View>
+
+    // <View>
+    //   <ProfileHeader />
+    // <TouchableOpacity
+    //   onPress={() => {
+    //     navigation.navigate('Single Trip');
+    //   }}
+    // >
+    //     <Text> Trip 1</Text>
+    //   </TouchableOpacity>
+    //   <TouchableOpacity
+    //     onPress={() => {
+    //       navigation.navigate('Single Trip');
+    //     }}
+    //   >
+    //     <Text> Trip 2</Text>
+    //   </TouchableOpacity>
+    //   <TouchableOpacity
+    //     onPress={() => {
+    //       navigation.navigate('Single Trip');
+    //     }}
+    //   >
+    //     <Text> Trip 3</Text>
+    //   </TouchableOpacity>
+    //   <NavBar />
+    // </View>
     );
   }
 }
