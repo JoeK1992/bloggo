@@ -11,7 +11,9 @@ import 'firebase/auth';
 import DestinationInputBar from '../../components/DestinationInputBar';
 import getDestination from '../../utils/InputDestinationFuncs';
 
-export default function AddDestinationScreen() {
+export default function AddDestinationScreen(props) {
+  console.log(props);
+
   const db = firebase.firestore();
   const [blogPost, setBlog] = useState('');
 
