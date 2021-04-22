@@ -17,9 +17,6 @@ import {
   SingleTripScreen,
   TripsScreen,
   UserScreen,
-
-  AddDestinationScreen,
-
 } from './src/screens';
 
 if (!global.btoa) {

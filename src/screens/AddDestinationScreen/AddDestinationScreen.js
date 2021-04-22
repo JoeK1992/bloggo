@@ -2,17 +2,15 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
 import {
-
   View, Text, TextInput, Alert,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 
 import CalendarPicker from 'react-native-calendar-picker';
-import { TouchableOpacity } from 'react-native-gesture-handler';
 import DestinationInputBar from '../../components/DestinationInputBar';
-import UploadImage from '../../components/UploadImage';
 import firebase from '../../firebase/config';
 import getDestination from '../../utils/InputDestinationFuncs';
+import PickImage from '../../components/PickImage';
 
 export default function AddDestinationScreen(props) {
   const db = firebase.firestore();
@@ -124,7 +122,8 @@ export default function AddDestinationScreen(props) {
         onChangeText={(blogPost) => setBlog(blogPost)}
         autoCapitalize="none"
       />
-      <UploadImage setUrl={setUrl} />
+
+      <PickImage setUrl={setUrl} />
       <TouchableOpacity onPress={handlePress}>
         <Text>Submit</Text>
       </TouchableOpacity>
