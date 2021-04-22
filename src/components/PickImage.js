@@ -1,16 +1,14 @@
 import React, { useEffect } from 'react';
-import {
-  View, Text, TouchableOpacity, Platform,
-} from 'react-native';
+import { View, Text, TouchableOpacity, Platform } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import s from '../styles/styles';
 
-export default function PickImage() {
+export default function PickImage(props) {
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
         const {
-          status,
+          status
         } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
           alert('Sorry, we need camera roll permissions to make this work!');
@@ -19,11 +17,11 @@ export default function PickImage() {
     })();
   }, []);
 
-  const pickImage = async (props) => {
+  const chooseImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
-      base64: true,
+      base64: true
 
       // allowsMultipleSelection: true
     });
@@ -35,14 +33,14 @@ export default function PickImage() {
 
       const data = {
         file: base64Img,
-        upload_preset: 'eqvu0yhl',
+        upload_preset: 'eqvu0yhl'
       };
       fetch(apiUrl, {
         body: JSON.stringify(data),
         headers: {
-          'content-type': 'application/json',
+          'content-type': 'application/json'
         },
-        method: 'POST',
+        method: 'POST'
       })
         .then(async (r) => {
           const data = await r.json();
@@ -52,12 +50,24 @@ export default function PickImage() {
         .catch((err) => console.log(err));
     }
   };
-
+  const { uploadedUrl } = props;
   return (
     <View>
-      <TouchableOpacity style={s.button} onPress={pickImage}>
+      <TouchableOpacity style={s.button} onPress={chooseImage}>
         <Text style={s.buttonText}>Pick Image</Text>
       </TouchableOpacity>
+      {uploadedUrl && (
+        <Text>
+          Cover image{' '}
+          <TouchableOpacity
+            onPress={() => {
+              props.setUrl(null);
+            }}
+          >
+            <Text>Delete Cover image</Text>
+          </TouchableOpacity>
+        </Text>
+      )}
     </View>
   );
 }

@@ -34,7 +34,7 @@ export default function DestinationInputBar(props) {
     <View>
       <TextInput
         placeholder="Enter your destination"
-        // value={destination.formatted}
+        // value={props.destination.formatted}
         editable
         onChangeText={(textInput) => props.setDestinationInput(textInput)}
       />
@@ -54,11 +54,11 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    padding: 20,
+    padding: 10,
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 5,
   },
   title: {
-    fontSize: 32,
+    fontSize: 15,
   },
 });

@@ -1,17 +1,13 @@
 import React, { Component } from 'react';
 
-import {
-  GoogleApiWrapper, Map, Marker, InfoWindow,
-} from 'google-maps-react';
+import { GoogleApiWrapper, Map, Marker, InfoWindow } from 'google-maps-react';
 
-import {
-  Modal, Text, TouchableOpacity, View, StyleSheet,
-} from 'react-native';
+import { Modal, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
 
 const styles = StyleSheet.create({
   mapContainer: {
     position: 'relative',
-    flex: 1,
+    flex: 1
   },
   popUp: {
     padding: 20,
@@ -20,8 +16,8 @@ const styles = StyleSheet.create({
     top: '50%',
 
     backgroundColor: 'blue',
-    fontSize: 40,
-  },
+    fontSize: 40
+  }
 });
 
 class MapDisplay extends Component {
@@ -35,7 +31,7 @@ class MapDisplay extends Component {
     modalDestinationKey: '',
     modalVisible: false,
     modalDestination: {},
-    modalPlaceName: '',
+    modalPlaceName: ''
   };
 
   clickMarker = (id, destination) => {
@@ -48,11 +44,11 @@ class MapDisplay extends Component {
       this.setState({
         modalVisible: !modalVisible,
         modalDestination: destination,
-        modalPlaceName: formattedPlaceName,
+        modalPlaceName: formattedPlaceName
       });
     } else {
       this.setState({
-        modalVisible: !modalVisible,
+        modalVisible: !modalVisible
       });
     }
   };
@@ -68,7 +64,7 @@ class MapDisplay extends Component {
           key={id}
           initialCenter={{
             lat: -1.2884,
-            lng: 36.8233,
+            lng: 36.8233
           }}
         />
       );
@@ -110,7 +106,7 @@ class MapDisplay extends Component {
           zoom={3}
           style={{
             width: '50%',
-            height: '50%',
+            height: '50%'
           }}
           initialCenter={this.props.destinations[0]}
         >
@@ -123,5 +119,5 @@ class MapDisplay extends Component {
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyBlzgz8XpUdCQgmvThnz6m5IDNf0ozT8R8',
+  apiKey: 'AIzaSyBlzgz8XpUdCQgmvThnz6m5IDNf0ozT8R8'
 })(MapDisplay);

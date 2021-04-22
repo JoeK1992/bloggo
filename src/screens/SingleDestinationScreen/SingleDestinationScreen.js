@@ -2,6 +2,7 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import React, { Component } from 'react';
 import {
+  Alert,
   FlatList,
   Image,
   StyleSheet,
@@ -11,6 +12,7 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
+import s from '../../styles/styles';
 
 export default class SingleDestinationScreen extends Component {
   constructor(props) {
@@ -68,15 +70,34 @@ export default class SingleDestinationScreen extends Component {
     const _this = this;
     const { tripUid, destinationUid } = _this.props.route.params;
     const { navigation } = _this.props;
-    const db = firebase.firestore();
-    const destinationRef = db
-      .collection('trips')
-      .doc(tripUid)
-      .collection('destinations')
-      .doc(destinationUid);
-    destinationRef.delete().then(() => {
-      navigation.navigate('Single Trip', { tripUid });
-    });
+
+    Alert.alert(
+      'Delete',
+      'Are you sure you want to delete your destination post?',
+      [
+        {
+          text: 'Confirm',
+          onPress: () => {
+            const db = firebase.firestore();
+            const destinationRef = db
+              .collection('trips')
+              .doc(tripUid)
+              .collection('destinations')
+              .doc(destinationUid);
+            destinationRef.delete().then(() => {
+              navigation.navigate('Single Trip', { tripUid });
+            });
+          },
+        },
+        {
+          text: 'Cancel',
+          onPress: () => {
+            'cancel';
+          },
+        },
+      ],
+      { cancelable: true },
+    );
   };
 
   render() {
@@ -98,7 +119,6 @@ export default class SingleDestinationScreen extends Component {
       <>
         <TouchableOpacity
           onPress={() => {
-            console.log('in here', item);
             navigation.replace('Single Destination', {
               destinationUid: item.id,
               tripUid,
@@ -118,8 +138,9 @@ export default class SingleDestinationScreen extends Component {
           onPress={() => {
             navigation.navigate('Single Trip', { tripUid });
           }}
+          style={s.button}
         >
-          <Text>
+          <Text style={s.buttonText}>
             Back to
             {tripName}
             {' '}
@@ -141,16 +162,16 @@ export default class SingleDestinationScreen extends Component {
             editable={editable}
           />
           {editable ? (
-            <TouchableOpacity onPress={this.editBlogPost}>
-              <Text>Submit!</Text>
+            <TouchableOpacity onPress={this.editBlogPost} style={s.button}>
+              <Text style={s.buttonText}>Submit!</Text>
             </TouchableOpacity>
           ) : (
-            <TouchableOpacity onPress={this.toggleEditable}>
-              <Text>Edit Blog</Text>
+            <TouchableOpacity onPress={this.toggleEditable} style={s.button}>
+              <Text style={s.buttonText}>Edit Blog</Text>
             </TouchableOpacity>
           )}
-          <TouchableOpacity onPress={this.deleteDestination}>
-            <Text>Delete Destination</Text>
+          <TouchableOpacity onPress={this.deleteDestination} style={s.button}>
+            <Text style={s.buttonText}>Delete Destination</Text>
           </TouchableOpacity>
         </View>
         <View>

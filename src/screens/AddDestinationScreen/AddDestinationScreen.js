@@ -11,6 +11,7 @@ import DestinationInputBar from '../../components/DestinationInputBar';
 import firebase from '../../firebase/config';
 import getDestination from '../../utils/InputDestinationFuncs';
 import PickImage from '../../components/PickImage';
+import PickImages from '../../components/PickImages';
 
 export default function AddDestinationScreen(props) {
   const db = firebase.firestore();
@@ -18,11 +19,11 @@ export default function AddDestinationScreen(props) {
 
   const currentUserUID = firebase.auth().currentUser.uid;
   const [uploadedUrl, setUrl] = useState(null);
+  const [uploadedUrls, setUrls] = useState([]);
   const [destination, setDestination] = useState({ formatted: '' });
   const [results, setResults] = useState([]);
   const [destinationInput, setDestinationInput] = useState('');
   const [selectedId, setSelectedId] = useState(null);
-  console.log(destination.formatted);
   const addDestination = (results, selectedId) => {
     for (let i = 0; i < results.length; i += 1) {
       if (selectedId === results[i].annotations.MGRS) {
@@ -40,7 +41,7 @@ export default function AddDestinationScreen(props) {
     if (destinationInput.length > 1) {
       const search = destinationInput.split(' ').join('+');
       getDestination(search).then((results) => {
-        setResults(results);
+        setResults(results.slice(0, 3));
       });
     }
   });
@@ -60,28 +61,31 @@ export default function AddDestinationScreen(props) {
 
   const handlePress = () => {
     const { route } = props;
-    console.log(props);
-    console.log(route);
     const { tripUid } = route.params;
-    if (!startDate) {
+    if (!destination.formatted) {
+      Alert.alert('Destination field is required.');
+    } else if (!startDate) {
       Alert.alert('Start Date field is required.');
-    }
-    if (!endDate) {
+    } else if (!endDate) {
       Alert.alert('End Date field is required.');
+    } else if (!blogPost) {
+      Alert.alert('Blog post is required.');
+    } else if (!uploadedUrl) {
+      Alert.alert('Cover image is required.');
+    } else {
+      db.collection('trips').doc(tripUid).collection('destinations').add({
+        destination,
+        user: currentUserUID,
+        trip: tripUid,
+        blogPost,
+        startDate,
+        endDate,
+        uploadedUrl,
+      });
+      setBlog('');
+      setStartDate('');
+      setEndDate('');
     }
-
-    db.collection('trips').doc(tripUid).collection('destinations').add({
-      destination,
-      user: currentUserUID,
-      trip: tripUid,
-      blogPost,
-      startDate,
-      endDate,
-      uploadedUrl,
-    });
-    setBlog('');
-    setStartDate('');
-    setEndDate('');
   };
   return (
     <View>
@@ -123,7 +127,9 @@ export default function AddDestinationScreen(props) {
         autoCapitalize="none"
       />
 
-      <PickImage setUrl={setUrl} />
+      <PickImage uploadedUrl={uploadedUrl} setUrl={setUrl} />
+      <PickImages uploadedUrls={uploadedUrls} setUrls={setUrls} />
+
       <TouchableOpacity onPress={handlePress}>
         <Text>Submit</Text>
       </TouchableOpacity>
