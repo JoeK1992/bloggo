@@ -10,16 +10,16 @@ const NavBar = () => {
         onPress={() => navigation.navigate("Profile Page")}
         style={styles.navbarBtn}
       >
-        <Text>Username</Text>
+        <Text style={styles.text}>Username</Text>
       </TouchableOpacity>
       <TouchableOpacity
         onPress={() => navigation.navigate("My Trips")}
         style={styles.navbarBtn}
       >
-        <Text>My Trips</Text>
+        <Text style={styles.text}>My Trips</Text>
       </TouchableOpacity>
       <TouchableOpacity style={styles.navbarBtn}>
-        <Text>Logout</Text>
+        <Text style={styles.text}>Logout</Text>
       </TouchableOpacity>
     </View>
   );
@@ -27,16 +27,17 @@ const NavBar = () => {
 
 const styles = StyleSheet.create({
   navbar: {
-    flex: 1,
-    padding: 5,
-    borderRadius: 5,
-    borderColor: "red",
-    borderWidth: 2,
+    backgroundColor: "#0096c7",
+    color: "white",
     flexDirection: "row",
+    paddingVertical: 5,
   },
   navbarBtn: {
-    margin: 5,
+    
   },
+  text: {
+    color: "white"
+  }
 });
 
 export default NavBar;
