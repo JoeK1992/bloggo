@@ -1,13 +1,11 @@
 import React, { useEffect } from 'react';
 import {
-  Text, View, Platform, TouchableOpacity,
+  View, Text, TouchableOpacity, Platform,
 } from 'react-native';
-
 import * as ImagePicker from 'expo-image-picker';
+import s from '../styles/styles';
 
-export default function UploadImage(props) {
-  // const [image, setImage] = useState(null);
-
+export default function PickImage() {
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -21,7 +19,7 @@ export default function UploadImage(props) {
     })();
   }, []);
 
-  const pickImage = async () => {
+  const pickImage = async (props) => {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
@@ -56,21 +54,10 @@ export default function UploadImage(props) {
   };
 
   return (
-    <View
-      style={{
-        display: 'block',
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}
-    >
-      <TouchableOpacity onPress={pickImage}>
-        <Text>Pick a Cover image</Text>
+    <View>
+      <TouchableOpacity style={s.button} onPress={pickImage}>
+        <Text style={s.buttonText}>Pick Image</Text>
       </TouchableOpacity>
-      {/* <Button title="Add more images of your holiday" onPress={pickImage} /> */}
-      {/* {image && (
-
-      )} */}
     </View>
   );
 }
