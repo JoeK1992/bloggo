@@ -37,34 +37,30 @@ export default function AddTripScreen({ navigation }) {
   const handlePress = () => {
     if (!tripName) {
       Alert.alert('Name field is required.');
-    }
-
-    if (!summary) {
+    } else if (!summary) {
       Alert.alert('Summary field is required.');
-    }
-    if (!startDate) {
+    } else if (!startDate) {
       Alert.alert('Start Date field is required.');
-    }
-    if (!endDate) {
+    } else if (!endDate) {
       Alert.alert('End Date field is required.');
+    } else {
+      db.collection('trips')
+        .add({
+          user: currentUserUID,
+          summary,
+          name: tripName,
+          startDate,
+          endDate,
+        })
+        .then((data) => {
+          setTripUid(data.id);
+        });
+      setName('');
+      setSummary('');
+      setStartDate('');
+      setEndDate('');
+      setSubmitted(true);
     }
-
-    db.collection('trips')
-      .add({
-        user: currentUserUID,
-        summary,
-        name: tripName,
-        startDate,
-        endDate,
-      })
-      .then((data) => {
-        setTripUid(data.id);
-      });
-    setName('');
-    setSummary('');
-    setStartDate('');
-    setEndDate('');
-    setSubmitted(true);
   };
 
   return (
