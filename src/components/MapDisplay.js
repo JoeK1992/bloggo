@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 
-import { GoogleApiWrapper, Map, Marker, InfoWindow } from 'google-maps-react';
+import {
+  GoogleApiWrapper, Map, Marker, InfoWindow,
+} from 'google-maps-react';
 
-import { Modal, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
+import {
+  Modal, Text, TouchableOpacity, View, StyleSheet,
+} from 'react-native';
 
 const styles = StyleSheet.create({
   mapContainer: {
     position: 'relative',
-    flex: 1
+    flex: 1,
   },
   popUp: {
     padding: 20,
@@ -16,11 +20,11 @@ const styles = StyleSheet.create({
     top: '50%',
 
     backgroundColor: 'blue',
-    fontSize: 40
-  }
+    fontSize: 40,
+  },
 });
 
-class MapViewer extends Component {
+class MapDisplay extends Component {
   state = {
     markerClicked: false,
     showingInfoWindow: false,
@@ -31,9 +35,8 @@ class MapViewer extends Component {
     modalDestinationKey: '',
     modalVisible: false,
     modalDestination: {},
-    modalPlaceName: ''
+    modalPlaceName: '',
   };
-
 
   clickMarker = (id, destination) => {
     const { modalVisible } = this.state;
@@ -41,15 +44,15 @@ class MapViewer extends Component {
       const placeName = destination.formatted;
       const commaIndex = placeName.indexOf(',');
       const formattedPlaceName = placeName.slice(0, commaIndex);
-     
+
       this.setState({
         modalVisible: !modalVisible,
         modalDestination: destination,
-        modalPlaceName: formattedPlaceName
+        modalPlaceName: formattedPlaceName,
       });
     } else {
       this.setState({
-        modalVisible: !modalVisible
+        modalVisible: !modalVisible,
       });
     }
   };
@@ -65,7 +68,7 @@ class MapViewer extends Component {
           key={id}
           initialCenter={{
             lat: -1.2884,
-            lng: 36.8233
+            lng: 36.8233,
           }}
         />
       );
@@ -74,9 +77,8 @@ class MapViewer extends Component {
 
   render() {
     const { modalVisible, modalDestination, modalPlaceName } = this.state;
-    
-let popUp;
 
+    let popUp;
     if (modalVisible) {
       popUp = (
         <View style={styles.popUp}>
@@ -108,7 +110,7 @@ let popUp;
           zoom={3}
           style={{
             width: '50%',
-            height: '50%'
+            height: '50%',
           }}
           initialCenter={this.props.destinations[0]}
         >
@@ -121,8 +123,5 @@ let popUp;
 }
 
 export default GoogleApiWrapper({
-  apiKey: 'AIzaSyBlzgz8XpUdCQgmvThnz6m5IDNf0ozT8R8'
-})(MapViewer);
-
-
-
+  apiKey: 'AIzaSyBlzgz8XpUdCQgmvThnz6m5IDNf0ozT8R8',
+})(MapDisplay);

@@ -1,6 +1,6 @@
-import "firebase/auth";
-import "firebase/firestore";
-import React, { Component } from "react";
+import 'firebase/auth';
+import 'firebase/firestore';
+import React, { Component } from 'react';
 import {
   FlatList,
   Image,
@@ -8,9 +8,9 @@ import {
   Text,
   TextInput,
   View,
-} from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import firebase from "../../firebase/config";
+} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import firebase from '../../firebase/config';
 
 export default class SingleDestinationScreen extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ export default class SingleDestinationScreen extends Component {
     this.state = {
       destination: {},
       editable: false,
-      blogPost: "",
+      blogPost: '',
     };
   }
 
@@ -31,13 +31,13 @@ export default class SingleDestinationScreen extends Component {
     // const route = this.props;
     // const { destinationUid } = route.params;
     const destinationRef = db
-      .collection("trips")
+      .collection('trips')
       .doc(tripUid)
-      .collection("destinations")
+      .collection('destinations')
       .doc(destinationUid);
     destinationRef.get().then((doc) => {
       if (!doc.exists) {
-        console.log("No such document");
+        console.log('No such document');
       } else {
         const destination = doc.data();
         this.setState({ destination, blogPost: destination.blogPost });
@@ -51,9 +51,9 @@ export default class SingleDestinationScreen extends Component {
     const { blogPost } = this.state;
     const db = firebase.firestore();
     const destinationRef = db
-      .collection("trips")
+      .collection('trips')
       .doc(tripUid)
-      .collection("destinations")
+      .collection('destinations')
       .doc(destinationUid);
     destinationRef.update({ blogPost }).then(() => {
       this.setState({ editable: false });
@@ -70,25 +70,21 @@ export default class SingleDestinationScreen extends Component {
     const { navigation } = _this.props;
     const db = firebase.firestore();
     const destinationRef = db
-      .collection("trips")
+      .collection('trips')
       .doc(tripUid)
-      .collection("destinations")
+      .collection('destinations')
       .doc(destinationUid);
     destinationRef.delete().then(() => {
-      navigation.navigate("Single Trip", { tripUid });
+      navigation.navigate('Single Trip', { tripUid });
     });
   };
 
   render() {
-    console.log(this.props);
-    const { navigation } = this.props;
+    const { navigation, route } = this.props;
     const { destination, blogPost, editable } = this.state;
     const {
-      destinations,
-      tripUid,
-      destinationUid,
-      tripName,
-    } = this.props.route.params;
+      destinations, tripUid, destinationUid, tripName,
+    } = route.params;
     const filteredDestinations = destinations.filter((destination) => {
       return destination.id !== destinationUid;
     });
@@ -102,8 +98,8 @@ export default class SingleDestinationScreen extends Component {
       <>
         <TouchableOpacity
           onPress={() => {
-            console.log("in here", item);
-            navigation.replace("Single Destination", {
+            console.log('in here', item);
+            navigation.replace('Single Destination', {
               destinationUid: item.id,
               tripUid,
               destinations,
@@ -120,10 +116,16 @@ export default class SingleDestinationScreen extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Single Trip", { tripUid });
+            navigation.navigate('Single Trip', { tripUid });
           }}
         >
-          <Text>Back to {tripName} trip! </Text>
+          <Text>
+            Back to
+            {tripName}
+            {' '}
+            trip!
+            {' '}
+          </Text>
         </TouchableOpacity>
 
         <Image style={styles.pic} source={destination.uploadedUrl} />
@@ -178,7 +180,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   item: {
-    backgroundColor: "#f9c2ff",
+    backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
