@@ -1,35 +1,34 @@
-import 'firebase/auth';
-import 'firebase/firestore';
-import React, { useState } from 'react';
-import {
-  View, Text, TextInput, Alert,
-} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import "firebase/auth";
+import "firebase/firestore";
+import React, { useState } from "react";
+import { View, Text, TextInput, Alert } from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
 
-import CalendarPicker from 'react-native-calendar-picker';
-import DestinationInputBar from '../../components/DestinationInputBar';
-import firebase from '../../firebase/config';
-import getDestination from '../../utils/InputDestinationFuncs';
-import PickImage from '../../components/PickImage';
-import PickImages from '../../components/PickImages';
+import CalendarPicker from "react-native-calendar-picker";
+import DestinationInputBar from "../../components/DestinationInputBar";
+import firebase from "../../firebase/config";
+import getDestination from "../../utils/InputDestinationFuncs";
+import PickImage from "../../components/PickImage";
+import PickImages from "../../components/PickImages";
+import moment from "moment";
 
 export default function AddDestinationScreen(props) {
   const db = firebase.firestore();
-  const [blogPost, setBlog] = useState('');
+  const [blogPost, setBlog] = useState("");
 
   const currentUserUID = firebase.auth().currentUser.uid;
   const [uploadedUrl, setUrl] = useState(null);
   const [uploadedUrls, setUrls] = useState([]);
-  const [destination, setDestination] = useState({ formatted: '' });
+  const [destination, setDestination] = useState({ formatted: "" });
   const [results, setResults] = useState([]);
-  const [destinationInput, setDestinationInput] = useState('');
+  const [destinationInput, setDestinationInput] = useState("");
   const [selectedId, setSelectedId] = useState(null);
   const addDestination = (results, selectedId) => {
     for (let i = 0; i < results.length; i += 1) {
       if (selectedId === results[i].annotations.MGRS) {
         setDestination(results[i]);
         setResults([]);
-        setDestinationInput('');
+        setDestinationInput("");
       }
     }
   };
@@ -38,8 +37,8 @@ export default function AddDestinationScreen(props) {
     if (selectedId) {
       addDestination(results, selectedId);
     }
-    if (destinationInput.length > 1) {
-      const search = destinationInput.split(' ').join('+');
+    if (destinationInput.length > 6) {
+      const search = destinationInput.split(" ").join("+");
       getDestination(search).then((results) => {
         setResults(results.slice(0, 3));
       });
@@ -48,10 +47,10 @@ export default function AddDestinationScreen(props) {
 
   const [selectedStartDate, setStartDate] = useState(null);
   const [selectedEndDate, setEndDate] = useState(null);
-  const startDate = selectedStartDate ? selectedStartDate.toString() : '';
-  const endDate = selectedEndDate ? selectedEndDate.toString() : '';
+  const startDate = selectedStartDate ? selectedStartDate.toString() : "";
+  const endDate = selectedEndDate ? selectedEndDate.toString() : "";
   const onDateChange = (date, type) => {
-    if (type === 'END_DATE') {
+    if (type === "END_DATE") {
       setEndDate(date);
     } else {
       setStartDate(date);
@@ -63,17 +62,17 @@ export default function AddDestinationScreen(props) {
     const { route } = props;
     const { tripUid } = route.params;
     if (!destination.formatted) {
-      Alert.alert('Destination field is required.');
+      Alert.alert("Destination field is required.");
     } else if (!startDate) {
-      Alert.alert('Start Date field is required.');
+      Alert.alert("Start Date field is required.");
     } else if (!endDate) {
-      Alert.alert('End Date field is required.');
+      Alert.alert("End Date field is required.");
     } else if (!blogPost) {
-      Alert.alert('Blog post is required.');
+      Alert.alert("Blog post is required.");
     } else if (!uploadedUrl) {
-      Alert.alert('Cover image is required.');
+      Alert.alert("Cover image is required.");
     } else {
-      db.collection('trips').doc(tripUid).collection('destinations').add({
+      db.collection("trips").doc(tripUid).collection("destinations").add({
         destination,
         user: currentUserUID,
         trip: tripUid,
@@ -82,9 +81,9 @@ export default function AddDestinationScreen(props) {
         endDate,
         uploadedUrl,
       });
-      setBlog('');
-      setStartDate('');
-      setEndDate('');
+      setBlog("");
+      setStartDate("");
+      setEndDate("");
     }
   };
   return (
@@ -111,11 +110,11 @@ export default function AddDestinationScreen(props) {
       <View>
         <Text>
           SELECTED START DATE:
-          {startDate}
+          {startDate ? moment(startDate).format("MMM Do YYYY") : ""}
         </Text>
         <Text>
           SELECTED END DATE:
-          {endDate}
+          {endDate ? moment(endDate).format("MMM Do YYYY") : ""}
         </Text>
       </View>
       <TextInput
