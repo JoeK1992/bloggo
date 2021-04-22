@@ -1,36 +1,23 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
-  Platform,
   StyleSheet,
-  FlatList
+  FlatList,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import s from '../styles/styles';
 
 export default function PickImages(props) {
   const [counter, incrementCounter] = useState(0);
-  useEffect(() => {
-    (async () => {
-      if (Platform.OS !== 'web') {
-        const {
-          status
-        } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-        if (status !== 'granted') {
-          alert('Sorry, we need camera roll permissions to make this work!');
-        }
-      }
-    })();
-  }, []);
 
   const pickImage = async () => {
     incrementCounter((prevCount) => prevCount + 1);
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
-      base64: true
+      base64: true,
     });
 
     if (!result.cancelled) {
@@ -38,14 +25,14 @@ export default function PickImages(props) {
       const apiUrl = 'https://api.cloudinary.com/v1_1/ddxr0zldw/image/upload';
       const data = {
         file: base64Img,
-        upload_preset: 'eqvu0yhl'
+        upload_preset: 'eqvu0yhl',
       };
       fetch(apiUrl, {
         body: JSON.stringify(data),
         headers: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
         },
-        method: 'POST'
+        method: 'POST',
       })
         .then(async (r) => {
           const data = await r.json();
@@ -105,21 +92,21 @@ export default function PickImages(props) {
 
 const styles = StyleSheet.create({
   container: {
-    paddingTop: 50
+    paddingTop: 50,
     // flex: 1,
     // marginTop: StatusBar.currentHeight || 0,
   },
   pic: {
     width: 100,
-    height: 100
+    height: 100,
   },
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   title: {
-    fontSize: 32
-  }
+    fontSize: 32,
+  },
 });

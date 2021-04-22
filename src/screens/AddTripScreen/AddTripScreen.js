@@ -1,27 +1,26 @@
-import React, { useState } from "react";
-import { View, Text, TextInput, Alert } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import CalendarPicker from "react-native-calendar-picker";
+import React, { useState } from 'react';
+import { View, Text, TextInput, Alert } from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import Calendar from '../../components/Calendar';
 
-import firebase from "../../firebase/config";
-import "firebase/firestore";
-import "firebase/auth";
+import firebase from '../../firebase/config';
+import 'firebase/firestore';
+import 'firebase/auth';
 
 export default function AddTripScreen({ navigation }) {
   const db = firebase.firestore();
-  const [tripName, setName] = useState("");
-  const [summary, setSummary] = useState("");
+  const [tripName, setName] = useState('');
+  const [summary, setSummary] = useState('');
   const [submitted, setSubmitted] = useState(false);
-  const [tripUid, setTripUid] = useState("");
+  const [tripUid, setTripUid] = useState('');
 
   const currentUserUID = firebase.auth().currentUser.uid;
   const [selectedStartDate, setStartDate] = useState(null);
   const [selectedEndDate, setEndDate] = useState(null);
-  const [calendarPressed, setCalendar] = useState(false);
-  const startDate = selectedStartDate ? selectedStartDate.toString() : "";
-  const endDate = selectedEndDate ? selectedEndDate.toString() : "";
+  const startDate = selectedStartDate ? selectedStartDate.toString() : '';
+  const endDate = selectedEndDate ? selectedEndDate.toString() : '';
   const onDateChange = (date, type) => {
-    if (type === "END_DATE") {
+    if (type === 'END_DATE') {
       setEndDate(date);
     } else {
       setStartDate(date);
@@ -30,66 +29,37 @@ export default function AddTripScreen({ navigation }) {
   };
 
   const onLinkPress = () => {
-    navigation.navigate("Add Destination", { tripUid });
+    navigation.navigate('Add Destination', { tripUid });
   };
 
   const handlePress = () => {
     if (!tripName) {
-      Alert.alert("Name field is required.");
+      Alert.alert('Name field is required.');
     } else if (!summary) {
-      Alert.alert("Summary field is required.");
+      Alert.alert('Summary field is required.');
     } else if (!startDate) {
-      Alert.alert("Start Date field is required.");
+      Alert.alert('Start Date field is required.');
     } else if (!endDate) {
-      Alert.alert("End Date field is required.");
+      Alert.alert('End Date field is required.');
     } else {
-      db.collection("trips")
+      db.collection('trips')
         .add({
           user: currentUserUID,
           summary,
           name: tripName,
           startDate,
-          endDate,
+          endDate
         })
         .then((data) => {
           setTripUid(data.id);
         });
-      setName("");
-      setSummary("");
-      setStartDate("");
-      setEndDate("");
+      setName('');
+      setSummary('');
+      setStartDate('');
+      setEndDate('');
       setSubmitted(true);
     }
   };
-
-  // const Calendar = () => {
-  //   if (calendarPressed) {
-  //     return (
-  //       <>
-  //         <TouchableOpacity onPress={setCalendar(false)}>
-  //           {" "}
-  //           <Text>X</Text>
-  //         </TouchableOpacity>
-  //         <CalendarPicker
-  //           startFromMonday
-  //           allowRangeSelection
-  //           todayBackgroundColor="#f2e6ff"
-  //           selectedDayColor="#7300e6"
-  //           selectedDayTextColor="#FFFFFF"
-  //           onDateChange={onDateChange}
-  //           scaleFactor="700"
-  //         />{" "}
-  //       </>
-  //     );
-  //   } else {
-  //     return (
-  //       <TouchableOpacity onPress={setCalendar(true)}>
-  //         {" "}
-  //         <Text>Select your trip dates</Text>
-  //       </TouchableOpacity>
-  //     );
-  //   }
-  // };
 
   return (
     <View>
@@ -105,20 +75,12 @@ export default function AddTripScreen({ navigation }) {
         value={summary}
         onChangeText={(summary) => setSummary(summary)}
       />
-
-      {/* <Calendar /> */}
-
-      <View>
-        <Text>
-          SELECTED START DATE:
-          {startDate}
-        </Text>
-        <Text>
-          SELECTED END DATE:
-          {endDate}
-        </Text>
-      </View>
-
+      <Calendar
+        page="trip"
+        startDate={startDate}
+        endDate={endDate}
+        onDateChange={onDateChange}
+      />
       <TouchableOpacity onPress={handlePress}>
         <Text>Submit</Text>
       </TouchableOpacity>

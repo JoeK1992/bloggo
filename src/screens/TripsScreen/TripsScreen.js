@@ -1,30 +1,32 @@
-import React, { Component } from "react";
-import { View, Text, FlatList, StyleSheet, StatusBar } from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import NavBar from "../../components/NavBar";
+import React, { Component } from 'react';
+import {
+  View, Text, FlatList, StyleSheet, StatusBar,
+} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import NavBar from '../../components/NavBar';
 // import ProfileHeader from '../../components/ProfileHeader';
-import firebase from "../../firebase/config";
+import firebase from '../../firebase/config';
 
-import "firebase/firestore";
-import "firebase/auth";
+import 'firebase/firestore';
+import 'firebase/auth';
 
 class TripsScreen extends Component {
   state = {
     trips: [],
-    order: "desc",
+    order: 'desc',
   };
 
   componentDidMount() {
     const db = firebase.firestore();
     const currentUserUID = firebase.auth().currentUser.uid;
-    const tripsRef = db.collection("trips");
+    const tripsRef = db.collection('trips');
     tripsRef
-      .where("user", "==", currentUserUID)
-      .where("summary", "!=", false)
+      .where('user', '==', currentUserUID)
+      .where('summary', '!=', false)
       .get()
       .then((snapshot) => {
         if (snapshot.empty) {
-          console.log("No matching documents.");
+          console.log('No matching documents.');
         } else {
           const newTrips = [];
           snapshot.forEach((doc) => {
@@ -42,23 +44,23 @@ class TripsScreen extends Component {
     const currentUserUID = firebase.auth().currentUser.uid;
     const { order } = this.state;
 
-    if (order === "desc") {
-      this.setState({ order: "asc" });
+    if (order === 'desc') {
+      this.setState({ order: 'asc' });
     } else {
-      this.setState({ order: "desc" });
+      this.setState({ order: 'desc' });
     }
 
-    const tripsRef = db.collection("trips");
+    const tripsRef = db.collection('trips');
 
     tripsRef
-      .where("user", "==", currentUserUID)
-      .where("summary", "!=", false)
-      .orderBy("summary")
-      .orderBy("startDate", order)
+      .where('user', '==', currentUserUID)
+      .where('summary', '!=', false)
+      .orderBy('summary')
+      .orderBy('startDate', order)
       .get()
       .then((snapshot) => {
         if (snapshot.empty) {
-          console.log("No matching documents.");
+          console.log('No matching documents.');
         } else {
           const newTrips = [];
           snapshot.forEach((doc) => {
@@ -72,9 +74,12 @@ class TripsScreen extends Component {
   };
 
   render() {
-    let { trips, order } = this.state;
-    if (this.props.route.params) {
-      trips = this.props.route.params.trips;
+    let { trips } = this.state;
+    const { order } = this.state;
+
+    const { route } = this.props;
+    if (route.params) {
+      trips = route.params.trips;
     }
     const { navigation } = this.props;
 
@@ -88,7 +93,7 @@ class TripsScreen extends Component {
       <>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Single Trip", { tripUid: item.id, trips });
+            navigation.navigate('Single Trip', { tripUid: item.id, trips });
           }}
         >
           <Item title={item.name} />
@@ -98,7 +103,7 @@ class TripsScreen extends Component {
 
     return (
       <View>
-        {order === "desc" ? (
+        {order === 'desc' ? (
           <TouchableOpacity onPress={this.reverseOrder}>
             <Text>Oldest trips</Text>
           </TouchableOpacity>
@@ -125,7 +130,7 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    backgroundColor: "#f9c2ff",
+    backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,

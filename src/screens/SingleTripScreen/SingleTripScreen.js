@@ -1,6 +1,6 @@
-import "firebase/auth";
-import "firebase/firestore";
-import React, { Component } from "react";
+import 'firebase/auth';
+import 'firebase/firestore';
+import React, { Component } from 'react';
 import {
   FlatList,
   StatusBar,
@@ -8,13 +8,13 @@ import {
   Text,
   View,
   Alert,
-} from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import s from "../../styles/styles";
+} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import s from '../../styles/styles';
 
-import NavBar from "../../components/NavBar";
-import ProfileHeader from "../../components/ProfileHeader";
-import firebase from "../../firebase/config";
+import NavBar from '../../components/NavBar';
+import ProfileHeader from '../../components/ProfileHeader';
+import firebase from '../../firebase/config';
 
 // import MapDisplay from '../../components/MapDisplay';
 
@@ -29,22 +29,22 @@ class SingleTripScreen extends Component {
     const { route } = this.props;
     const { tripUid } = route.params;
 
-    const tripRef = db.collection("trips").doc(tripUid);
+    const tripRef = db.collection('trips').doc(tripUid);
     tripRef.get().then((doc) => {
       if (!doc.exists) {
-        console.log("No such document");
+        console.log('No such document');
       } else {
         this.setState({ trip: doc.data() });
       }
     });
 
     const destinationsRef = db
-      .collection("trips")
+      .collection('trips')
       .doc(tripUid)
-      .collection("destinations");
+      .collection('destinations');
     destinationsRef.get().then((snapshot) => {
       if (snapshot.empty) {
-        console.log("No matching documents.");
+        console.log('No matching documents.');
       } else {
         const newDestinations = [];
         snapshot.forEach((doc) => {
@@ -65,30 +65,30 @@ class SingleTripScreen extends Component {
       return trip.id !== tripUid;
     });
     Alert.alert(
-      "Delete",
-      "Are you sure you want to delete your trip?",
+      'Delete',
+      'Are you sure you want to delete your trip?',
       [
         {
-          text: "Confirm",
+          text: 'Confirm',
           onPress: () => {
             const { route, navigation } = this.props;
             const { tripUid } = route.params;
 
             const db = firebase.firestore();
-            const tripRef = db.collection("trips").doc(tripUid);
+            const tripRef = db.collection('trips').doc(tripUid);
             tripRef.delete().then(() => {
-              navigation.replace("My Trips", { trips: filteredTrips });
+              navigation.replace('My Trips', { trips: filteredTrips });
             });
           },
         },
         {
-          text: "Cancel",
+          text: 'Cancel',
           onPress: () => {
-            "cancel";
+            'cancel';
           },
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
@@ -99,8 +99,8 @@ class SingleTripScreen extends Component {
     const { trip } = this.state;
     let { destinations } = this.state;
 
-    if (this.props.route.params.destinations) {
-      destinations = this.props.route.params.destinations;
+    if (route.params.destinations) {
+      destinations = route.params.destinations;
     }
 
     const Item = ({ title }) => (
@@ -113,7 +113,7 @@ class SingleTripScreen extends Component {
       <>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Single Destination", {
+            navigation.navigate('Single Destination', {
               destinationUid: item.id,
               tripUid,
               destinations,
@@ -140,7 +140,7 @@ class SingleTripScreen extends Component {
           <TouchableOpacity
             style={s.button}
             onPress={() => {
-              navigation.navigate("Add Destination", { tripUid });
+              navigation.navigate('Add Destination', { tripUid });
             }}
           >
             <TouchableOpacity />
@@ -171,7 +171,7 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    backgroundColor: "#f9c2ff",
+    backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,

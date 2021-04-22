@@ -1,6 +1,6 @@
-import "firebase/auth";
-import "firebase/firestore";
-import React, { Component } from "react";
+import 'firebase/auth';
+import 'firebase/firestore';
+import React, { Component } from 'react';
 import {
   Alert,
   FlatList,
@@ -9,10 +9,10 @@ import {
   Text,
   TextInput,
   View,
-} from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import firebase from "../../firebase/config";
-import s from "../../styles/styles";
+} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import firebase from '../../firebase/config';
+import s from '../../styles/styles';
 
 export default class SingleDestinationScreen extends Component {
   constructor(props) {
@@ -20,7 +20,7 @@ export default class SingleDestinationScreen extends Component {
     this.state = {
       destination: {},
       editable: false,
-      blogPost: "",
+      blogPost: '',
     };
   }
 
@@ -33,13 +33,13 @@ export default class SingleDestinationScreen extends Component {
     // const route = this.props;
     // const { destinationUid } = route.params;
     const destinationRef = db
-      .collection("trips")
+      .collection('trips')
       .doc(tripUid)
-      .collection("destinations")
+      .collection('destinations')
       .doc(destinationUid);
     destinationRef.get().then((doc) => {
       if (!doc.exists) {
-        console.log("No such document");
+        console.log('No such document');
       } else {
         const destination = doc.data();
         this.setState({ destination, blogPost: destination.blogPost });
@@ -53,9 +53,9 @@ export default class SingleDestinationScreen extends Component {
     const { blogPost } = this.state;
     const db = firebase.firestore();
     const destinationRef = db
-      .collection("trips")
+      .collection('trips')
       .doc(tripUid)
-      .collection("destinations")
+      .collection('destinations')
       .doc(destinationUid);
     destinationRef.update({ blogPost }).then(() => {
       this.setState({ editable: false });
@@ -76,20 +76,20 @@ export default class SingleDestinationScreen extends Component {
     });
 
     Alert.alert(
-      "Delete",
-      "Are you sure you want to delete your destination post?",
+      'Delete',
+      'Are you sure you want to delete your destination post?',
       [
         {
-          text: "Confirm",
+          text: 'Confirm',
           onPress: () => {
             const db = firebase.firestore();
             const destinationRef = db
-              .collection("trips")
+              .collection('trips')
               .doc(tripUid)
-              .collection("destinations")
+              .collection('destinations')
               .doc(destinationUid);
             destinationRef.delete().then(() => {
-              navigation.replace("Single Trip", {
+              navigation.replace('Single Trip', {
                 tripUid,
                 destinations: filteredDestinations,
               });
@@ -97,20 +97,22 @@ export default class SingleDestinationScreen extends Component {
           },
         },
         {
-          text: "Cancel",
+          text: 'Cancel',
           onPress: () => {
-            "cancel";
+            'cancel';
           },
         },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
   render() {
     const { navigation, route } = this.props;
     const { destination, blogPost, editable } = this.state;
-    const { destinations, tripUid, destinationUid, tripName } = route.params;
+    const {
+      destinations, tripUid, destinationUid, tripName,
+    } = route.params;
     const filteredDestinations = destinations.filter((destination) => {
       return destination.id !== destinationUid;
     });
@@ -124,7 +126,7 @@ export default class SingleDestinationScreen extends Component {
       <>
         <TouchableOpacity
           onPress={() => {
-            navigation.replace("Single Destination", {
+            navigation.replace('Single Destination', {
               destinationUid: item.id,
               tripUid,
               destinations,
@@ -141,13 +143,16 @@ export default class SingleDestinationScreen extends Component {
       <View style={styles.container}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate("Single Trip", { tripUid });
+            navigation.navigate('Single Trip', { tripUid });
           }}
           style={s.button}
         >
           <Text style={s.buttonText}>
             Back to
-            {tripName} trip!{" "}
+            {tripName}
+            {' '}
+            trip!
+            {' '}
           </Text>
         </TouchableOpacity>
 
@@ -203,7 +208,7 @@ const styles = StyleSheet.create({
     height: 100,
   },
   item: {
-    backgroundColor: "#f9c2ff",
+    backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
