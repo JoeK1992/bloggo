@@ -30,11 +30,6 @@ export default class SingleDestinationScreen extends Component {
     };
   }
 
-  onContentSizeChange = (contentWidth, contentHeight) => {
-    // Save the content height in state
-    this.setState({ screenHeight: contentHeight });
-  };
-
   componentDidMount() {
     const db = firebase.firestore();
     const _this = this;
@@ -57,6 +52,11 @@ export default class SingleDestinationScreen extends Component {
       }
     });
   }
+
+  onContentSizeChange = (contentWidth, contentHeight) => {
+    // Save the content height in state
+    this.setState({ screenHeight: contentHeight });
+  };
 
   editBlogPost = () => {
     const _this = this;
