@@ -1,17 +1,22 @@
-import * as React from "react";
-import MapView, { Marker } from "react-native-maps";
-import { StyleSheet, View, TouchableOpacity, Text } from "react-native";
-import MapPopUp from "../components/MapPopUp";
+import * as React from 'react';
+import MapView, { Marker } from 'react-native-maps';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import MapPopUp from '../components/MapPopUp';
 
 class MapViewer extends React.Component {
   state = {
     popUpVisible: false,
-    id: "",
+    id: ''
   };
 
   handlePress = (id) => {
-    console.log("in handlePress", this.state.popUpVisible);
+    console.log('in handlePress', this.state.popUpVisible);
     this.setState({ popUpVisible: true, id: id });
+  };
+
+  closeModal = () => {
+    console.log('closing');
+    this.setState({ popUpVisible: false });
   };
 
   render() {
@@ -20,8 +25,15 @@ class MapViewer extends React.Component {
 
     return (
       <View style={styles.container}>
+        {popUpVisible && (
+          <MapPopUp
+            closeModal={() => {
+              this.closeModal();
+            }}
+            style={{ position: 'absolute', top: 100, left: 50 }}
+          />
+        )}
         <MapView style={styles.map}>
-          {popUpVisible && <MapPopUp />}
           {destinations.map(({ destination, id }) => {
             const latitude = destination.geometry.lat;
             const longitude = destination.geometry.lng;
@@ -45,23 +57,23 @@ class MapViewer extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center'
   },
   map: {
     width: 500,
     height: 500,
-    position: "relative",
+    position: 'relative'
   },
   popUp: {
-    position: "absolute",
+    position: 'absolute',
     width: 500,
     height: 500,
-    left: "16vh",
-    top: "16vh",
-    backgroundColor: "green",
-  },
+    left: '16vh',
+    top: '16vh',
+    backgroundColor: 'green'
+  }
 });
 
 export default MapViewer;
