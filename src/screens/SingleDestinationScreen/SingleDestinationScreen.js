@@ -165,6 +165,7 @@ export default class SingleDestinationScreen extends Component {
 
           <TextInput
             value={blogPost}
+            style={s.paragraphText}
             onChangeText={(blogPost) => this.setState({ blogPost })}
             editable={editable}
           />

@@ -5,7 +5,9 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
 
 export default function Calendar(props) {
-  const { page, startDate, endDate, onDateChange } = props;
+  const {
+    page, startDate, endDate, onDateChange,
+  } = props;
   const [calendarPressed, setCalendar] = useState(false);
   let text;
   if (page === 'trip') {

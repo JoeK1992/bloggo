@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { View, Text, TextInput, Alert } from 'react-native';
+import {
+  View, Text, TextInput, Alert,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Calendar from '../../components/Calendar';
 
@@ -48,7 +50,7 @@ export default function AddTripScreen({ navigation }) {
           summary,
           name: tripName,
           startDate,
-          endDate
+          endDate,
         })
         .then((data) => {
           setTripUid(data.id);
