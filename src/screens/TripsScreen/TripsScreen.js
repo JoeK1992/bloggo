@@ -3,7 +3,7 @@ import {
   View, Text, FlatList, StyleSheet, StatusBar,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-// import NavBar from '../../components/NavBar';
+import NavBar from '../../components/NavBar';
 // import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
 
@@ -13,6 +13,7 @@ import 'firebase/auth';
 class TripsScreen extends Component {
   state = {
     trips: [],
+    order: 'desc',
   };
 
   componentDidMount() {
@@ -38,8 +39,48 @@ class TripsScreen extends Component {
       });
   }
 
+  reverseOrder = () => {
+    const db = firebase.firestore();
+    const currentUserUID = firebase.auth().currentUser.uid;
+    const { order } = this.state;
+
+    if (order === 'desc') {
+      this.setState({ order: 'asc' });
+    } else {
+      this.setState({ order: 'desc' });
+    }
+
+    const tripsRef = db.collection('trips');
+
+    tripsRef
+      .where('user', '==', currentUserUID)
+      .where('summary', '!=', false)
+      .orderBy('summary')
+      .orderBy('startDate', order)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.empty) {
+          console.log('No matching documents.');
+        } else {
+          const newTrips = [];
+          snapshot.forEach((doc) => {
+            const trip = doc.data();
+            trip.id = doc.id;
+            newTrips.push(trip);
+          });
+          this.setState({ trips: newTrips });
+        }
+      });
+  };
+
   render() {
-    const { trips } = this.state;
+    let { trips } = this.state;
+    const { order } = this.state;
+
+    const { route } = this.props;
+    if (route.params) {
+      trips = route.params.trips;
+    }
     const { navigation } = this.props;
 
     const Item = ({ title }) => (
@@ -52,7 +93,7 @@ class TripsScreen extends Component {
       <>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Single Trip', { tripUid: item.id });
+            navigation.navigate('Single Trip', { tripUid: item.id, trips });
           }}
         >
           <Item title={item.name} />
@@ -62,38 +103,23 @@ class TripsScreen extends Component {
 
     return (
       <View>
+        {order === 'desc' ? (
+          <TouchableOpacity onPress={this.reverseOrder}>
+            <Text>Oldest trips</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={this.reverseOrder}>
+            <Text>Most recent trips</Text>
+          </TouchableOpacity>
+        )}
+
         <FlatList
           data={trips}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />
+        <NavBar />
       </View>
-
-    // <View>
-    //   <ProfileHeader />
-    // <TouchableOpacity
-    //   onPress={() => {
-    //     navigation.navigate('Single Trip');
-    //   }}
-    // >
-    //     <Text> Trip 1</Text>
-    //   </TouchableOpacity>
-    //   <TouchableOpacity
-    //     onPress={() => {
-    //       navigation.navigate('Single Trip');
-    //     }}
-    //   >
-    //     <Text> Trip 2</Text>
-    //   </TouchableOpacity>
-    //   <TouchableOpacity
-    //     onPress={() => {
-    //       navigation.navigate('Single Trip');
-    //     }}
-    //   >
-    //     <Text> Trip 3</Text>
-    //   </TouchableOpacity>
-    //   <NavBar />
-    // </View>
     );
   }
 }

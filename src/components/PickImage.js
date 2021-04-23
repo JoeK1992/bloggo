@@ -5,7 +5,7 @@ import {
 import * as ImagePicker from 'expo-image-picker';
 import s from '../styles/styles';
 
-export default function PickImage() {
+export default function PickImage(props) {
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -19,7 +19,7 @@ export default function PickImage() {
     })();
   }, []);
 
-  const pickImage = async (props) => {
+  const chooseImage = async () => {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
@@ -52,12 +52,25 @@ export default function PickImage() {
         .catch((err) => console.log(err));
     }
   };
-
+  const { uploadedUrl } = props;
   return (
     <View>
-      <TouchableOpacity style={s.button} onPress={pickImage}>
+      <TouchableOpacity style={s.button} onPress={chooseImage}>
         <Text style={s.buttonText}>Pick Image</Text>
       </TouchableOpacity>
+      {uploadedUrl && (
+        <Text>
+          Cover image
+          {' '}
+          <TouchableOpacity
+            onPress={() => {
+              props.setUrl(null);
+            }}
+          >
+            <Text>Delete Cover image</Text>
+          </TouchableOpacity>
+        </Text>
+      )}
     </View>
   );
 }

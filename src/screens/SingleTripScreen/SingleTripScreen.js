@@ -2,15 +2,21 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import React, { Component } from 'react';
 import {
-  FlatList, StatusBar, StyleSheet, Text, View,
+  FlatList,
+  StatusBar,
+  StyleSheet,
+  Text,
+  View,
+  Alert,
 } from 'react-native';
-
 import { TouchableOpacity } from 'react-native-gesture-handler';
+import s from '../../styles/styles';
+
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
 
-import MapDisplay from '../../components/MapDisplay';
+// import MapDisplay from '../../components/MapDisplay';
 
 class SingleTripScreen extends Component {
   state = {
@@ -52,20 +58,50 @@ class SingleTripScreen extends Component {
   }
 
   deleteTrip = () => {
-    const { route, navigation } = this.props;
-    const { tripUid } = route.params;
-    const db = firebase.firestore();
-    const tripRef = db.collection('trips').doc(tripUid);
-    tripRef.delete().then(() => {
-      navigation.navigate('My Trips');
+    const { route } = this.props;
+    const { trips, tripUid } = route.params;
+
+    const filteredTrips = trips.filter((trip) => {
+      return trip.id !== tripUid;
     });
+    Alert.alert(
+      'Delete',
+      'Are you sure you want to delete your trip?',
+      [
+        {
+          text: 'Confirm',
+          onPress: () => {
+            const { route, navigation } = this.props;
+            const { tripUid } = route.params;
+
+            const db = firebase.firestore();
+            const tripRef = db.collection('trips').doc(tripUid);
+            tripRef.delete().then(() => {
+              navigation.replace('My Trips', { trips: filteredTrips });
+            });
+          },
+        },
+        {
+          text: 'Cancel',
+          onPress: () => {
+            'cancel';
+          },
+        },
+      ],
+      { cancelable: true },
+    );
   };
 
   render() {
     const { navigation, route } = this.props;
     const { tripUid } = route.params;
 
-    const { trip, destinations } = this.state;
+    const { trip } = this.state;
+    let { destinations } = this.state;
+
+    if (route.params.destinations) {
+      destinations = route.params.destinations;
+    }
 
     const Item = ({ title }) => (
       <View style={styles.item}>
@@ -93,25 +129,26 @@ class SingleTripScreen extends Component {
     return (
       <View>
         <ProfileHeader />
-        <View style={styles.mapDisplay}>
+        {/* <View style={styles.mapDisplay}>
           <MapDisplay destinations={destinations} />
-        </View>
+        </View> */}
         <View>
           <Text>Map Goes Here</Text>
           <Text>Trip Stats go Here</Text>
         </View>
         <View>
           <TouchableOpacity
+            style={s.button}
             onPress={() => {
               navigation.navigate('Add Destination', { tripUid });
             }}
           >
             <TouchableOpacity />
-            <Text> Add Destination</Text>
+            <Text style={s.buttonText}> Add Destination</Text>
           </TouchableOpacity>
 
-          <TouchableOpacity onPress={this.deleteTrip}>
-            <Text> Delete Trip </Text>
+          <TouchableOpacity style={s.button} onPress={this.deleteTrip}>
+            <Text style={s.buttonText}> Delete Trip </Text>
           </TouchableOpacity>
         </View>
         <View>

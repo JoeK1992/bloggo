@@ -1,9 +1,7 @@
 import React, { useState } from 'react';
-import {
-  View, Text, TextInput, Alert,
-} from 'react-native';
+import { View, Text, TextInput, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import CalendarPicker from 'react-native-calendar-picker';
+import Calendar from '../../components/Calendar';
 
 import firebase from '../../firebase/config';
 import 'firebase/firestore';
@@ -37,34 +35,30 @@ export default function AddTripScreen({ navigation }) {
   const handlePress = () => {
     if (!tripName) {
       Alert.alert('Name field is required.');
-    }
-
-    if (!summary) {
+    } else if (!summary) {
       Alert.alert('Summary field is required.');
-    }
-    if (!startDate) {
+    } else if (!startDate) {
       Alert.alert('Start Date field is required.');
-    }
-    if (!endDate) {
+    } else if (!endDate) {
       Alert.alert('End Date field is required.');
+    } else {
+      db.collection('trips')
+        .add({
+          user: currentUserUID,
+          summary,
+          name: tripName,
+          startDate,
+          endDate
+        })
+        .then((data) => {
+          setTripUid(data.id);
+        });
+      setName('');
+      setSummary('');
+      setStartDate('');
+      setEndDate('');
+      setSubmitted(true);
     }
-
-    db.collection('trips')
-      .add({
-        user: currentUserUID,
-        summary,
-        name: tripName,
-        startDate,
-        endDate,
-      })
-      .then((data) => {
-        setTripUid(data.id);
-      });
-    setName('');
-    setSummary('');
-    setStartDate('');
-    setEndDate('');
-    setSubmitted(true);
   };
 
   return (
@@ -81,30 +75,12 @@ export default function AddTripScreen({ navigation }) {
         value={summary}
         onChangeText={(summary) => setSummary(summary)}
       />
-
-      <Text>Select your trip dates</Text>
-
-      <CalendarPicker
-        startFromMonday
-        allowRangeSelection
-        todayBackgroundColor="#f2e6ff"
-        selectedDayColor="#7300e6"
-        selectedDayTextColor="#FFFFFF"
+      <Calendar
+        page="trip"
+        startDate={startDate}
+        endDate={endDate}
         onDateChange={onDateChange}
-        scaleFactor="700"
       />
-
-      <View>
-        <Text>
-          SELECTED START DATE:
-          {startDate}
-        </Text>
-        <Text>
-          SELECTED END DATE:
-          {endDate}
-        </Text>
-      </View>
-
       <TouchableOpacity onPress={handlePress}>
         <Text>Submit</Text>
       </TouchableOpacity>
