@@ -7,6 +7,7 @@ import {
   Modal,
   TouchableHighlight
 } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
   container: {
@@ -64,7 +65,8 @@ const destinationFormatter = (destination) => {
 const MapPopUp = ({ closeModal, modalDestination }) => {
   //console.log('in map popup', modalDestination);
   const { id, destination, endDate, startDate, uploadedUrl } = modalDestination;
-  console.log(uploadedUrl);
+  console.log(typeof endDate);
+  const navigation = useNavigation();
 
   return (
     <Modal
@@ -75,9 +77,18 @@ const MapPopUp = ({ closeModal, modalDestination }) => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>
-            {destinationFormatter(destination.formatted)}
-          </Text>
+          <TouchableHighlight
+            onPress={() => {
+              console.log('navigating');
+              navigation.navigate('Single Destination');
+            }}
+          >
+            <Text style={styles.modalText}>
+              {destinationFormatter(destination.formatted)}
+            </Text>
+          </TouchableHighlight>
+          <Text>{startDate}</Text>
+          <Text>{endDate}</Text>
           <View style={styles.container}>
             <Image source={{ uri: uploadedUrl }} style={styles.stretch} />
           </View>
@@ -88,7 +99,7 @@ const MapPopUp = ({ closeModal, modalDestination }) => {
               closeModal();
             }}
           >
-            <Text style={styles.textStyle}>Hide Modal</Text>
+            <Text style={styles.textStyle}>Close</Text>
           </TouchableHighlight>
         </View>
       </View>
