@@ -2,13 +2,21 @@ import React from 'react';
 import {
   Text,
   View,
-  Alert,
+  Image,
   StyleSheet,
   Modal,
   TouchableHighlight
 } from 'react-native';
 
 const styles = StyleSheet.create({
+  container: {
+    paddingTop: 50
+  },
+  stretch: {
+    width: 50,
+    height: 200,
+    resizeMode: 'stretch'
+  },
   centeredView: {
     flex: 1,
     justifyContent: 'center',
@@ -56,6 +64,7 @@ const destinationFormatter = (destination) => {
 const MapPopUp = ({ closeModal, modalDestination }) => {
   //console.log('in map popup', modalDestination);
   const { id, destination, endDate, startDate, uploadedUrl } = modalDestination;
+  console.log(uploadedUrl);
 
   return (
     <Modal
@@ -69,6 +78,9 @@ const MapPopUp = ({ closeModal, modalDestination }) => {
           <Text style={styles.modalText}>
             {destinationFormatter(destination.formatted)}
           </Text>
+          <View style={styles.container}>
+            <Image source={{ uri: uploadedUrl }} style={styles.stretch} />
+          </View>
 
           <TouchableHighlight
             style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
