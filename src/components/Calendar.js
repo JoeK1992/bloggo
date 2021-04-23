@@ -3,6 +3,8 @@ import CalendarPicker from 'react-native-calendar-picker';
 import { View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
+import s from '../styles/styles';
+import styles from '../screens/AddTripScreen/styles';
 
 export default function Calendar(props) {
   const {
@@ -23,35 +25,40 @@ export default function Calendar(props) {
             onPress={() => {
               setCalendar(false);
             }}
+            style={s.button}
           >
             <Text>X</Text>
           </TouchableOpacity>
-          <CalendarPicker
-            startFromMonday
-            allowRangeSelection
-            todayBackgroundColor="#f2e6ff"
-            selectedDayColor="#7300e6"
-            selectedDayTextColor="#FFFFFF"
-            onDateChange={onDateChange}
-            scaleFactor="700"
-          />
+          <View style={styles.calendar}>
+            <CalendarPicker
+              startFromMonday
+              allowRangeSelection
+              todayBackgroundColor="#34A0A4"
+              selectedDayColor="#1E6091"
+              selectedDayTextColor="#FFFFFF"
+              onDateChange={onDateChange}
+              scaleFactor="600"
+              scrollable="true"
+            />
+          </View>
         </>
       ) : (
         <TouchableOpacity
           onPress={() => {
             setCalendar(true);
           }}
+          style={s.button}
         >
-          <Text>{text}</Text>
+          <Text style={s.buttonText}>{text}</Text>
         </TouchableOpacity>
       )}
       <View>
         <Text>
-          Select Start Date:
+          Start Date:
           {startDate ? moment(startDate).format('MMM Do YYYY') : ''}
         </Text>
         <Text>
-          Select End Date:
+          End Date:
           {endDate ? moment(endDate).format('MMM Do YYYY') : ''}
         </Text>
       </View>

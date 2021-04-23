@@ -81,6 +81,7 @@ export default function AddDestinationScreen(props) {
         startDate,
         endDate,
         uploadedUrl,
+        uploadedUrls,
       });
       setBlog('');
       setStartDate('');
@@ -114,6 +115,8 @@ export default function AddDestinationScreen(props) {
       />
 
       <PickImage uploadedUrl={uploadedUrl} setUrl={setUrl} />
+      {/* <PickImages uploadedUrls={uploadedUrls} setUrls={setUrls} /> */}
+
       <PickImages uploadedUrls={uploadedUrls} setUrls={setUrls} />
 
       <TouchableOpacity onPress={handlePress}>
