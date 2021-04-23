@@ -8,6 +8,8 @@ import Calendar from '../../components/Calendar';
 import firebase from '../../firebase/config';
 import 'firebase/firestore';
 import 'firebase/auth';
+import styles from './styles';
+import s from '../../styles/styles';
 
 export default function AddTripScreen({ navigation }) {
   const db = firebase.firestore();
@@ -64,18 +66,21 @@ export default function AddTripScreen({ navigation }) {
   };
 
   return (
-    <View>
+    <View style={styles.container}>
       <Text>Add trip:</Text>
       <TextInput
         placeholder="Enter your trip name"
         value={tripName}
         onChangeText={(tripName) => setName(tripName)}
         autoCapitalize="none"
+        style={styles.input}
       />
       <TextInput
         placeholder="Enter a summary of your trip"
         value={summary}
+        multiline
         onChangeText={(summary) => setSummary(summary)}
+        style={styles.input}
       />
       <Calendar
         page="trip"
@@ -83,16 +88,24 @@ export default function AddTripScreen({ navigation }) {
         endDate={endDate}
         onDateChange={onDateChange}
       />
-      <TouchableOpacity onPress={handlePress}>
-        <Text>Submit</Text>
+      <TouchableOpacity style={s.button} onPress={handlePress}>
+        <Text style={s.buttonText}>Submit</Text>
       </TouchableOpacity>
       {!submitted ? (
-        <TouchableOpacity onPress={onLinkPress} disabled>
-          <Text>Add Destination</Text>
+        <TouchableOpacity
+          style={s.buttonDisabled}
+          onPress={onLinkPress}
+          disabled
+        >
+          <Text style={s.buttonText}>Add Destination</Text>
         </TouchableOpacity>
       ) : (
-        <TouchableOpacity onPress={onLinkPress} disabled={false}>
-          <Text>Add Destination</Text>
+        <TouchableOpacity
+          style={s.button}
+          onPress={onLinkPress}
+          disabled={false}
+        >
+          <Text style={s.buttonText}>Add Destination</Text>
         </TouchableOpacity>
       )}
     </View>

@@ -11,8 +11,9 @@ export default StyleSheet.create({
   },
   titles: {
     fontSize: 10,
-    color: "white",
-    fontFamily: "Nunito",
+    color: 'white',
+    fontFamily: 'Nunito_400Regular',
+
   },
 
   logo: {
@@ -26,21 +27,30 @@ export default StyleSheet.create({
     zIndex: 1,
   },
   button: {
-    height: 47,
     borderRadius: 5,
-    backgroundColor: "#788eec",
-    width: 80,
-    justifyContent: "center",
+
+    backgroundColor: '#52b69a',
+    justifyContent: 'center',
+
     margin: 2,
+    width: 90,
+    padding: 10,
+    minWidth: 200,
+
+    alignItems: 'center',
   },
 
   buttonDisabled: {
     height: 47,
     borderRadius: 5,
-    backgroundColor: "#567eed",
+
+    backgroundColor: '#B7E1D5',
+
     width: 80,
     justifyContent: "center",
     margin: 2,
+    minWidth: 200,
+    alignItems: 'center',
   },
 
   input: {
@@ -57,10 +67,12 @@ export default StyleSheet.create({
   buttonText: {
     color: "white",
     fontSize: 16,
+    fontFamily: 'Nunito_400Regular',
   },
   paragraphText: {
     fontSize: 10,
-    color: "black",
-    fontFamily: "Lato_400Regular",
+    color: 'black',
+    fontFamily: 'Lato_400Regular',
+
   },
 });

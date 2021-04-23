@@ -8,6 +8,7 @@ import {
   Text,
   View,
   Alert,
+  ScrollView,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import s from '../../styles/styles';
@@ -128,38 +129,40 @@ class SingleTripScreen extends Component {
 
     return (
       <View>
-        <ProfileHeader />
-        {/* <View style={styles.mapDisplay}>
+        <ScrollView>
+          <ProfileHeader />
+          {/* <View style={styles.mapDisplay}>
           <MapDisplay destinations={destinations} />
         </View> */}
-        <View>
-          <Text>Map Goes Here</Text>
-          <Text>Trip Stats go Here</Text>
-        </View>
-        <View>
-          <TouchableOpacity
-            style={s.button}
-            onPress={() => {
-              navigation.navigate('Add Destination', { tripUid });
-            }}
-          >
-            <TouchableOpacity />
-            <Text style={s.buttonText}> Add Destination</Text>
-          </TouchableOpacity>
+          <View>
+            <Text>Map Goes Here</Text>
+            <Text>Trip Stats go Here</Text>
+          </View>
+          <View>
+            <TouchableOpacity
+              style={s.button}
+              onPress={() => {
+                navigation.navigate('Add Destination', { tripUid });
+              }}
+            >
+              <TouchableOpacity />
+              <Text style={s.buttonText}> Add Destination</Text>
+            </TouchableOpacity>
 
-          <TouchableOpacity style={s.button} onPress={this.deleteTrip}>
-            <Text style={s.buttonText}> Delete Trip </Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <FlatList
-            data={destinations}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-          />
-        </View>
+            <TouchableOpacity style={s.button} onPress={this.deleteTrip}>
+              <Text style={s.buttonText}> Delete Trip </Text>
+            </TouchableOpacity>
+          </View>
+          <View>
+            <FlatList
+              data={destinations}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+            />
+          </View>
 
-        <NavBar />
+          <NavBar />
+        </ScrollView>
       </View>
     );
   }
