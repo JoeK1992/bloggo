@@ -7,7 +7,7 @@ import {
   StyleSheet,
   Text,
   View,
-  Alert
+  Alert,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import s from '../../styles/styles';
@@ -21,7 +21,7 @@ import MapViewer from '../../components/MapViewer';
 class SingleTripScreen extends Component {
   state = {
     trip: {},
-    destinations: []
+    destinations: [],
   };
 
   componentDidMount() {
@@ -79,16 +79,16 @@ class SingleTripScreen extends Component {
             tripRef.delete().then(() => {
               navigation.replace('My Trips', { trips: filteredTrips });
             });
-          }
+          },
         },
         {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          }
-        }
+          },
+        },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
@@ -117,7 +117,7 @@ class SingleTripScreen extends Component {
               destinationUid: item.id,
               tripUid,
               destinations,
-              tripName: trip.name
+              tripName: trip.name,
             });
           }}
         >
@@ -168,21 +168,21 @@ class SingleTripScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0
+    marginTop: StatusBar.currentHeight || 0,
   },
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   title: {
-    fontSize: 32
+    fontSize: 32,
   },
   mapDisplay: {
     height: 500,
-    width: 500
-  }
+    width: 500,
+  },
 });
 
 export default SingleTripScreen;

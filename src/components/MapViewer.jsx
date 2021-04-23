@@ -6,12 +6,11 @@ import MapPopUp from '../components/MapPopUp';
 class MapViewer extends React.Component {
   state = {
     popUpVisible: false,
-    id: ''
+    modalDestination: {}
   };
 
-  handlePress = (id) => {
-    console.log('in handlePress', this.state.popUpVisible);
-    this.setState({ popUpVisible: true, id: id });
+  handlePress = (destination) => {
+    this.setState({ popUpVisible: true, modalDestination: destination });
   };
 
   closeModal = () => {
@@ -21,7 +20,7 @@ class MapViewer extends React.Component {
 
   render() {
     const { destinations } = this.props;
-    const { popUpVisible } = this.state;
+    const { popUpVisible, modalDestination } = this.state;
 
     return (
       <View style={styles.container}>
@@ -31,19 +30,21 @@ class MapViewer extends React.Component {
               this.closeModal();
             }}
             style={{ position: 'absolute', top: 100, left: 50 }}
+            modalDestination={modalDestination}
           />
         )}
         <MapView style={styles.map}>
-          {destinations.map(({ destination, id }) => {
-            const latitude = destination.geometry.lat;
-            const longitude = destination.geometry.lng;
+          {destinations.map((destination) => {
+            const { geometry } = destination.destination;
+            const latitude = geometry.lat;
+            const longitude = geometry.lng;
 
             return (
               <Marker
                 coordinate={{ latitude: latitude, longitude: longitude }}
-                key={id}
+                key={destination.id}
                 onPress={() => {
-                  this.handlePress(id);
+                  this.handlePress(destination);
                 }}
               />
             );

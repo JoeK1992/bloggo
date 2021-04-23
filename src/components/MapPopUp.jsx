@@ -47,27 +47,17 @@ const styles = StyleSheet.create({
   }
 });
 
-const MapPopUp = ({ closeModal }) => {
-  console.log('in map popup', closeModal);
+const destinationFormatter = (destination) => {
+  const commaIndex = destination.indexOf(',');
+  const formattedDestination = destination.slice(0, commaIndex);
+  return formattedDestination;
+};
+
+const MapPopUp = ({ closeModal, modalDestination }) => {
+  //console.log('in map popup', modalDestination);
+  const { id, destination, endDate, startDate, uploadedUrl } = modalDestination;
+
   return (
-    // <View style={styles.popUp}>
-    // <Text>Placename</Text>
-    // <TouchableOpacity
-    // style={styles.mapClosingButton}
-    // onPress={() => {
-    // console.log("close");
-    // }}
-    // >
-    // <Text style={styles.text}>Close</Text>
-    // </TouchableOpacity>
-    // <TouchableOpacity
-    // // onPress={() => {
-    // // console.log("navigating to single trip page");
-    // // }}
-    // >
-    // <Text>This Trip</Text>
-    // </TouchableOpacity>
-    // </View>
     <Modal
       animationType="slide"
       transparent={true}
@@ -76,7 +66,9 @@ const MapPopUp = ({ closeModal }) => {
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
-          <Text style={styles.modalText}>Hello World!</Text>
+          <Text style={styles.modalText}>
+            {destinationFormatter(destination.formatted)}
+          </Text>
 
           <TouchableHighlight
             style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
