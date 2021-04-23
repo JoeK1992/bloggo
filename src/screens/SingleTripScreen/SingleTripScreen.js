@@ -9,6 +9,10 @@ import {
   StyleSheet,
   Text,
   View,
+
+
+  ScrollView,
+
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import NavBar from '../../components/NavBar';
@@ -130,6 +134,7 @@ class SingleTripScreen extends Component {
     );
 
     return (
+
       <View style={styles.page}>
         <View>
           <Text>Map Goes Here</Text>
@@ -159,6 +164,7 @@ class SingleTripScreen extends Component {
         </View>
 
         <NavBar />
+
       </View>
     );
   }

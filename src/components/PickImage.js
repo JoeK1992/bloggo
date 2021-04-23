@@ -24,8 +24,6 @@ export default function PickImage(props) {
       allowsEditing: true,
       aspect: [4, 3],
       base64: true,
-
-      // allowsMultipleSelection: true
     });
 
     if (!result.cancelled) {
@@ -53,15 +51,15 @@ export default function PickImage(props) {
     }
   };
   const { uploadedUrl } = props;
+  console.log(uploadedUrl, 'here');
   return (
     <View>
       <TouchableOpacity style={s.button} onPress={chooseImage}>
-        <Text style={s.buttonText}>Pick Image</Text>
+        <Text style={s.buttonText}>Pick Cover Image</Text>
       </TouchableOpacity>
       {uploadedUrl && (
         <Text>
           Cover image
-          {' '}
           <TouchableOpacity
             onPress={() => {
               props.setUrl(null);
