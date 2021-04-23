@@ -1,14 +1,13 @@
+import 'firebase/auth';
+import 'firebase/firestore';
 import React, { Component } from 'react';
 import {
-  View, Text, FlatList, StyleSheet, StatusBar,
+  FlatList, StatusBar, StyleSheet, Text, View,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import NavBar from '../../components/NavBar';
 // import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
-
-import 'firebase/firestore';
-import 'firebase/auth';
 
 class TripsScreen extends Component {
   state = {
@@ -102,18 +101,26 @@ class TripsScreen extends Component {
     );
 
     return (
-      <View>
-        {order === 'desc' ? (
-          <TouchableOpacity onPress={this.reverseOrder}>
-            <Text>Oldest trips</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={this.reverseOrder}>
-            <Text>Most recent trips</Text>
-          </TouchableOpacity>
-        )}
+      <View style={styles.page}>
+        <View style={styles.head}>
+          <Text style={styles.headTitle}> Choose One of Your Trips! </Text>
+        </View>
+
+        <View style={styles.sortBtn}>
+          <Text style={styles.sortBy}> Sort your Trips by:</Text>
+          {order === 'desc' ? (
+            <TouchableOpacity onPress={this.reverseOrder}>
+              <Text style={styles.sortText}>Oldest trips</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={this.reverseOrder}>
+              <Text style={styles.sortText}>Most recent trips</Text>
+            </TouchableOpacity>
+          )}
+        </View>
 
         <FlatList
+          style={styles.text}
           data={trips}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
@@ -130,13 +137,49 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: '#52B69A',
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
+    borderRadius: 15,
+    borderColor: '#F9FCED',
+    borderWidth: 2,
   },
   title: {
     fontSize: 32,
+    color: '#F9FCED',
+    textAlign: 'center',
+  },
+  page: {
+    backgroundColor: '#1E6091',
+  },
+  sortBtn: {
+    flexDirection: 'row',
+    left: 90,
+  },
+  sortText: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#F9FCED',
+    borderColor: '#52B69A',
+    borderWidth: 2,
+    borderRadius: 5,
+    backgroundColor: '#113755',
+    left: 10,
+    marginLeft: 2,
+    width: 90,
+    height: 20,
+  },
+  headTitle: {
+    fontSize: 20,
+    textAlign: 'center',
+    fontWeight: 'bold',
+    color: '#F9FCED',
+  },
+  sortBy: {
+    fontSize: 15,
+    fontWeight: 'bold',
+    color: '#F9FCED',
   },
 });
 export default TripsScreen;

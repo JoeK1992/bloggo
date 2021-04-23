@@ -61,6 +61,6 @@ export default StyleSheet.create({
   paragraphText: {
     fontSize: 10,
     color: 'black',
-    fontFamily: 'Nunito',
+    fontFamily: 'Lato_400Regular',
   },
 });

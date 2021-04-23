@@ -1,24 +1,23 @@
+import {
+  Lato_300Light,
+  Lato_400Regular,
+  Lato_700Bold,
+} from '@expo-google-fonts/lato';
+import {
+  Nunito_400Regular,
+  Nunito_600SemiBold,
+  useFonts,
+} from '@expo-google-fonts/nunito';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { decode, encode } from 'base-64';
+import AppLoading from 'expo-app-loading';
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import 'react-native-gesture-handler';
-
-import AppLoading from 'expo-app-loading';
-
-import {
-  useFonts,
-  Nunito_600SemiBold,
-  Nunito_400Regular,
-} from '@expo-google-fonts/nunito';
-import {
-  Lato_400Regular,
-  Lato_300Light,
-  Lato_700Bold,
-} from '@expo-google-fonts/lato';
+import firebase from './src/firebase/config';
 import {
   AddDestinationScreen,
   AddTripScreen,
@@ -30,7 +29,6 @@ import {
   TripsScreen,
   UserScreen,
 } from './src/screens';
-import firebase from './src/firebase/config';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -104,10 +102,7 @@ export default function App() {
           </>
         ) : (
           <>
-            <Stack.Screen
-              name="Registration"
-              component={RegistrationScreen}
-            />
+            <Stack.Screen name="Registration" component={RegistrationScreen} />
             <Stack.Screen name="Login" component={LoginScreen} />
           </>
         )}
