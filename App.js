@@ -6,7 +6,19 @@ import 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
 import { Text } from 'react-native';
 import 'react-native-gesture-handler';
-import firebase from './src/firebase/config';
+
+import AppLoading from 'expo-app-loading';
+
+import {
+  useFonts,
+  Nunito_600SemiBold,
+  Nunito_400Regular,
+} from '@expo-google-fonts/nunito';
+import {
+  Lato_400Regular,
+  Lato_300Light,
+  Lato_700Bold,
+} from '@expo-google-fonts/lato';
 import {
   AddDestinationScreen,
   AddTripScreen,
@@ -18,6 +30,7 @@ import {
   TripsScreen,
   UserScreen,
 } from './src/screens';
+import firebase from './src/firebase/config';
 
 if (!global.btoa) {
   global.btoa = encode;
@@ -31,6 +44,14 @@ const Stack = createStackNavigator();
 export default function App() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
+
+  const [fontsLoaded] = useFonts({
+    Nunito_600SemiBold,
+    Lato_400Regular,
+    Lato_300Light,
+    Lato_700Bold,
+    Nunito_400Regular,
+  });
 
   useEffect(() => {
     const usersRef = firebase.firestore().collection('users');
@@ -54,6 +75,9 @@ export default function App() {
   }, []);
   if (loading) {
     return <Text>Loading</Text>;
+  }
+  if (!fontsLoaded) {
+    return <AppLoading />;
   }
   return (
     <NavigationContainer>
@@ -80,7 +104,10 @@ export default function App() {
           </>
         ) : (
           <>
-            <Stack.Screen name="Registration" component={RegistrationScreen} />
+            <Stack.Screen
+              name="Registration"
+              component={RegistrationScreen}
+            />
             <Stack.Screen name="Login" component={LoginScreen} />
           </>
         )}

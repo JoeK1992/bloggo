@@ -12,6 +12,7 @@ export default StyleSheet.create({
   titles: {
     fontSize: 10,
     color: 'white',
+    fontFamily: 'Nunito',
   },
 
   logo: {
@@ -56,5 +57,10 @@ export default StyleSheet.create({
   buttonText: {
     color: 'white',
     fontSize: 16,
+  },
+  paragraphText: {
+    fontSize: 10,
+    color: 'black',
+    fontFamily: 'Nunito',
   },
 });
