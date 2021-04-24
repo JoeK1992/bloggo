@@ -10,13 +10,18 @@ import {
   View,
   ScrollView,
   Dimensions,
+  LogBox
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
 import s from '../../styles/styles';
 import ImagesCarousel from '../../components/ImagesCarousel';
 
-const { height, width } = Dimensions.get('window');
+LogBox.ignoreLogs([
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
+]);
+
+const { width } = Dimensions.get('window');
 
 export default class SingleDestinationScreen extends Component {
   constructor(props) {
@@ -25,8 +30,7 @@ export default class SingleDestinationScreen extends Component {
       destination: null,
       editable: false,
       blogPost: '',
-      screenHeight: 0,
-      openedMenu: false,
+      openedMenu: false
     };
   }
 
@@ -52,11 +56,6 @@ export default class SingleDestinationScreen extends Component {
       }
     });
   }
-
-  onContentSizeChange = (contentWidth, contentHeight) => {
-    // Save the content height in state
-    this.setState({ screenHeight: contentHeight });
-  };
 
   editBlogPost = () => {
     const _this = this;
@@ -106,32 +105,26 @@ export default class SingleDestinationScreen extends Component {
             destinationRef.delete().then(() => {
               navigation.replace('Single Trip', {
                 tripUid,
-                destinations: filteredDestinations,
+                destinations: filteredDestinations
               });
             });
-          },
+          }
         },
         {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          },
-        },
+          }
+        }
       ],
-      { cancelable: true },
+      { cancelable: true }
     );
   };
 
   render() {
-    const { screenHeight } = this.state;
-    const scrollEnabled = screenHeight > height;
     const { navigation, route } = this.props;
-    const {
-      destination, blogPost, editable, openedMenu,
-    } = this.state;
-    const {
-      destinations, tripUid, destinationUid, tripName,
-    } = route.params;
+    const { destination, blogPost, editable, openedMenu } = this.state;
+    const { destinations, tripUid, destinationUid, tripName } = route.params;
     const filteredDestinations = destinations.filter((destination) => {
       return destination.id !== destinationUid;
     });
@@ -149,13 +142,56 @@ export default class SingleDestinationScreen extends Component {
               destinationUid: item.id,
               tripUid,
               destinations,
-              tripName,
+              tripName
             });
           }}
         >
           <Item title={item.destination.formatted.split(',')[0]} />
         </TouchableOpacity>
       </>
+    );
+
+    const Header = () => (
+      <View style={styles.container}>
+        <View style={styles.carouselContainer}>
+          {destination && <ImagesCarousel destination={destination} />}
+        </View>
+      </View>
+    );
+
+    const Footer = () => (
+      <View style={styles.container}>
+        <TextInput
+          value={blogPost}
+          multiline
+          style={[editable ? styles.input : styles.blogText]}
+          onChangeText={(blogPost) => this.setState({ blogPost })}
+          editable={editable}
+        />
+        {editable ? (
+          <TouchableOpacity onPress={this.editBlogPost} style={s.button}>
+            <Text style={s.buttonText}>Submit!</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={this.toggleEditable} style={s.button}>
+            <Text style={s.buttonText}>Edit Blog</Text>
+          </TouchableOpacity>
+        )}
+        <TouchableOpacity onPress={this.deleteDestination} style={s.button}>
+          <Text style={s.buttonText}>Delete Destination</Text>
+        </TouchableOpacity>
+      </View>
+    );
+
+    const ExploreBtn = () => (
+      <TouchableOpacity
+        style={s.button}
+        onPress={() => {
+          this.openMenu(true);
+        }}
+      >
+        <Text style={s.buttonText}>Explore trip</Text>
+      </TouchableOpacity>
     );
 
     return (
@@ -174,74 +210,29 @@ export default class SingleDestinationScreen extends Component {
                   style={styles.button}
                 >
                   <Text style={styles.buttonText}>
-                    Back to
-                    {' '}
-                    {tripName}
-                    {' '}
-                    trip!
+                    Back to {tripName} trip!
                   </Text>
                 </TouchableOpacity>
               </>
             </>
           )}
         </View>
-        <ScrollView
-          style={{ flex: 1 }}
-          contentContainerStyle={styles.scrollview}
-          scrollEnabled={scrollEnabled}
-          onContentSizeChange={this.onContentSizeChange}
-        >
-          <View style={styles.carouselContainer}>
-            {destination && <ImagesCarousel destination={destination} />}
-          </View>
-          {!openedMenu ? (
-            <TouchableOpacity
-              style={s.button}
-              onPress={() => {
-                this.openMenu(true);
-              }}
-            >
-              <Text style={s.buttonText}>Explore trip</Text>
-            </TouchableOpacity>
-          ) : (
-            <View>
-              <TouchableOpacity
-                onPress={() => {
-                  this.openMenu(false);
-                }}
-              >
-                <Text>X</Text>
-              </TouchableOpacity>
-              <FlatList
-                data={filteredDestinations}
-                renderItem={renderItem}
-                keyExtractor={(item) => item.id}
-                style={styles.listContainer}
-              />
-            </View>
-          )}
-          <View>
-            <TextInput
-              value={blogPost}
-              multiline
-              style={[editable ? styles.input : styles.blogText]}
-              onChangeText={(blogPost) => this.setState({ blogPost })}
-              editable={editable}
-            />
-            {editable ? (
-              <TouchableOpacity onPress={this.editBlogPost} style={s.button}>
-                <Text style={s.buttonText}>Submit!</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={this.toggleEditable} style={s.button}>
-                <Text style={s.buttonText}>Edit Blog</Text>
-              </TouchableOpacity>
-            )}
-            <TouchableOpacity onPress={this.deleteDestination} style={s.button}>
-              <Text style={s.buttonText}>Delete Destination</Text>
-            </TouchableOpacity>
-          </View>
-        </ScrollView>
+        {!openedMenu ? (
+          <ScrollView>
+            <Header />
+            {filteredDestinations.length > 1 && <ExploreBtn />}
+            <Footer />
+          </ScrollView>
+        ) : (
+          <FlatList
+            ListHeaderComponent={<Header />}
+            data={filteredDestinations}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            style={styles.listContainer}
+            ListFooterComponent={<Footer />}
+          />
+        )}
       </View>
     );
   }
@@ -250,36 +241,34 @@ export default class SingleDestinationScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#113755',
-    flex: 1,
-
-    // flex: 1,
-    // marginTop: StatusBar.currentHeight || 0,
+    flex: 1
   },
   tinyLogo: {
     width: 50,
-    height: 50,
+    height: 50
   },
   pic: {
     width: 100,
-    height: 100,
+    height: 100
   },
   listContainer: {
-    backgroundColor: '#52B69A',
+    backgroundColor: '#52B69A'
   },
   item: {
     marginVertical: 8,
-    marginHorizontal: 16,
+    marginHorizontal: 16
   },
 
   carouselContainer: {
     backgroundColor: '#113755',
     justifyContent: 'center',
-    marginTop: 80,
+    marginTop: 120,
+    transform: [{ translateX: -40 }]
   },
   title: {
     fontSize: 15,
     fontFamily: 'Nunito_600SemiBold',
-    color: '#f9fced',
+    color: '#f9fced'
   },
   titleContainer: {
     fontFamily: 'Nunito_600SemiBold',
@@ -290,12 +279,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingLeft: 20,
     paddingRight: 20,
-    zIndex: 2,
+    zIndex: 2
   },
 
   buttonText: {
     fontFamily: 'Nunito_600SemiBold',
-    color: '#f9fced',
+    color: '#f9fced'
   },
 
   input: {
@@ -306,7 +295,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     marginLeft: 20,
-    marginRight: 20,
+    marginRight: 20
   },
   blogText: {
     fontSize: 15,
@@ -318,6 +307,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 20,
     marginRight: 20,
-    lineHeight: 20,
-  },
+    lineHeight: 20
+  }
 });

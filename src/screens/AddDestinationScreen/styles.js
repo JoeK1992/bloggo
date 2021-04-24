@@ -79,4 +79,7 @@ export default StyleSheet.create({
     borderTopEndRadius: 5,
     borderTopStartRadius: 5,
   },
+  successMessage: {
+    color: '#f9fced',
+  },
 });

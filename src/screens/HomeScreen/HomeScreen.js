@@ -8,6 +8,7 @@ import firebase from '../../firebase/config';
 // import { createStackNavigator } from '@react-navigation/stack';
 
 import 'firebase/firestore';
+import AddAvatar from '../../components/AddAvatar';
 
 export default function HomeScreen({ navigation }) {
   const handlePress = () => {
@@ -48,6 +49,7 @@ export default function HomeScreen({ navigation }) {
           >
             <Text> User Profile Button</Text>
           </TouchableOpacity>
+          <AddAvatar />
         </View>
 
         <TouchableOpacity style={styles.btn}>

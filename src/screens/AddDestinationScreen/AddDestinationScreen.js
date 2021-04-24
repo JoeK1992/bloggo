@@ -17,7 +17,6 @@ export default function AddDestinationScreen(props) {
   const [blogPost, setBlog] = useState('');
 
   const currentUserUID = firebase.auth().currentUser.uid;
-  const [uploadedUrls, setUrls] = useState([]);
   const [destination, setDestination] = useState({ formatted: '' });
   const [results, setResults] = useState([]);
   const [destinationInput, setDestinationInput] = useState('');
@@ -43,7 +42,8 @@ export default function AddDestinationScreen(props) {
       });
     }
   });
-
+  const [uploadedUrls, setUploadedUrls] = useState([]);
+  const [successMessage, setSuccessMessage] = useState('');
   const [selectedStartDate, setStartDate] = useState(null);
   const [selectedEndDate, setEndDate] = useState(null);
   const startDate = selectedStartDate ? selectedStartDate.toString() : '';
@@ -72,13 +72,6 @@ export default function AddDestinationScreen(props) {
     } else if (uploadedUrls.length < 1) {
       Alert.alert('At least one image is required.');
     } else {
-      console.log(
-        startDate,
-        endDate,
-        blogPost,
-        uploadedUrls,
-        destination.formatted,
-      );
       db.collection('trips').doc(tripUid).collection('destinations').add({
         destination,
         user: currentUserUID,
@@ -91,6 +84,8 @@ export default function AddDestinationScreen(props) {
       setBlog('');
       setStartDate('');
       setEndDate('');
+      setUploadedUrls([]);
+      setSuccessMessage('Destination successfully submitted');
     }
   };
   return (
@@ -121,15 +116,14 @@ export default function AddDestinationScreen(props) {
           onChangeText={(blogPost) => setBlog(blogPost)}
           autoCapitalize="none"
         />
-
-        {/* <PickImage uploadedUrl={uploadedUrl} setUrl={setUrl} /> */}
-        {/* <PickImages uploadedUrls={uploadedUrls} setUrls={setUrls} /> */}
-
-        <PickImages uploadedUrls={uploadedUrls} setUrls={setUrls} />
-
+        <PickImages
+          uploadedUrls={uploadedUrls}
+          setUploadedUrls={setUploadedUrls}
+        />
         <TouchableOpacity onPress={handlePress} style={styles.button}>
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
+        <Text style={styles.successMessage}>{successMessage}</Text>
       </ScrollView>
     </View>
   );
