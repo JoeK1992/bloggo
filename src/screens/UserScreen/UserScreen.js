@@ -10,11 +10,79 @@ import {
 } from "react-native";
 import NavBar from "../../components/NavBar";
 import ProfileHeader from "../../components/ProfileHeader";
+import firebase from "../../firebase/config";
+
+import "firebase/firestore";
+import "firebase/auth";
+import TripsScreen from "../TripsScreen/TripsScreen";
 
 const { height, width } = Dimensions.get("window");
 
 class UserScreen extends Component {
+  state = {
+    trips: 0,
+    tripUids: [],
+    continents: [],
+    countries: [],
+    flags: [],
+  };
+
+  componentDidMount() {
+    const db = firebase.firestore();
+    const currentUserUID = firebase.auth().currentUser.uid;
+    const tripUids = [];
+    const tripsRef = db.collection("trips");
+    tripsRef
+      .where("user", "==", currentUserUID)
+      .where("summary", "!=", false)
+      .get()
+      .then((snapshot) => {
+        if (snapshot.empty) {
+          console.log("No matching documents.");
+        } else {
+          let trips = 0;
+          snapshot.forEach((doc) => {
+            const trip = doc.data();
+            trip.id = doc.id;
+            tripUids.push(trip.id);
+            trips++;
+          });
+          this.setState({ trips, tripUids });
+          this.state.tripUids.forEach((tripUid) => {
+            const destinationsRef = db
+              .collection("trips")
+              .doc(tripUid)
+              .collection("destinations");
+            destinationsRef.get().then((snapshot) => {
+              if (snapshot.empty) {
+                console.log("No matching documents.");
+              } else {
+                const newDestinations = [];
+                const continents = [];
+                const countries = [];
+                const flags = [];
+                snapshot.forEach((doc) => {
+                  const destination = doc.data();
+                  const { components, annotations } = destination.destination;
+                  continents.push(components.continents);
+                  countries.push(components.country);
+                  flags.push(annotations.flag);
+                });
+
+                this.setState({
+                  countries,
+                  flags,
+                  continents,
+                });
+              }
+            });
+          });
+        }
+      });
+  }
+
   render() {
+    const { trips, continents, countries, flags } = this.state;
     const { navigation } = this.props;
     return (
       <View style={styles.userScreen}>
@@ -33,13 +101,17 @@ class UserScreen extends Component {
           <View style={styles.gamificationContainer}>
             <Text style={styles.gamificationTitle}>My World</Text>
             <Text style={styles.gamificationStat}>
-              2 Continents | 24 Countries | 4 Trips
+              {continents.length === 1
+                ? "1 Continent"
+                : `${continents.length} Continents`}
+              |
+              {countries.length === 1
+                ? "1 Country"
+                : `${countries.length} Countries`}
+              | {trips} Trips
             </Text>
 
-            <Text style={styles.gamificationFlags}>
-              🇦🇽 🇧🇬 🇧🇷 🇧🇿 🇦🇽 🇧🇬 🇧🇷 🇧🇿 🇦🇽 🇧🇬 🇧🇷 🇧🇿 🇦🇽 🇧🇬 🇧🇷 🇧🇿 🇦🇽 🇧🇬 🇧🇷 🇧🇿 🇦🇽 🇧🇬
-              🇧🇷 🇧🇿 🇦🇽 🇧🇬 🇧🇷 🇧🇿 🇦🇽 🇧🇬
-            </Text>
+            <Text style={styles.gamificationFlags}>{flags}</Text>
           </View>
           <NavBar style={styles.navBar} />
         </ScrollView>
