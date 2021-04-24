@@ -4,20 +4,19 @@ import React, { useState } from 'react';
 import {
   View, Text, TextInput, Alert,
 } from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { ScrollView, TouchableOpacity } from 'react-native-gesture-handler';
 import DestinationInputBar from '../../components/DestinationInputBar';
 import firebase from '../../firebase/config';
 import getDestination from '../../utils/InputDestinationFuncs';
-import PickImage from '../../components/PickImage';
 import PickImages from '../../components/PickImages';
 import Calendar from '../../components/Calendar';
+import styles from './styles';
 
 export default function AddDestinationScreen(props) {
   const db = firebase.firestore();
   const [blogPost, setBlog] = useState('');
 
   const currentUserUID = firebase.auth().currentUser.uid;
-  const [uploadedUrl, setUrl] = useState(null);
   const [uploadedUrls, setUrls] = useState([]);
   const [destination, setDestination] = useState({ formatted: '' });
   const [results, setResults] = useState([]);
@@ -70,9 +69,16 @@ export default function AddDestinationScreen(props) {
       Alert.alert('End Date field is required.');
     } else if (!blogPost) {
       Alert.alert('Blog post is required.');
-    } else if (!uploadedUrl) {
-      Alert.alert('Cover image is required.');
+    } else if (uploadedUrls.length < 1) {
+      Alert.alert('At least one image is required.');
     } else {
+      console.log(
+        startDate,
+        endDate,
+        blogPost,
+        uploadedUrls,
+        destination.formatted,
+      );
       db.collection('trips').doc(tripUid).collection('destinations').add({
         destination,
         user: currentUserUID,
@@ -80,7 +86,6 @@ export default function AddDestinationScreen(props) {
         blogPost,
         startDate,
         endDate,
-        uploadedUrl,
         uploadedUrls,
       });
       setBlog('');
@@ -89,39 +94,43 @@ export default function AddDestinationScreen(props) {
     }
   };
   return (
-    <View>
-      <DestinationInputBar
-        setDestination={setDestination}
-        destination={destination}
-        results={results}
-        destinationInput={destinationInput}
-        setDestinationInput={setDestinationInput}
-        selectedId={selectedId}
-        setSelectedId={setSelectedId}
-      />
-      <Calendar
-        page="destination"
-        startDate={startDate}
-        endDate={endDate}
-        onDateChange={onDateChange}
-      />
-      <TextInput
-        multiline
-        numberOfLines={6}
-        placeholder="Enter your blog post"
-        value={blogPost}
-        onChangeText={(blogPost) => setBlog(blogPost)}
-        autoCapitalize="none"
-      />
+    <View style={styles.container}>
+      <ScrollView>
+        <DestinationInputBar
+          setDestination={setDestination}
+          destination={destination}
+          results={results}
+          destinationInput={destinationInput}
+          setDestinationInput={setDestinationInput}
+          selectedId={selectedId}
+          setSelectedId={setSelectedId}
+        />
+        <Calendar
+          page="destination"
+          startDate={startDate}
+          endDate={endDate}
+          onDateChange={onDateChange}
+        />
 
-      <PickImage uploadedUrl={uploadedUrl} setUrl={setUrl} />
-      {/* <PickImages uploadedUrls={uploadedUrls} setUrls={setUrls} /> */}
+        <TextInput
+          style={styles.input}
+          multiline
+          numberOfLines={6}
+          placeholder="Enter your blog post"
+          value={blogPost}
+          onChangeText={(blogPost) => setBlog(blogPost)}
+          autoCapitalize="none"
+        />
 
-      <PickImages uploadedUrls={uploadedUrls} setUrls={setUrls} />
+        {/* <PickImage uploadedUrl={uploadedUrl} setUrl={setUrl} /> */}
+        {/* <PickImages uploadedUrls={uploadedUrls} setUrls={setUrls} /> */}
 
-      <TouchableOpacity onPress={handlePress}>
-        <Text>Submit</Text>
-      </TouchableOpacity>
+        <PickImages uploadedUrls={uploadedUrls} setUrls={setUrls} />
+
+        <TouchableOpacity onPress={handlePress} style={styles.button}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+      </ScrollView>
     </View>
   );
 }

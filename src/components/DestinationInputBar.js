@@ -6,7 +6,6 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
-  StatusBar,
 } from 'react-native';
 
 export default function DestinationInputBar(props) {
@@ -18,9 +17,22 @@ export default function DestinationInputBar(props) {
     </TouchableOpacity>
   );
   const { results, selectedId } = props;
+
+  const renderSeparator = () => {
+    return (
+      <View
+        style={{
+          height: 1,
+          width: '100%',
+          backgroundColor: '#CED0CE',
+        }}
+      />
+    );
+  };
+
   const renderItem = ({ item }) => {
-    const backgroundColor = item.annotations.MGRS === selectedId ? '#6E3B6E' : '#F9C2FF';
-    const color = item.annotations.MGRS === selectedId ? 'white' : 'black';
+    const backgroundColor = item.annotations.MGRS === selectedId ? '#1e6091' : 'white';
+    const color = item.annotations.MGRS === selectedId ? 'white' : '#1e6091';
     return (
       <Item
         item={item}
@@ -31,18 +43,21 @@ export default function DestinationInputBar(props) {
     );
   };
   return (
-    <View>
+    <View style={styles.container}>
       <TextInput
         placeholder="Enter your destination"
         // value={props.destination.formatted}
         editable
         onChangeText={(textInput) => props.setDestinationInput(textInput)}
+        style={styles.input}
       />
       <FlatList
         data={results}
         renderItem={renderItem}
         keyExtractor={(item) => item.annotations.MGRS}
         extraData={selectedId}
+        style={styles.list}
+        ItemSeparatorComponent={renderSeparator}
       />
     </View>
   );
@@ -50,8 +65,9 @@ export default function DestinationInputBar(props) {
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    flex: 0,
+    alignItems: 'center',
+    justifyContent: 'center',
   },
   item: {
     padding: 10,
@@ -60,5 +76,12 @@ const styles = StyleSheet.create({
   },
   title: {
     fontSize: 15,
+  },
+  input: {
+    marginTop: 10,
+    padding: 10,
+    width: 300,
+    backgroundColor: 'white',
+    borderRadius: 5,
   },
 });

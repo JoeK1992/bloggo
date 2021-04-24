@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, Alert,
+  View, Text, TextInput, Alert, ScrollView,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Calendar from '../../components/Calendar';
@@ -67,47 +67,53 @@ export default function AddTripScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
-      <Text>Add trip:</Text>
-      <TextInput
-        placeholder="Enter your trip name"
-        value={tripName}
-        onChangeText={(tripName) => setName(tripName)}
-        autoCapitalize="none"
-        style={styles.input}
-      />
-      <TextInput
-        placeholder="Enter a summary of your trip"
-        value={summary}
-        multiline
-        onChangeText={(summary) => setSummary(summary)}
-        style={styles.input}
-      />
-      <Calendar
-        page="trip"
-        startDate={startDate}
-        endDate={endDate}
-        onDateChange={onDateChange}
-      />
-      <TouchableOpacity style={s.button} onPress={handlePress}>
-        <Text style={s.buttonText}>Submit</Text>
-      </TouchableOpacity>
-      {!submitted ? (
-        <TouchableOpacity
-          style={s.buttonDisabled}
-          onPress={onLinkPress}
-          disabled
-        >
-          <Text style={s.buttonText}>Add Destination</Text>
+      <ScrollView>
+        <TextInput
+          placeholder="Enter your trip name"
+          value={tripName}
+          onChangeText={(tripName) => setName(tripName)}
+          autoCapitalize="none"
+          style={styles.input}
+        />
+        <TextInput
+          placeholder="Enter a summary of your trip"
+          value={summary}
+          multiline
+          onChangeText={(summary) => setSummary(summary)}
+          style={styles.input}
+        />
+        <Calendar
+          page="trip"
+          startDate={startDate}
+          endDate={endDate}
+          onDateChange={onDateChange}
+        />
+        <TouchableOpacity style={styles.button} onPress={handlePress}>
+          <Text style={s.buttonText}>Submit</Text>
         </TouchableOpacity>
-      ) : (
-        <TouchableOpacity
-          style={s.button}
-          onPress={onLinkPress}
-          disabled={false}
-        >
-          <Text style={s.buttonText}>Add Destination</Text>
-        </TouchableOpacity>
-      )}
+        {!submitted ? (
+          <TouchableOpacity
+            style={styles.buttonDisabled}
+            onPress={onLinkPress}
+            disabled
+          >
+            <Text style={s.buttonText}>Add Destination</Text>
+          </TouchableOpacity>
+        ) : (
+          <>
+            <TouchableOpacity
+              style={s.button}
+              onPress={onLinkPress}
+              disabled={false}
+            >
+              <Text style={s.buttonText}>Add Destination</Text>
+            </TouchableOpacity>
+            <Text style={styles.successMessage}>
+              Trip successfully submitted
+            </Text>
+          </>
+        )}
+      </ScrollView>
     </View>
   );
 }

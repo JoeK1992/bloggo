@@ -6,6 +6,7 @@ export default StyleSheet.create({
     backgroundColor: '#113755',
     color: '#f9fced',
     alignItems: 'center',
+    justifyContent: 'center',
   },
   title: {},
 
@@ -21,37 +22,43 @@ export default StyleSheet.create({
     paddingLeft: 16,
   },
   button: {
-    backgroundColor: '#788eec',
-    marginLeft: 30,
-    marginRight: 30,
-    marginTop: 20,
-    height: 48,
     borderRadius: 5,
-    alignItems: 'center',
+    backgroundColor: '#52b69a',
     justifyContent: 'center',
+    width: 300,
+    margin: 2,
+    padding: 10,
+    minWidth: 200,
+    marginVertical: 7,
+    alignItems: 'center',
+    textAlign: 'center',
+    alignSelf: 'center',
+  },
+
+  buttonDisabled: {
+    height: 47,
+    borderRadius: 5,
+    alignSelf: 'center',
+
+    backgroundColor: '#B7E1D5',
+    width: 300,
+    justifyContent: 'center',
+    margin: 2,
+    minWidth: 200,
+    alignItems: 'center',
   },
   buttonTitle: {
     color: 'white',
     fontSize: 16,
     fontWeight: 'bold',
   },
-  footerView: {
-    flex: 1,
-    alignItems: 'center',
-    marginTop: 20,
-  },
-  footerText: {
-    fontSize: 16,
-    color: '#2e2e2d',
-  },
-  footerLink: {
-    color: '#788eec',
-    fontWeight: 'bold',
-    fontSize: 16,
-  },
   calendar: {
     backgroundColor: 'white',
-    width: 300,
     borderRadius: 5,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  successMessage: {
+    color: '#f9fced',
   },
 });

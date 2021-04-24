@@ -131,6 +131,7 @@ class SingleTripScreen extends Component {
       <View>
         <ScrollView>
           <ProfileHeader />
+
           {/* <View style={styles.mapDisplay}>
           <MapDisplay destinations={destinations} />
         </View> */}

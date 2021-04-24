@@ -1,16 +1,30 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   View,
   Text,
   TouchableOpacity,
   StyleSheet,
   FlatList,
+  Platform,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import s from '../styles/styles';
+import addDesStyles from '../screens/AddDestinationScreen/styles';
 
 export default function PickImages(props) {
-  const [counter, incrementCounter] = useState(0);
+  const [counter, incrementCounter] = useState(1);
+
+  useEffect(() => {
+    (async () => {
+      if (Platform.OS !== 'web') {
+        const {
+          status,
+        } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+        if (status !== 'granted') {
+          alert('Sorry, we need camera roll permissions to make this work!');
+        }
+      }
+    })();
+  }, []);
 
   const pickImage = async () => {
     incrementCounter((prevCount) => prevCount + 1);
@@ -21,7 +35,10 @@ export default function PickImages(props) {
     });
 
     if (!result.cancelled) {
-      const base64Img = result.uri;
+      const base64Img = Platform.OS === 'web'
+        ? result.uri
+        : `data:image/jpg;base64,${result.base64}`;
+
       const apiUrl = 'https://api.cloudinary.com/v1_1/ddxr0zldw/image/upload';
       const data = {
         file: base64Img,
@@ -37,6 +54,8 @@ export default function PickImages(props) {
         .then(async (r) => {
           const data = await r.json();
           const newImage = { name: `Image ${counter}`, url: data.secure_url };
+
+          console.log(newImage);
           const newArray = [...props.uploadedUrls, newImage];
           props.setUrls(newArray);
           return data.secure_url;
@@ -60,6 +79,7 @@ export default function PickImages(props) {
           onPress={() => {
             deleteImage(url);
           }}
+          style={styles.delete}
         >
           Delete image
         </Text>
@@ -76,8 +96,10 @@ export default function PickImages(props) {
 
   return (
     <View>
-      <TouchableOpacity style={s.button} onPress={pickImage}>
-        <Text style={s.buttonText}>Pick more images of your trip</Text>
+      <TouchableOpacity style={addDesStyles.button} onPress={pickImage}>
+        <Text style={addDesStyles.buttonText}>
+          Pick more images of your trip
+        </Text>
       </TouchableOpacity>
       <View>
         <FlatList
@@ -93,6 +115,7 @@ export default function PickImages(props) {
 const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
+    fontFamily: 'Nunito_400Regular',
     // flex: 1,
     // marginTop: StatusBar.currentHeight || 0,
   },
@@ -101,12 +124,22 @@ const styles = StyleSheet.create({
     height: 100,
   },
   item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
+    backgroundColor: '#34a0a4',
+    padding: 10,
     marginVertical: 8,
     marginHorizontal: 16,
+    borderRadius: 5,
+    width: 300,
+    alignSelf: 'center',
+    alignItems: 'center',
   },
   title: {
-    fontSize: 32,
+    fontSize: 15,
+    fontFamily: 'Nunito_400Regular',
+    color: 'white',
+  },
+  delete: {
+    fontFamily: 'Nunito_600SemiBold',
+    color: '#ffe8dc',
   },
 });

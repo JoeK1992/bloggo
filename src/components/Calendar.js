@@ -3,8 +3,9 @@ import CalendarPicker from 'react-native-calendar-picker';
 import { View, Text } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import moment from 'moment';
-import s from '../styles/styles';
-import styles from '../screens/AddTripScreen/styles';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import styles from '../screens/AddDestinationScreen/styles';
 
 export default function Calendar(props) {
   const {
@@ -22,12 +23,12 @@ export default function Calendar(props) {
       {calendarPressed ? (
         <>
           <TouchableOpacity
+            style={styles.closeButton}
             onPress={() => {
               setCalendar(false);
             }}
-            style={s.button}
           >
-            <Text>X</Text>
+            <FontAwesomeIcon icon={faTimes} size={30} style={styles.logo} />
           </TouchableOpacity>
           <View style={styles.calendar}>
             <CalendarPicker
@@ -37,8 +38,9 @@ export default function Calendar(props) {
               selectedDayColor="#1E6091"
               selectedDayTextColor="#FFFFFF"
               onDateChange={onDateChange}
-              scaleFactor="600"
               scrollable="true"
+              // scaleFactor="450"
+              // headerWrapperStyle={viewStyle}
             />
           </View>
         </>
@@ -47,18 +49,20 @@ export default function Calendar(props) {
           onPress={() => {
             setCalendar(true);
           }}
-          style={s.button}
+          style={styles.button}
         >
-          <Text style={s.buttonText}>{text}</Text>
+          <Text style={styles.buttonText}>{text}</Text>
         </TouchableOpacity>
       )}
       <View>
-        <Text>
+        <Text style={styles.titles}>
           Start Date:
+          {' '}
           {startDate ? moment(startDate).format('MMM Do YYYY') : ''}
         </Text>
-        <Text>
+        <Text style={styles.titles}>
           End Date:
+          {' '}
           {endDate ? moment(endDate).format('MMM Do YYYY') : ''}
         </Text>
       </View>
