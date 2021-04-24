@@ -47,10 +47,6 @@ export default function LoginScreen({ navigation }) {
         style={{ flex: 1, width: '100%' }}
         keyboardShouldPersistTaps="always"
       >
-        {/* <Image
-          style={styles.logo}
-          source={require('')}
-        /> */}
         <TextInput
           style={styles.input}
           placeholder="E-mail"
@@ -76,6 +72,7 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.footerView}>
           <Text style={styles.footerText}>
             Don't have an account?
+            {' '}
             <Text onPress={onFooterLinkPress} style={styles.footerLink}>
               Sign up
             </Text>

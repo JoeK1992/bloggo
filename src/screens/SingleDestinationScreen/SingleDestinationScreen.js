@@ -10,7 +10,7 @@ import {
   View,
   ScrollView,
   Dimensions,
-  LogBox
+  LogBox,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
@@ -18,7 +18,7 @@ import s from '../../styles/styles';
 import ImagesCarousel from '../../components/ImagesCarousel';
 
 LogBox.ignoreLogs([
-  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
 ]);
 
 const { width } = Dimensions.get('window');
@@ -30,7 +30,7 @@ export default class SingleDestinationScreen extends Component {
       destination: null,
       editable: false,
       blogPost: '',
-      openedMenu: false
+      openedMenu: false,
     };
   }
 
@@ -105,26 +105,30 @@ export default class SingleDestinationScreen extends Component {
             destinationRef.delete().then(() => {
               navigation.replace('Single Trip', {
                 tripUid,
-                destinations: filteredDestinations
+                destinations: filteredDestinations,
               });
             });
-          }
+          },
         },
         {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          }
-        }
+          },
+        },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
   render() {
     const { navigation, route } = this.props;
-    const { destination, blogPost, editable, openedMenu } = this.state;
-    const { destinations, tripUid, destinationUid, tripName } = route.params;
+    const {
+      destination, blogPost, editable, openedMenu,
+    } = this.state;
+    const {
+      destinations, tripUid, destinationUid, tripName,
+    } = route.params;
     const filteredDestinations = destinations.filter((destination) => {
       return destination.id !== destinationUid;
     });
@@ -142,7 +146,7 @@ export default class SingleDestinationScreen extends Component {
               destinationUid: item.id,
               tripUid,
               destinations,
-              tripName
+              tripName,
             });
           }}
         >
@@ -210,7 +214,11 @@ export default class SingleDestinationScreen extends Component {
                   style={styles.button}
                 >
                   <Text style={styles.buttonText}>
-                    Back to {tripName} trip!
+                    Back to
+                    {' '}
+                    {tripName}
+                    {' '}
+                    trip!
                   </Text>
                 </TouchableOpacity>
               </>
@@ -241,34 +249,35 @@ export default class SingleDestinationScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#113755',
-    flex: 1
+    flex: 1,
   },
   tinyLogo: {
     width: 50,
-    height: 50
+    height: 50,
   },
   pic: {
     width: 100,
-    height: 100
+    height: 100,
   },
   listContainer: {
-    backgroundColor: '#52B69A'
+    backgroundColor: '#52B69A',
   },
   item: {
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
 
   carouselContainer: {
     backgroundColor: '#113755',
     justifyContent: 'center',
     marginTop: 120,
-    transform: [{ translateX: -40 }]
+    transform: [{ translateX: -40 }],
+    marginBottom: 10,
   },
   title: {
     fontSize: 15,
     fontFamily: 'Nunito_600SemiBold',
-    color: '#f9fced'
+    color: '#f9fced',
   },
   titleContainer: {
     fontFamily: 'Nunito_600SemiBold',
@@ -279,15 +288,16 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingLeft: 20,
     paddingRight: 20,
-    zIndex: 2
+    zIndex: 2,
   },
 
   buttonText: {
     fontFamily: 'Nunito_600SemiBold',
-    color: '#f9fced'
+    color: '#f9fced',
   },
 
   input: {
+    paddingLeft: 16,
     color: '#1e6091',
     flex: 1,
     borderRadius: 5,
@@ -295,7 +305,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     marginLeft: 20,
-    marginRight: 20
+    marginRight: 20,
   },
   blogText: {
     fontSize: 15,
@@ -307,6 +317,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 20,
     marginRight: 20,
-    lineHeight: 20
-  }
+    lineHeight: 20,
+  },
 });

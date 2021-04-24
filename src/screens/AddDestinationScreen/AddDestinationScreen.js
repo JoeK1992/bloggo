@@ -11,6 +11,7 @@ import getDestination from '../../utils/InputDestinationFuncs';
 import PickImages from '../../components/PickImages';
 import Calendar from '../../components/Calendar';
 import styles from './styles';
+import PickImage from '../../components/PickImage';
 
 export default function AddDestinationScreen(props) {
   const db = firebase.firestore();
@@ -42,6 +43,8 @@ export default function AddDestinationScreen(props) {
       });
     }
   });
+  const [uploadedUrl, setUploadedUrl] = useState('');
+
   const [uploadedUrls, setUploadedUrls] = useState([]);
   const [successMessage, setSuccessMessage] = useState('');
   const [selectedStartDate, setStartDate] = useState(null);
@@ -116,6 +119,7 @@ export default function AddDestinationScreen(props) {
           onChangeText={(blogPost) => setBlog(blogPost)}
           autoCapitalize="none"
         />
+        <PickImage uploadedUrl={uploadedUrl} setUploadedUrl={setUploadedUrl} />
         <PickImages
           uploadedUrls={uploadedUrls}
           setUploadedUrls={setUploadedUrls}

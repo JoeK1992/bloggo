@@ -5,14 +5,7 @@ export default StyleSheet.create({
     flex: 1,
     alignItems: 'center',
   },
-  title: {},
-  logo: {
-    flex: 1,
-    height: 120,
-    width: 90,
-    alignSelf: 'center',
-    margin: 30,
-  },
+
   input: {
     height: 48,
     borderRadius: 5,
@@ -25,7 +18,7 @@ export default StyleSheet.create({
     paddingLeft: 16,
   },
   button: {
-    backgroundColor: '#788eec',
+    backgroundColor: '#52b69a',
     marginLeft: 30,
     marginRight: 30,
     marginTop: 20,
@@ -36,8 +29,8 @@ export default StyleSheet.create({
   },
   buttonTitle: {
     color: 'white',
+    fontFamily: 'Nunito_600SemiBold',
     fontSize: 16,
-    fontWeight: 'bold',
   },
   footerView: {
     flex: 1,
@@ -47,9 +40,10 @@ export default StyleSheet.create({
   footerText: {
     fontSize: 16,
     color: '#2e2e2d',
+    fontFamily: 'Nunito_400Regular',
   },
   footerLink: {
-    color: '#788eec',
+    color: '#52b69a',
     fontWeight: 'bold',
     fontSize: 16,
   },
