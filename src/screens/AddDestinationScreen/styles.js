@@ -5,14 +5,13 @@ export default StyleSheet.create({
     flex: 1,
     backgroundColor: '#113755',
     color: '#f9fced',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   titles: {
     alignSelf: 'center',
     fontSize: 15,
     color: 'white',
     fontFamily: 'Nunito_400Regular',
+    paddingVertical: 10,
   },
 
   input: {
@@ -26,21 +25,6 @@ export default StyleSheet.create({
     marginRight: 30,
     paddingLeft: 16,
   },
-  // button: {
-  //   backgroundColor: '#788eec',
-  //   marginLeft: 30,
-  //   marginRight: 30,
-  //   marginTop: 20,
-  //   height: 48,
-  //   borderRadius: 5,
-  //   alignItems: 'center',
-  //   justifyContent: 'center'
-  // },
-  // buttonTitle: {
-  //   color: 'white',
-  //   fontSize: 16,
-  //   fontWeight: 'bold'
-  // },
 
   button: {
     alignSelf: 'center',

@@ -8,11 +8,9 @@ import {
   Text,
   View,
   Alert,
-  ScrollView,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import s from '../../styles/styles';
-
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
@@ -128,43 +126,38 @@ class SingleTripScreen extends Component {
     );
 
     return (
-      <View>
-        <ScrollView>
-          <ProfileHeader />
-
-          {/* <View style={styles.mapDisplay}>
+      <FlatList
+        ListHeaderComponent={(
+          <View>
+            <ProfileHeader />
+            {/* <View style={styles.mapDisplay}>
           <MapDisplay destinations={destinations} />
         </View> */}
-          <View>
-            <Text>Map Goes Here</Text>
-            <Text>Trip Stats go Here</Text>
+            <View>
+              <Text>Map Goes Here</Text>
+              <Text>Trip Stats go Here</Text>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={s.button}
+                onPress={() => {
+                  navigation.navigate('Add Destination', { tripUid });
+                }}
+              >
+                <TouchableOpacity />
+                <Text style={s.buttonText}> Add Destination</Text>
+              </TouchableOpacity>
+              <TouchableOpacity style={s.button} onPress={this.deleteTrip}>
+                <Text style={s.buttonText}> Delete Trip </Text>
+              </TouchableOpacity>
+            </View>
           </View>
-          <View>
-            <TouchableOpacity
-              style={s.button}
-              onPress={() => {
-                navigation.navigate('Add Destination', { tripUid });
-              }}
-            >
-              <TouchableOpacity />
-              <Text style={s.buttonText}> Add Destination</Text>
-            </TouchableOpacity>
-
-            <TouchableOpacity style={s.button} onPress={this.deleteTrip}>
-              <Text style={s.buttonText}> Delete Trip </Text>
-            </TouchableOpacity>
-          </View>
-          <View>
-            <FlatList
-              data={destinations}
-              renderItem={renderItem}
-              keyExtractor={(item) => item.id}
-            />
-          </View>
-
-          <NavBar />
-        </ScrollView>
-      </View>
+        )}
+        data={destinations}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        ListFooterComponent={<NavBar />}
+      />
     );
   }
 }

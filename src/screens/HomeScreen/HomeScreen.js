@@ -12,7 +12,6 @@ import AddAvatar from '../../components/AddAvatar';
 
 export default function HomeScreen({ navigation }) {
   const handlePress = () => {
-    console.log('in here');
     firebase
       .auth()
       .signOut()

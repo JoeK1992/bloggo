@@ -10,6 +10,7 @@ import 'firebase/firestore';
 import 'firebase/auth';
 import styles from './styles';
 import s from '../../styles/styles';
+import NavBar from '../../components/NavBar';
 
 export default function AddTripScreen({ navigation }) {
   const db = firebase.firestore();
@@ -114,6 +115,7 @@ export default function AddTripScreen({ navigation }) {
           </>
         )}
       </ScrollView>
+      <NavBar />
     </View>
   );
 }

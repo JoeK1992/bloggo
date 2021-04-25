@@ -4,24 +4,20 @@ import React, { Component } from 'react';
 import {
   Alert,
   FlatList,
-  StyleSheet,
   Text,
   TextInput,
   View,
   ScrollView,
-  Dimensions,
-  LogBox,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
 import s from '../../styles/styles';
 import ImagesCarousel from '../../components/ImagesCarousel';
-
-LogBox.ignoreLogs([
-  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
-]);
-
-const { width } = Dimensions.get('window');
+import styles from './styles';
+import NavBar from '../../components/NavBar';
+// LogBox.ignoreLogs([
+//   'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
+// ]);
 
 export default class SingleDestinationScreen extends Component {
   constructor(props) {
@@ -184,6 +180,7 @@ export default class SingleDestinationScreen extends Component {
         <TouchableOpacity onPress={this.deleteDestination} style={s.button}>
           <Text style={s.buttonText}>Delete Destination</Text>
         </TouchableOpacity>
+        <NavBar />
       </View>
     );
 
@@ -245,78 +242,3 @@ export default class SingleDestinationScreen extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    backgroundColor: '#113755',
-    flex: 1,
-  },
-  tinyLogo: {
-    width: 50,
-    height: 50,
-  },
-  pic: {
-    width: 100,
-    height: 100,
-  },
-  listContainer: {
-    backgroundColor: '#52B69A',
-  },
-  item: {
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-
-  carouselContainer: {
-    backgroundColor: '#113755',
-    justifyContent: 'center',
-    marginTop: 120,
-    transform: [{ translateX: -40 }],
-    marginBottom: 10,
-  },
-  title: {
-    fontSize: 15,
-    fontFamily: 'Nunito_600SemiBold',
-    color: '#f9fced',
-  },
-  titleContainer: {
-    fontFamily: 'Nunito_600SemiBold',
-    backgroundColor: '#52b69a',
-    position: 'absolute',
-    top: 0,
-    width,
-    paddingVertical: 10,
-    paddingLeft: 20,
-    paddingRight: 20,
-    zIndex: 2,
-  },
-
-  buttonText: {
-    fontFamily: 'Nunito_600SemiBold',
-    color: '#f9fced',
-  },
-
-  input: {
-    paddingLeft: 16,
-    color: '#1e6091',
-    flex: 1,
-    borderRadius: 5,
-    backgroundColor: 'white',
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 20,
-    marginRight: 20,
-  },
-  blogText: {
-    fontSize: 15,
-    fontFamily: 'Lato_400Regular',
-    color: 'white',
-    flex: 1,
-    flexWrap: 'wrap',
-    marginTop: 10,
-    marginBottom: 10,
-    marginLeft: 20,
-    marginRight: 20,
-    lineHeight: 20,
-  },
-});
