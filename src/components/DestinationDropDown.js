@@ -9,6 +9,7 @@ export default function DestinationDropDown(props) {
   const resultsType = results.map((destination, index) => {
     return { name: destination.formatted, id: index };
   });
+
   const whichPlaceholder = destination
     ? destination.formatted
     : 'Enter the name of your destination';

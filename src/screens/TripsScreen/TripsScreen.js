@@ -9,6 +9,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
+import s from '../../styles/styles';
 
 class TripsScreen extends Component {
   constructor(props) {
@@ -35,7 +36,6 @@ class TripsScreen extends Component {
     const tripsRef = db.collection('trips');
     tripsRef
       .where('user', equalSign, currentUserUID)
-      // .where("summary", "==", true)
       .get()
       .then((snapshot) => {
         if (snapshot.empty) {
@@ -54,9 +54,18 @@ class TripsScreen extends Component {
 
   reverseOrder = () => {
     const db = firebase.firestore();
-    const currentUserUID = firebase.auth().currentUser.uid;
-    const { order } = this.state;
 
+    const _this = this;
+    const { currentUserUID } = this.state;
+    const { page } = _this.props.route.params;
+
+    const { order } = this.state;
+    let equalSign;
+    if (page === 'Explore') {
+      equalSign = '!=';
+    } else {
+      equalSign = '==';
+    }
     if (order === 'desc') {
       this.setState({ order: 'asc' });
     } else {
@@ -66,9 +75,9 @@ class TripsScreen extends Component {
     const tripsRef = db.collection('trips');
 
     tripsRef
-      .where('user', '==', currentUserUID)
-      .where('summary', '!=', false)
-      .orderBy('summary')
+      .where('user', equalSign, currentUserUID)
+      // .where('summary', '!=', false)
+      // .orderBy('summary')
       .orderBy('startDate', order)
       .get()
       .then((snapshot) => {
@@ -77,6 +86,7 @@ class TripsScreen extends Component {
         } else {
           const newTrips = [];
           snapshot.forEach((doc) => {
+            console.log(trip);
             const trip = doc.data();
             trip.id = doc.id;
             newTrips.push(trip);
@@ -96,43 +106,52 @@ class TripsScreen extends Component {
       trips = route.params.trips;
     }
     const { navigation } = this.props;
-    // userName, userUid,
-    const Item = ({ title, startDate, endDate }) => (
+    // ,
+    const Item = ({
+      title,
+      startDate,
+      endDate,
+      userName,
+      userUid,
+      tripUid,
+    }) => (
       <View style={styles.item}>
-        <Text style={styles.title}>{title}</Text>
-        <Text style={styles.dates}>
-          {moment(startDate).format('MMM Do YYYY')}
-          {' '}
-          -
-          {moment(endDate).format('MMM Do YYYY')}
-        </Text>
-        {/* {page === "Explore" && (
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Single Trip', { tripUid, trips });
+          }}
+        >
+          <Text style={styles.title}>{title}</Text>
+          <Text style={styles.dates}>
+            {moment(startDate).format('MMM Do YYYY')}
+            {' '}
+            -
+            {moment(endDate).format('MMM Do YYYY')}
+          </Text>
+        </TouchableOpacity>
+
+        {page === 'Explore' && (
           <TouchableOpacity
+            style={s.button}
             onPress={() => {
-              navigation.replace("Profile Page", { userUid });
+              navigation.replace('Profile Page', { userUid });
             }}
           >
             <Text>{userName}</Text>
           </TouchableOpacity>
-        )} */}
+        )}
       </View>
     );
-
     const renderItem = ({ item }) => (
       <>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Single Trip', { tripUid: item.id, trips });
-          }}
-        >
-          <Item
-            userUid={item.user}
-            title={item.name}
-            startDate={item.startDate}
-            endDate={item.endDate}
-            userName={item.userName}
-          />
-        </TouchableOpacity>
+        <Item
+          userUid={item.user}
+          title={item.name}
+          startDate={item.startDate}
+          endDate={item.endDate}
+          userName={item.userName}
+          tripUid={item.id}
+        />
       </>
     );
 

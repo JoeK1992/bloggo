@@ -65,5 +65,7 @@ export default StyleSheet.create({
   },
   successMessage: {
     color: '#f9fced',
+    fontFamily: 'Nunito_400Regular',
+    alignSelf: 'center',
   },
 });

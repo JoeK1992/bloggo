@@ -45,6 +45,20 @@ export default StyleSheet.create({
     textAlign: 'center',
   },
 
+  deleteButton: {
+    alignSelf: 'center',
+    borderRadius: 5,
+    backgroundColor: '#ed6a5a',
+    justifyContent: 'center',
+    margin: 2,
+    width: 90,
+    padding: 10,
+    minWidth: 300,
+    marginVertical: 7,
+    alignItems: 'center',
+    textAlign: 'center',
+  },
+
   buttonText: {
     color: 'white',
     fontSize: 16,

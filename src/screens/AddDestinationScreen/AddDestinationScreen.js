@@ -1,9 +1,8 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
-import { View, Text, TextInput, Alert, ScrollView } from 'react-native';
+import { View, Text, TextInput, Alert, ScrollView, LogBox } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-// import DestinationInputBar from '../../components/DestinationInputBar';
 import firebase from '../../firebase/config';
 import getDestination from '../../utils/InputDestinationFuncs';
 import PickImages from '../../components/PickImages';
@@ -12,7 +11,9 @@ import styles from './styles';
 import PickImage from '../../components/PickImage';
 import NavBar from '../../components/NavBar';
 import DestinationDropDown from '../../components/DestinationDropDown';
-
+LogBox.ignoreLogs([
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
+]);
 export default function AddDestinationScreen(props) {
   const db = firebase.firestore();
   const [blogPost, setBlog] = useState('');
@@ -28,7 +29,7 @@ export default function AddDestinationScreen(props) {
   const currentUserUID = firebase.auth().currentUser.uid;
 
   const fetchResults = (textInput) => {
-    if (textInput.length > 0) {
+    if (textInput.length > 1) {
       const search = textInput.split(' ').join('+');
       getDestination(search).then((results) => {
         setResults(results);
