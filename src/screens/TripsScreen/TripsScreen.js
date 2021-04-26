@@ -1,28 +1,41 @@
 import 'firebase/auth';
 import 'firebase/firestore';
+import moment from 'moment';
 import React, { Component } from 'react';
 import {
   FlatList, StyleSheet, Text, View,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import moment from 'moment';
 import NavBar from '../../components/NavBar';
-// import ProfileHeader from '../../components/ProfileHeader';
+import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
 
 class TripsScreen extends Component {
-  state = {
-    trips: [],
-    order: 'desc',
-  };
+  constructor(props) {
+    super(props);
+    this.state = {
+      trips: [],
+      order: 'desc',
+      currentUserUID: firebase.auth().currentUser.uid,
+    };
+  }
 
   componentDidMount() {
+    const _this = this;
+    const { currentUserUID } = this.state;
+    const { page } = _this.props.route.params;
     const db = firebase.firestore();
-    const currentUserUID = firebase.auth().currentUser.uid;
+
+    let equalSign;
+    if (page === 'Explore') {
+      equalSign = '!=';
+    } else {
+      equalSign = '==';
+    }
     const tripsRef = db.collection('trips');
     tripsRef
-      .where('user', '==', currentUserUID)
-      .where('summary', '!=', false)
+      .where('user', equalSign, currentUserUID)
+      // .where("summary", "==", true)
       .get()
       .then((snapshot) => {
         if (snapshot.empty) {
@@ -74,14 +87,16 @@ class TripsScreen extends Component {
   };
 
   render() {
+    console.log(this.props);
     let { trips } = this.state;
-    const { order } = this.state;
+    const { order, currentUserUID } = this.state;
     const { route } = this.props;
-    if (route.params) {
+    const { page } = route.params;
+    if (route.params.trips) {
       trips = route.params.trips;
     }
     const { navigation } = this.props;
-
+    // userName, userUid,
     const Item = ({ title, startDate, endDate }) => (
       <View style={styles.item}>
         <Text style={styles.title}>{title}</Text>
@@ -91,6 +106,15 @@ class TripsScreen extends Component {
           -
           {moment(endDate).format('MMM Do YYYY')}
         </Text>
+        {/* {page === "Explore" && (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.replace("Profile Page", { userUid });
+            }}
+          >
+            <Text>{userName}</Text>
+          </TouchableOpacity>
+        )} */}
       </View>
     );
 
@@ -102,9 +126,11 @@ class TripsScreen extends Component {
           }}
         >
           <Item
+            userUid={item.user}
             title={item.name}
             startDate={item.startDate}
             endDate={item.endDate}
+            userName={item.userName}
           />
         </TouchableOpacity>
       </>
@@ -112,6 +138,8 @@ class TripsScreen extends Component {
 
     return (
       <View style={styles.container}>
+        {page === 'My Trips' && <ProfileHeader userUID={currentUserUID} />}
+
         <Text style={styles.headTitle}> Explore your trips </Text>
 
         <View style={styles.sortBtn}>

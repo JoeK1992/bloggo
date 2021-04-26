@@ -1,24 +1,23 @@
+import {
+  faHome,
+  faMapMarkedAlt,
+  faSignOutAlt,
+  faUser,
+} from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
-
 import {
+  Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
-  Dimensions,
 } from "react-native";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faHome,
-  faUser,
-  faMapMarkedAlt,
-  faSignOutAlt,
-} from "@fortawesome/free-solid-svg-icons";
+
 // import styles from "../styles/styles";
 
 const { height, width } = Dimensions.get("window");
-
 
 const NavBar = () => {
   const navigation = useNavigation();
@@ -35,9 +34,17 @@ const NavBar = () => {
         <FontAwesomeIcon icon={faUser} style={styles.logo} size={30} />
         <Text style={styles.text}>Profile</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("My Trips")}>
+      <TouchableOpacity
+        onPress={() => navigation.replace("Trips", { page: "My Trips" })}
+      >
         <FontAwesomeIcon icon={faMapMarkedAlt} style={styles.logo} size={30} />
         <Text style={styles.text}>Trips</Text>
+      </TouchableOpacity>
+      <TouchableOpacity
+        onPress={() => navigation.replace("Trips", { page: "Explore" })}
+      >
+        <FontAwesomeIcon icon={faSignOutAlt} style={styles.logo} size={30} />
+        <Text style={styles.text}>Explore</Text>
       </TouchableOpacity>
       <TouchableOpacity>
         <FontAwesomeIcon icon={faSignOutAlt} style={styles.logo} size={30} />
@@ -51,7 +58,6 @@ const NavBar = () => {
 
 const styles = StyleSheet.create({
   navbar: {
-    
     backgroundColor: "#113755",
     color: "white",
     flexDirection: "row",

@@ -92,7 +92,7 @@ export default function App() {
               component={AddDestinationScreen}
             />
 
-            <Stack.Screen name="My Trips" component={TripsScreen} />
+            <Stack.Screen name="Trips" component={TripsScreen} />
             <Stack.Screen name="Profile Page" component={UserScreen} />
             <Stack.Screen name="Single Trip" component={SingleTripScreen} />
             <Stack.Screen

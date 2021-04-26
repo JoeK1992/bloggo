@@ -1,16 +1,15 @@
+import 'firebase/auth';
+import 'firebase/firestore';
 import React, { useState } from 'react';
 import {
-  View, Text, TextInput, Alert, ScrollView,
+  Alert, ScrollView, Text, TextInput, View,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import Calendar from '../../components/Calendar';
-
-import firebase from '../../firebase/config';
-import 'firebase/firestore';
-import 'firebase/auth';
-import styles from './styles';
-import s from '../../styles/styles';
 import NavBar from '../../components/NavBar';
+import firebase from '../../firebase/config';
+import s from '../../styles/styles';
+import styles from './styles';
 
 export default function AddTripScreen({ navigation }) {
   const db = firebase.firestore();
@@ -24,6 +23,7 @@ export default function AddTripScreen({ navigation }) {
   const [selectedEndDate, setEndDate] = useState(null);
   const startDate = selectedStartDate ? selectedStartDate.toString() : '';
   const endDate = selectedEndDate ? selectedEndDate.toString() : '';
+
   const onDateChange = (date, type) => {
     if (type === 'END_DATE') {
       setEndDate(date);
@@ -47,22 +47,40 @@ export default function AddTripScreen({ navigation }) {
     } else if (!endDate) {
       Alert.alert('End Date field is required.');
     } else {
-      db.collection('trips')
-        .add({
-          user: currentUserUID,
-          summary,
-          name: tripName,
-          startDate,
-          endDate,
+      const userRef = db.collection('users').doc(currentUserUID);
+
+      userRef
+        .get()
+        .then((doc) => {
+          if (!doc.exists) {
+            return 'No such user';
+          }
+          const userInfo = doc.data();
+          console.log(userInfo);
+          const userName = `${userInfo.firstName} ${userInfo.lastName}`;
+          console.log(userName);
+          return userName;
         })
-        .then((data) => {
-          setTripUid(data.id);
+        .then((userName) => {
+          console.log(userName);
+          db.collection('trips')
+            .add({
+              user: currentUserUID,
+              summary,
+              name: tripName,
+              startDate,
+              endDate,
+              userName,
+            })
+            .then((data) => {
+              setTripUid(data.id);
+            });
+          setName('');
+          setSummary('');
+          setStartDate('');
+          setEndDate('');
+          setSubmitted(true);
         });
-      setName('');
-      setSummary('');
-      setStartDate('');
-      setEndDate('');
-      setSubmitted(true);
     }
   };
 

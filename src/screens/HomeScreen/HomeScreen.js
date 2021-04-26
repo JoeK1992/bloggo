@@ -1,16 +1,18 @@
 // import { NavigationContainer } from '@react-navigation/native';
 // import { createStackNavigator } from '@react-navigation/stack';
 
-import 'firebase/firestore';
-
-import React from 'react';
-import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faBold, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import 'firebase/firestore';
+import React from 'react';
+import {
+  ImageBackground, Text, TouchableOpacity, View,
+} from 'react-native';
 import NavBar from '../../components/NavBar';
-import styles from './styles';
 import ProfileHeader from '../../components/ProfileHeader';
+import firebase from '../../firebase/config';
 import image from '../../images/mountain.jpeg';
+import styles from './styles';
 
 export default function HomeScreen({ navigation }) {
   // const handlePress = () => {
@@ -23,6 +25,8 @@ export default function HomeScreen({ navigation }) {
   //       navigation.replace('Login');
   //     });
   // };
+
+  const userUID = firebase.auth().currentUser.uid;
 
   const onLinkPress = () => {
     navigation.navigate('Add Trip');
@@ -48,7 +52,7 @@ export default function HomeScreen({ navigation }) {
             />
           </Text>
         </View>
-        <ProfileHeader />
+        <ProfileHeader userUID={userUID} />
 
         <TouchableOpacity style={styles.button}>
           <Text style={styles.buttonText} onPress={onLinkPress}>
@@ -60,7 +64,7 @@ export default function HomeScreen({ navigation }) {
           <TouchableOpacity style={styles.button}>
             <Text
               style={styles.buttonText}
-              onPress={() => navigation.navigate('My Trips')}
+              onPress={() => navigation.replace('Trips', { page: 'My Trips' })}
             >
               My Trips
             </Text>
