@@ -5,33 +5,42 @@ const countryMapData = geoJson.features;
 const fetchCoordinates = (countryName) => {
   for (let i = 0; i < countryMapData.length; i += 1) {
     if (countryMapData[i].properties.label_en === countryName) {
-      const flattenedCountryData = countryMapData[i].geometry.coordinates.flat(
-        1,
-      );
-      return formatCountryData(flattenedCountryData).flat(1);
+      const flattenedCountryData = countryMapData[i].geometry.coordinates;
+
+      return formatCountryData(flattenedCountryData);
     }
   }
 };
 
 const formatCountryData = (coordinateArray) => {
   const finalData = [];
-  if (!Array.isArray(coordinateArray[0][0])) {
-    for (let i = 0; i < coordinateArray.length; i += 1) {
-      finalData.push({
-        latitude: coordinateArray[i][0],
-        longitude: coordinateArray[i][1],
-      });
+
+  if (Array.isArray(coordinateArray[0][0][0])) {
+    const flattenedArray = coordinateArray.flat(1);
+    for (let i = 0; i < flattenedArray.length; i += 1) {
+      const tempData = [];
+      for (let j = 0; j < flattenedArray[i].length; j += 1) {
+        tempData.push({
+          longitude: flattenedArray[i][j][0],
+          latitude: flattenedArray[i][j][1]
+        });
+      }
+      finalData.push(tempData);
     }
   } else {
-    const tempData = [];
-    for (let j = 0; j < coordinateArray.length; j += 1) {
-      tempData.push(formatCountryData(coordinateArray[j]));
+    const flattenedArray = coordinateArray.flat(1);
+    for (let i = 0; i < flattenedArray.length; i += 1) {
+      finalData.push({
+        longitude: flattenedArray[i][0],
+        latitude: flattenedArray[i][1]
+      });
     }
-
-    finalData.push(tempData);
+    return [finalData];
   }
 
   return finalData;
 };
+
+fetchCoordinates('San Marino');
 
 module.exports = { fetchCoordinates };
