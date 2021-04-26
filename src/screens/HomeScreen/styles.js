@@ -2,55 +2,49 @@ import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    flex: 1,
-    alignItems: 'center',
+    height: '100%',
+    backgroundColor: '#113755',
+    position: 'relative',
   },
-  formContainer: {
-    flexDirection: 'row',
-    height: 80,
-    marginTop: 40,
-    marginBottom: 20,
-    flex: 1,
+  logoContainer: {
+    position: 'absolute',
+    top: 0,
+    left: 0,
     paddingTop: 10,
-    paddingBottom: 10,
-    paddingLeft: 30,
-    paddingRight: 30,
-    justifyContent: 'center',
-    alignItems: 'center',
   },
-  input: {
-    height: 48,
-    borderRadius: 5,
-    overflow: 'hidden',
-    backgroundColor: 'white',
-    paddingLeft: 16,
-    flex: 1,
-    marginRight: 5,
+  logo: {
+    color: '#52b69a',
+  },
+  logoText: {
+    fontSize: 25,
+    color: '#e2f3ec',
+    fontFamily: 'Nunito_600SemiBold',
+    alignSelf: 'center',
   },
   button: {
-    height: 47,
+    alignSelf: 'center',
     borderRadius: 5,
-    backgroundColor: '#788eec',
-    width: 80,
-    alignItems: 'center',
+    backgroundColor: '#52b69a',
     justifyContent: 'center',
+    margin: 2,
+    padding: 10,
+    marginVertical: 7,
+    alignItems: 'center',
+    textAlign: 'center',
+    width: 200,
   },
+
   buttonText: {
     color: 'white',
     fontSize: 16,
+    fontFamily: 'Nunito_400Regular',
   },
-  listContainer: {
-    marginTop: 20,
-    padding: 20,
-  },
-  entityContainer: {
-    marginTop: 16,
-    borderBottomColor: '#cccccc',
-    borderBottomWidth: 1,
-    paddingBottom: 16,
-  },
-  entityText: {
-    fontSize: 20,
-    color: '#333333',
+
+  image: {
+    flex: 1,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    borderRadius: 5,
+    height: '100%',
   },
 });

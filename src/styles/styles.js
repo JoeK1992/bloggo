@@ -32,19 +32,23 @@ export default StyleSheet.create({
     zIndex: 1,
   },
   button: {
+    alignSelf: 'center',
     borderRadius: 5,
-
     backgroundColor: '#52b69a',
     justifyContent: 'center',
-
     margin: 2,
     width: 90,
     padding: 10,
-    minWidth: 200,
+    minWidth: 300,
     marginVertical: 7,
     alignItems: 'center',
     textAlign: 'center',
-    alignSelf: 'center',
+  },
+
+  buttonText: {
+    color: 'white',
+    fontSize: 16,
+    fontFamily: 'Nunito_400Regular',
   },
 
   buttonDisabled: {
@@ -53,8 +57,7 @@ export default StyleSheet.create({
     alignSelf: 'center',
 
     backgroundColor: '#B7E1D5',
-
-    width: 80,
+    width: 300,
     justifyContent: 'center',
     margin: 2,
     minWidth: 200,
@@ -72,11 +75,7 @@ export default StyleSheet.create({
     marginRight: 30,
     paddingLeft: 16,
   },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontFamily: 'Nunito_400Regular',
-  },
+
   paragraphText: {
     fontSize: 10,
     color: 'black',

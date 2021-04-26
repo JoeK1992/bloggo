@@ -5,16 +5,20 @@ import {
   TextInput,
   FlatList,
   TouchableOpacity,
-  StyleSheet
+  StyleSheet,
 } from 'react-native';
 
 export default function DestinationInputBar(props) {
-  const Item = ({ item, onPress, backgroundColor, textColor }) => (
+  const Item = ({
+    item, onPress, backgroundColor, textColor,
+  }) => (
     <TouchableOpacity onPress={onPress} style={[styles.item, backgroundColor]}>
       <Text style={[styles.title, textColor]}>{item.formatted}</Text>
     </TouchableOpacity>
   );
-  const { results, selectedId, setSelectedId, fetchResults } = props;
+  const {
+    results, selectedId, setSelectedId, fetchResults,
+  } = props;
 
   const renderSeparator = () => {
     return (
@@ -22,15 +26,14 @@ export default function DestinationInputBar(props) {
         style={{
           height: 1,
           width: '100%',
-          backgroundColor: '#CED0CE'
+          backgroundColor: '#CED0CE',
         }}
       />
     );
   };
 
   const renderItem = ({ item }) => {
-    const backgroundColor =
-      item.annotations.MGRS === selectedId ? '#1e6091' : 'white';
+    const backgroundColor = item.annotations.MGRS === selectedId ? '#1e6091' : 'white';
     const color = item.annotations.MGRS === selectedId ? 'white' : '#1e6091';
     return (
       <Item
@@ -66,21 +69,21 @@ const styles = StyleSheet.create({
   container: {
     flex: 0,
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   item: {
     padding: 10,
     marginVertical: 8,
-    marginHorizontal: 5
+    marginHorizontal: 5,
   },
   title: {
-    fontSize: 15
+    fontSize: 15,
   },
   input: {
     marginTop: 10,
     padding: 10,
     width: 300,
     backgroundColor: 'white',
-    borderRadius: 5
-  }
+    borderRadius: 5,
+  },
 });

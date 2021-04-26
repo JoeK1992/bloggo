@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
+
 import {
   StyleSheet,
   Text,
@@ -18,10 +19,13 @@ import {
 
 const { height, width } = Dimensions.get("window");
 
+
 const NavBar = () => {
   const navigation = useNavigation();
 
   return (
+    // <StickyContainer>
+    //   <Sticky>
     <View style={styles.navbar}>
       <TouchableOpacity onPress={() => navigation.navigate("Home")}>
         <FontAwesomeIcon icon={faHome} style={styles.logo} size={30} />
@@ -40,6 +44,8 @@ const NavBar = () => {
         <Text style={styles.text}>Logout</Text>
       </TouchableOpacity>
     </View>
+    //   </Sticky>
+    // </StickyContainer>
   );
 };
 
@@ -57,7 +63,6 @@ const styles = StyleSheet.create({
     // right: 0,
     marginTop: 10,
   },
-
   text: {
     color: "#f9fced",
     textAlign: "center",

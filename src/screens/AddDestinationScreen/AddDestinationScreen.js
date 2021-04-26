@@ -1,7 +1,9 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
-import { View, Text, TextInput, Alert } from 'react-native';
+import {
+  View, Text, TextInput, Alert,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 // import DestinationInputBar from '../../components/DestinationInputBar';
 import firebase from '../../firebase/config';
@@ -28,10 +30,10 @@ export default function AddDestinationScreen(props) {
   const currentUserUID = firebase.auth().currentUser.uid;
 
   const fetchResults = (textInput) => {
-    if (textInput.length > 6) {
+    if (textInput.length > 0) {
       const search = textInput.split(' ').join('+');
       getDestination(search).then((results) => {
-        setResults(results.slice(0, 3));
+        setResults(results);
       });
     }
   };
@@ -66,7 +68,7 @@ export default function AddDestinationScreen(props) {
         blogPost,
         startDate,
         endDate,
-        uploadedUrls
+        uploadedUrls,
       });
       setBlog('');
       setStartDate('');
