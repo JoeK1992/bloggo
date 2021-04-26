@@ -1,9 +1,7 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
-import {
-  View, Text, TextInput, Alert,
-} from 'react-native';
+import { View, Text, TextInput, Alert } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 // import DestinationInputBar from '../../components/DestinationInputBar';
 import firebase from '../../firebase/config';
@@ -48,6 +46,7 @@ export default function AddDestinationScreen(props) {
   };
 
   const handlePress = () => {
+    console.log(uploadedUrl, '*****', uploadedUrls);
     const { route } = props;
     const { tripUid } = route.params;
     if (!destination.formatted) {
@@ -58,7 +57,7 @@ export default function AddDestinationScreen(props) {
       Alert.alert('End Date field is required.');
     } else if (!blogPost) {
       Alert.alert('Blog post is required.');
-    } else if (uploadedUrls.length < 1) {
+    } else if (uploadedUrl) {
       Alert.alert('At least one image is required.');
     } else {
       db.collection('trips').doc(tripUid).collection('destinations').add({
@@ -68,7 +67,8 @@ export default function AddDestinationScreen(props) {
         blogPost,
         startDate,
         endDate,
-        uploadedUrls,
+        uploadedUrl,
+        uploadedUrls
       });
       setBlog('');
       setStartDate('');
