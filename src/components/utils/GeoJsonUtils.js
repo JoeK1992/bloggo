@@ -1,16 +1,37 @@
 const geoJson = require('../colouredMapData/country-codes-data.json');
+
 const countryMapData = geoJson.features;
 
 const fetchCoordinates = (countryName) => {
   for (let i = 0; i < countryMapData.length; i += 1) {
     if (countryMapData[i].properties.label_en === countryName) {
-      console.log(countryMapData[i].geometry.coordinates[5]);
+      const flattenedCountryData = countryMapData[i].geometry.coordinates.flat(
+        1,
+      );
+      return formatCountryData(flattenedCountryData).flat(1);
     }
   }
 };
 
-//Map through each set of coordinates and turn into apporpriate objects
+const formatCountryData = (coordinateArray) => {
+  const finalData = [];
+  if (!Array.isArray(coordinateArray[0][0])) {
+    for (let i = 0; i < coordinateArray.length; i += 1) {
+      finalData.push({
+        latitude: coordinateArray[i][0],
+        longitude: coordinateArray[i][1],
+      });
+    }
+  } else {
+    const tempData = [];
+    for (let j = 0; j < coordinateArray.length; j += 1) {
+      tempData.push(formatCountryData(coordinateArray[j]));
+    }
 
-//https://www.npmjs.com/package/deep-map
-//https://stackoverflow.com/questions/25333918/js-deep-map-function
-fetchCoordinates('France');
+    finalData.push(tempData);
+  }
+
+  return finalData;
+};
+
+module.exports = { fetchCoordinates };
