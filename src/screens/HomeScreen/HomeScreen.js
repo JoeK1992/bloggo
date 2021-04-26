@@ -5,7 +5,9 @@ import { faBold, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import 'firebase/firestore';
 import React from 'react';
-import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ImageBackground, Text, TouchableOpacity, View,
+} from 'react-native';
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
