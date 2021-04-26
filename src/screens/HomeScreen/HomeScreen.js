@@ -5,9 +5,7 @@ import { faBold, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import 'firebase/firestore';
 import React from 'react';
-import {
-  ImageBackground, Text, TouchableOpacity, View,
-} from 'react-native';
+import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
@@ -15,17 +13,6 @@ import image from '../../images/mountain.jpeg';
 import styles from './styles';
 
 export default function HomeScreen({ navigation }) {
-  // const handlePress = () => {
-  //   console.log('in here');
-  //   firebase
-  //     .auth()
-  //     .signOut()
-  //     .then(() => {
-  //       console.log('in navigate');
-  //       navigation.replace('Login');
-  //     });
-  // };
-
   const userUID = firebase.auth().currentUser.uid;
 
   const onLinkPress = () => {

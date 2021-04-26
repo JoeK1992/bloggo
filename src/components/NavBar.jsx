@@ -14,11 +14,21 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
+import firebase from '../firebase/config'
 
 // import styles from "../styles/styles";
 
-const { height, width } = Dimensions.get("window");
-
+// const { height, width } = Dimensions.get("window");
+const handlePress = () => {
+    console.log('in here');
+    firebase
+      .auth()
+      .signOut()
+      // .then(() => {
+      //   console.log('in navigate');
+      //   navigation.replace('Login');
+      // });
+  };
 const NavBar = () => {
   const navigation = useNavigation();
 
@@ -46,7 +56,7 @@ const NavBar = () => {
         <FontAwesomeIcon icon={faSignOutAlt} style={styles.logo} size={30} />
         <Text style={styles.text}>Explore</Text>
       </TouchableOpacity>
-      <TouchableOpacity>
+      <TouchableOpacity onPress={handlePress}>
         <FontAwesomeIcon icon={faSignOutAlt} style={styles.logo} size={30} />
         <Text style={styles.text}>Logout</Text>
       </TouchableOpacity>
@@ -55,6 +65,7 @@ const NavBar = () => {
     // </StickyContainer>
   );
 };
+  
 
 const styles = StyleSheet.create({
   navbar: {

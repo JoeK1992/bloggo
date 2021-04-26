@@ -1,7 +1,9 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
-import { View, Text, TextInput, Alert } from 'react-native';
+import {
+  View, Text, TextInput, Alert,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 // import DestinationInputBar from '../../components/DestinationInputBar';
 import firebase from '../../firebase/config';
@@ -68,7 +70,7 @@ export default function AddDestinationScreen(props) {
         startDate,
         endDate,
         uploadedUrl,
-        uploadedUrls
+        uploadedUrls,
       });
       setBlog('');
       setStartDate('');
