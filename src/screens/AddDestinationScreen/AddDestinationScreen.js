@@ -57,7 +57,7 @@ export default function AddDestinationScreen(props) {
       Alert.alert('End Date field is required.');
     } else if (!blogPost) {
       Alert.alert('Blog post is required.');
-    } else if (uploadedUrl) {
+    } else if (!uploadedUrl) {
       Alert.alert('At least one image is required.');
     } else {
       db.collection('trips').doc(tripUid).collection('destinations').add({

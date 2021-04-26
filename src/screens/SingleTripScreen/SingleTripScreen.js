@@ -8,7 +8,7 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View
+  View,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import NavBar from '../../components/NavBar';
@@ -22,7 +22,7 @@ class SingleTripScreen extends Component {
   state = {
     trip: {},
     destinations: [],
-    currentUserUID: firebase.auth().currentUser.uid
+    currentUserUID: firebase.auth().currentUser.uid,
   };
 
   componentDidMount() {
@@ -80,16 +80,16 @@ class SingleTripScreen extends Component {
             tripRef.delete().then(() => {
               navigation.replace('My Trips', { trips: filteredTrips });
             });
-          }
+          },
         },
         {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          }
-        }
+          },
+        },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
@@ -119,7 +119,7 @@ class SingleTripScreen extends Component {
                 destinationUid: item.id,
                 tripUid,
                 destinations,
-                tripName: trip.name
+                tripName: trip.name,
               });
             }}
           >
@@ -133,7 +133,7 @@ class SingleTripScreen extends Component {
     return (
       <FlatList
         style={styles.page}
-        ListHeaderComponent={
+        ListHeaderComponent={(
           <>
             <View>
               <Text>Map Goes Here</Text>
@@ -157,7 +157,7 @@ class SingleTripScreen extends Component {
               </View>
             )}
           </>
-        }
+        )}
         data={destinations}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
@@ -170,7 +170,7 @@ class SingleTripScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0
+    marginTop: StatusBar.currentHeight || 0,
   },
   item: {
     // backgroundColor: "#f9c2ff",
@@ -180,11 +180,11 @@ const styles = StyleSheet.create({
     // zIndex: 15,
   },
   title: {
-    fontSize: 32
+    fontSize: 32,
   },
   mapDisplay: {
     height: 1000,
-    width: 1000
+    width: 1000,
   },
   image: {
     flex: 1,
@@ -193,11 +193,11 @@ const styles = StyleSheet.create({
     padding: 20,
     marginVertical: 8,
     marginHorizontal: 16,
-    zIndex: 20
+    zIndex: 20,
   },
   page: {
-    backgroundColor: '#1E6091'
-  }
+    backgroundColor: '#1E6091',
+  },
 });
 
 export default SingleTripScreen;
