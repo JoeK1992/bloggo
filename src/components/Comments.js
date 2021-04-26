@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View, Text, TextInput, StyleSheet, FlatList,
-} from 'react-native';
+import { View, Text, TextInput, StyleSheet, FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../firebase/config';
+import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
+import { faTimes } from '@fortawesome/free-solid-svg-icons';
 
 export default function Comments(props) {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
-  console.log(props);
   const { tripUid, destinationUid } = props;
+  const currentUserUID = firebase.auth().currentUser.uid;
 
   useEffect(() => {
     const db = firebase.firestore();
@@ -34,9 +34,8 @@ export default function Comments(props) {
       }
     });
   });
-
+  console.log(comments);
   const handlePress = () => {
-    const currentUserUID = firebase.auth().currentUser.uid;
     const db = firebase.firestore();
 
     const userRef = db.collection('users').doc(currentUserUID);
@@ -51,7 +50,6 @@ export default function Comments(props) {
         return userName;
       })
       .then((userName) => {
-        console.log(userName);
         const commentsRef = db
           .collection('trips')
           .doc(tripUid)
@@ -62,6 +60,7 @@ export default function Comments(props) {
           userName,
           comment,
           date: new Date().toUTCString(),
+          user: currentUserUID
         };
         setComments([...comments, newComment]);
         commentsRef
@@ -69,6 +68,7 @@ export default function Comments(props) {
             comment,
             userName,
             date: new Date().toUTCString(),
+            user: currentUserUID
           })
           .catch((err) => {
             console.log(err);
@@ -76,18 +76,23 @@ export default function Comments(props) {
       });
   };
 
-  const Item = ({ comment, date, userName }) => (
+  const Item = ({ comment, date, userName, user }) => (
     <View>
       <Text style={styles.comment}>{comment}</Text>
       <Text style={styles.comment}>
-        Posted by
-        {' '}
-        {userName}
-        {' '}
-        on
-        {' '}
-        {date.slice(0, 16)}
+        Posted by {userName} on {date.slice(0, 16)}
       </Text>
+      {user === currentUserUID && (
+        <TouchableOpacity
+        // style={styles.closeButton}
+        // onPress={() => {
+        //   deleteComment();
+        // }}
+        >
+          <Text>heeey</Text>
+          <FontAwesomeIcon icon={faTimes} size={30} />
+        </TouchableOpacity>
+      )}
     </View>
   );
 
@@ -99,7 +104,7 @@ export default function Comments(props) {
           width: 300,
           alignSelf: 'center',
           marginVertical: 10,
-          backgroundColor: 'white',
+          backgroundColor: 'white'
         }}
       />
     );
@@ -112,6 +117,7 @@ export default function Comments(props) {
           comment={item.comment}
           date={item.date}
           userName={item.userName}
+          user={item.user}
         />
       </TouchableOpacity>
     </>
@@ -160,21 +166,21 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,
-    paddingLeft: 16,
+    paddingLeft: 16
   },
   title: {
     color: '#f9fced',
     textAlign: 'center',
     paddingVertical: 2,
     fontSize: 16,
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Nunito_600SemiBold'
   },
   comment: {
     color: 'white',
     textAlign: 'center',
     paddingVertical: 2,
     fontSize: 14,
-    fontFamily: 'Lato_400Regular',
+    fontFamily: 'Lato_400Regular'
   },
   button: {
     alignSelf: 'center',
@@ -187,13 +193,13 @@ const styles = StyleSheet.create({
     minWidth: 300,
     marginVertical: 7,
     alignItems: 'center',
-    textAlign: 'center',
+    textAlign: 'center'
   },
 
   buttonText: {
     color: 'white',
     fontSize: 16,
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'Nunito_400Regular'
   },
 
   buttonDisabled: {
@@ -205,6 +211,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     margin: 2,
     minWidth: 200,
-    alignItems: 'center',
-  },
+    alignItems: 'center'
+  }
 });

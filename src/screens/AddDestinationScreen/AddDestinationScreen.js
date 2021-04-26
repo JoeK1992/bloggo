@@ -1,7 +1,9 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
-import { View, Text, TextInput, Alert, ScrollView, LogBox } from 'react-native';
+import {
+  View, Text, TextInput, Alert, ScrollView, LogBox,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
 import getDestination from '../../utils/InputDestinationFuncs';
@@ -11,8 +13,9 @@ import styles from './styles';
 import PickImage from '../../components/PickImage';
 import NavBar from '../../components/NavBar';
 import DestinationDropDown from '../../components/DestinationDropDown';
+
 LogBox.ignoreLogs([
-  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
 ]);
 export default function AddDestinationScreen(props) {
   const db = firebase.firestore();
@@ -69,7 +72,7 @@ export default function AddDestinationScreen(props) {
         startDate,
         endDate,
         uploadedUrl,
-        uploadedUrls
+        uploadedUrls,
       });
       setBlog('');
       setStartDate('');
