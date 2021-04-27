@@ -57,7 +57,7 @@ export default function PickImages(props) {
 
           console.log(newImage);
           const newArray = [...props.uploadedUrls, newImage];
-          props.setUrls(newArray);
+          props.setUploadedUrls(newArray);
           return data.secure_url;
         })
         .catch((err) => console.log(err));
@@ -68,7 +68,7 @@ export default function PickImages(props) {
     const currArray = props.uploadedUrls.filter((image) => {
       return image.url !== url;
     });
-    props.setUrls(currArray);
+    props.setUploadedUrls(currArray);
   };
 
   const Item = ({ title, url }) => (

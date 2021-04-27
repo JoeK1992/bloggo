@@ -4,7 +4,9 @@
 import 'firebase/firestore';
 
 import React from 'react';
-import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
+import {
+  ImageBackground, Text, TouchableOpacity, View,
+} from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faBold, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
 import NavBar from '../../components/NavBar';
