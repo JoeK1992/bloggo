@@ -131,3 +131,32 @@ describe('formatCoordinates', () => {
     });
   });
 });
+describe('fetchPolygonCoordinates', () => {
+  test('should return correct polygon coordinates when given a country string', () => {
+    const sanMarinoPolygon = [
+      { longitude: 12.429450359, latitude: 43.892055515 },
+      { longitude: 12.399581381, latitude: 43.903217625 },
+      { longitude: 12.385628745, latitude: 43.924534153 },
+      { longitude: 12.395653973, latitude: 43.948408664 },
+      { longitude: 12.421388836, latitude: 43.967218885 },
+      { longitude: 12.482160321, latitude: 43.982566786 },
+      { longitude: 12.492392254, latitude: 43.956418511 },
+      { longitude: 12.478286774, latitude: 43.917037885 },
+      { longitude: 12.460456219, latitude: 43.895259454 },
+      { longitude: 12.429450359, latitude: 43.892055515 }
+    ];
+    const sanMarino = fetchPolygonCoordinates('San Marino');
+    expect(Array.isArray(sanMarino)).toBe(true);
+    expect(sanMarino).toEqual(
+      expect.arrayContaining([
+        expect.arrayContaining([
+          expect.objectContaining(
+            sanMarinoPolygon[0],
+            sanMarinoPolygon[4],
+            sanMarinoPolygon[9]
+          )
+        ])
+      ])
+    );
+  });
+});

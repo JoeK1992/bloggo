@@ -16,7 +16,7 @@ import firebase from '../../firebase/config';
 import image from '../../images/indo.jpeg';
 import s from '../../styles/styles';
 
-import MapViewer from '../../components/MapViewer';
+// import MapViewer from '../../components/MapViewer';
 
 class SingleTripScreen extends Component {
   state = {
@@ -113,7 +113,6 @@ class SingleTripScreen extends Component {
     const renderItem = ({ item }) => (
       <>
         <ImageBackground source={image} style={styles.image}>
-
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Single Destination', {
