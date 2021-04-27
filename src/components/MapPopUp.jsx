@@ -47,10 +47,11 @@ const styles = StyleSheet.create({
   },
   textStyle: {
     color: 'white',
-    fontWeight: 'bold',
+    fontFamily: 'Nunito_600SemiBold',
     textAlign: 'center'
   },
   modalText: {
+        fontFamily: 'Nunito_600SemiBold',
     marginBottom: 15,
     textAlign: 'center'
   }
@@ -87,8 +88,8 @@ const MapPopUp = ({ closeModal, modalDestination }) => {
               {destinationFormatter(destination.formatted)}
             </Text>
           </TouchableHighlight>
-          <Text>{startDate}</Text>
-          <Text>{endDate}</Text>
+          <Text style={styles.dates}>{startDate}</Text>
+          <Text style={styles.dates}>{endDate}</Text>
           <View style={styles.container}>
             <Image source={{ uri: uploadedUrl }} style={styles.stretch} />
           </View>

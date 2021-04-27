@@ -113,7 +113,6 @@ class SingleTripScreen extends Component {
     const renderItem = ({ item }) => (
       <>
         <ImageBackground source={image} style={styles.image}>
-
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Single Destination', {
@@ -137,8 +136,12 @@ class SingleTripScreen extends Component {
         ListHeaderComponent={(
           <>
             <View>
-              <Text>Map Goes Here</Text>
-              <Text>Trip Stats go Here</Text>
+              <MapViewer destinations={destinations} />
+              <Text style={s.buttonText}>
+                Places visited:
+                {' '}
+                {destinations.length}
+              </Text>
             </View>
 
             {currentUserUID === trip.user && (
