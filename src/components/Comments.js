@@ -22,25 +22,6 @@ export default function Comments(props) {
       .doc(destinationUid)
       .collection('comments');
 
-    commentsRef.onSnapshot((querySnapshot) => {
-      querySnapshot.docChanges().forEach((change) => {
-        if (change.type === 'added') {
-          console.log('in added');
-          const newComment = change.doc.data();
-          newComment.id = change.doc.id;
-          setComments([newComment, ...comments]);
-        }
-        // if (change.type === 'removed') {
-        //   console.log('removed');
-        //   const filteredComments = comments.filter((comment) => {
-        //     console.log(comment.id, '///', change.doc.id);
-        //     return comment.id !== change.doc.id;
-        //   });
-        //   setComments(filteredComments);
-        // }
-      });
-    });
-
     commentsRef.get().then((snapshot) => {
       if (snapshot.empty) {
         console.log('No matching documents.');
@@ -55,6 +36,25 @@ export default function Comments(props) {
 
         setComments(newComments);
       }
+    });
+
+    commentsRef.onSnapshot((querySnapshot) => {
+      querySnapshot.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          console.log('in added');
+          const newComment = change.doc.data();
+          newComment.id = change.doc.id;
+          setComments([newComment, ...comments]);
+        }
+        if (change.type === 'removed') {
+          console.log('removed');
+          const filteredComments = comments.filter((comment) => {
+            console.log(comment.id, '///', change.doc.id);
+            return comment.id !== change.doc.id;
+          });
+          setComments(filteredComments);
+        }
+      });
     });
   }, []);
 

@@ -2,7 +2,6 @@ import React from 'react';
 import {
   Text,
   View,
-  Image,
   StyleSheet,
   Modal,
   TouchableHighlight
@@ -24,6 +23,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginTop: 22
   },
+  dates: {
+    fontFamily: 'Nunito_600SemiBold',
+
+  },
+
   modalView: {
     margin: 20,
     backgroundColor: 'white',
@@ -40,7 +44,6 @@ const styles = StyleSheet.create({
     elevation: 5
   },
   openButton: {
-    backgroundColor: '#F194FF',
     borderRadius: 20,
     padding: 10,
     elevation: 2
@@ -64,23 +67,19 @@ const destinationFormatter = (destination) => {
 };
 
 const MapPopUp = ({ closeModal, modalDestination }) => {
-  //console.log('in map popup', modalDestination);
-  const { id, destination, endDate, startDate, uploadedUrl } = modalDestination;
-  console.log(typeof endDate);
+  const { id, destination, endDate, startDate } = modalDestination;
   const navigation = useNavigation();
 
   return (
     <Modal
       animationType="slide"
       transparent={true}
-      // visible={modalVisible}
       onRequestClose={() => closeModal()}
     >
       <View style={styles.centeredView}>
         <View style={styles.modalView}>
           <TouchableHighlight
             onPress={() => {
-              console.log('navigating');
               navigation.navigate('Single Destination');
             }}
           >
@@ -88,14 +87,13 @@ const MapPopUp = ({ closeModal, modalDestination }) => {
               {destinationFormatter(destination.formatted)}
             </Text>
           </TouchableHighlight>
-          <Text style={styles.dates}>{startDate}</Text>
-          <Text style={styles.dates}>{endDate}</Text>
+          <Text style={styles.dates}>{startDate.slice(0, 15)}</Text>
+          <Text style={styles.dates}>{endDate.slice(0, 15)}</Text>
           <View style={styles.container}>
-            <Image source={{ uri: uploadedUrl }} style={styles.stretch} />
           </View>
 
           <TouchableHighlight
-            style={{ ...styles.openButton, backgroundColor: '#2196F3' }}
+            style={{ ...styles.openButton, backgroundColor: '#52b69a' }}
             onPress={() => {
               closeModal();
             }}

@@ -75,13 +75,13 @@ export default function AddPlace(props) {
     }
   };
 
-  console.log(type);
   return (
     <View style={styles.centeredView}>
       <Modal
         animationType="slide"
         transparent
         visible={modalVisible}
+        useNativeDriver="true"
         onRequestClose={() => {
           Alert.alert('Modal has been closed.');
           setModalVisible(!modalVisible);

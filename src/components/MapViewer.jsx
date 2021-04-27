@@ -19,7 +19,6 @@ class MapViewer extends React.Component {
   };
 
   closeModal = () => {
-    console.log('closing');
     this.setState({ popUpVisible: false });
   };
 

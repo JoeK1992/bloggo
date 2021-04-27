@@ -3,6 +3,7 @@ import {
   faMapMarkedAlt,
   faSignOutAlt,
   faUser,
+  faGlobeAmericas
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useNavigation } from "@react-navigation/native";
@@ -53,7 +54,7 @@ const NavBar = () => {
       <TouchableOpacity
         onPress={() => navigation.replace("Trips", { page: "Explore" })}
       >
-        <FontAwesomeIcon icon={faSignOutAlt} style={styles.logo} size={30} />
+        <FontAwesomeIcon icon={faGlobeAmericas} style={styles.logo} size={30} />
         <Text style={styles.text}>Explore</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={handlePress}>
