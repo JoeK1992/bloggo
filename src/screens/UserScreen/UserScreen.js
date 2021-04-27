@@ -1,8 +1,10 @@
-import 'firebase/auth';
-import 'firebase/firestore';
-import React, { Component } from 'react';
+import "firebase/auth";
+import "firebase/firestore";
+import React, { Component } from "react";
 
-import ColouredMap from '../../components/ColouredMap';
+
+import ColouredMap from "../../components/ColouredMap";
+
 
 import {
   Image,
@@ -10,15 +12,24 @@ import {
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
-} from 'react-native';
+  View,
+  ImageBackground,
+} from "react-native";
 
-import NavBar from '../../components/NavBar';
-import ProfileHeader from '../../components/ProfileHeader';
-import firebase from '../../firebase/config';
+import NavBar from "../../components/NavBar";
+import ProfileHeader from "../../components/ProfileHeader";
+import firebase from "../../firebase/config";
 // import TripsScreen from '../TripsScreen/TripsScreen';
 // import AddAvatar from '../../components/AddAvatar';
-import map from '../../images/map.jpg';
+import globe from "../../images/globe.png";
+import trip from "../../images/trip.png";
+import country from "../../images/country.jpeg";
+import continent from "../../images/continents.jpg";
+import first from "../../images/1.jpeg";
+import second from "../../images/2.jpg";
+import third from "../../images/3.jpg";
+import fourth from "../../images/4.jpg";
+import flagBackground from "../../images/flag.jpg";
 
 // const { height, width } = Dimensions.get('window');
 class UserScreen extends Component {
@@ -29,7 +40,7 @@ class UserScreen extends Component {
       tripUids: [],
       continents: [],
       countries: [],
-      flags: []
+      flags: [],
       // user: null,
       // userUID: '',
     };
@@ -46,14 +57,14 @@ class UserScreen extends Component {
     }
 
     const db = firebase.firestore();
-    const tripsRef = db.collection('trips');
+    const tripsRef = db.collection("trips");
     tripsRef
-      .where('user', '==', currentUserUID)
-      .where('summary', '!=', false)
+      .where("user", "==", currentUserUID)
+      .where("summary", "!=", false)
       .get()
       .then((snapshot) => {
         if (snapshot.empty) {
-          console.log('No matching documents.');
+          console.log("No matching documents.");
         } else {
           const tripUidsArr = [];
           let trips = 0;
@@ -67,12 +78,12 @@ class UserScreen extends Component {
           const { tripUids } = this.state;
           tripUids.forEach((tripUid) => {
             const destinationsRef = db
-              .collection('trips')
+              .collection("trips")
               .doc(tripUid)
-              .collection('destinations');
+              .collection("destinations");
             destinationsRef.get().then((snapshot) => {
               if (snapshot.empty) {
-                console.log('No matching documents.');
+                console.log("No matching documents.");
               } else {
                 const continents = [];
                 const countries = [];
@@ -80,6 +91,7 @@ class UserScreen extends Component {
                 snapshot.forEach((doc) => {
                   const destination = doc.data();
                   const { components, annotations } = destination.destination;
+                  console.log(destination, "COMPONENTS");
                   continents.push(components.continents);
                   countries.push(components.country);
                   flags.push(annotations.flag);
@@ -87,7 +99,7 @@ class UserScreen extends Component {
                 this.setState({
                   countries,
                   flags,
-                  continents
+                  continents,
                 });
               }
             });
@@ -97,6 +109,7 @@ class UserScreen extends Component {
   }
 
   render() {
+    console.log(this.state.countries.length);
     let currentUserUID;
     const { route } = this.props;
     if (route.params) {
@@ -106,18 +119,24 @@ class UserScreen extends Component {
       currentUserUID = firebase.auth().currentUser.uid;
     }
     const { trips, continents, countries, flags } = this.state;
+
+    const globePercentage = Math.round((countries.length / 195) * 100);
+
     const { navigation } = this.props;
     return (
       <ScrollView style={styles.userScreen}>
         <ProfileHeader userUID={currentUserUID} />
         <View style={styles.mapContainer} />
         <View style={styles.mapDisplay}>
-          <ColouredMap />
+
+          <ColouredMap countries={countries} />
+
+        
+
         </View>
-        <Image style={styles.map} source={map} />
         <View style={styles.btnContainer}>
           <TouchableOpacity
-            onPress={() => navigation.navigate('My Trips')}
+            onPress={() => navigation.navigate("My Trips")}
             style={styles.btn}
           >
             <Text style={styles.text}>My Trips</Text>
@@ -125,17 +144,56 @@ class UserScreen extends Component {
         </View>
         <View style={styles.gamificationContainer}>
           <Text style={styles.gamificationTitle}>My World</Text>
-          <Text style={styles.gamificationStat}>
-            {continents.length === 1
-              ? '1 Continent'
-              : `${continents.length} Continents`}
-            |
-            {countries.length === 1
-              ? '1 Country'
-              : `${countries.length} Countries`}
-            | {trips === 1 ? '1 Trip' : `${trips} Trips`}
-          </Text>
-          <Text style={styles.gamificationFlags}>{flags}</Text>
+
+          <View style={styles.statsCardContainer}>
+            <ImageBackground
+              imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+              source={third}
+              style={styles.statsCard}
+            >
+              <Text style={styles.statsCardText}>
+                {continents.length === 1
+                  ? "1 Continent"
+                  : `${continents.length} Continents`}
+              </Text>
+            </ImageBackground>
+            <ImageBackground
+              imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+              source={fourth}
+              style={styles.statsCard}
+            >
+              <Text style={styles.statsCardText}>
+                {countries.length === 1
+                  ? "1 Country"
+                  : `${countries.length} Countries`}
+              </Text>
+            </ImageBackground>
+            <ImageBackground
+              imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+              source={first}
+              style={styles.statsCard}
+            >
+              <Text style={styles.statsCardText}>
+                {trips === 1 ? "1 Trip" : `${trips} Trips`}
+              </Text>
+            </ImageBackground>
+            <ImageBackground
+              imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+              source={second}
+              style={styles.statsCard}
+            >
+              <Text
+                style={styles.statsCardText}
+              >{`${globePercentage}% of the world`}</Text>
+            </ImageBackground>
+          </View>
+          <ImageBackground
+            imageStyle={{ borderRadius: 20, opacity: 0.3 }}
+            source={flagBackground}
+            style={styles.flagBackground}
+          >
+            <Text style={styles.flagText}>{flags}</Text>
+          </ImageBackground>
         </View>
         <NavBar style={styles.navBar} />
       </ScrollView>
@@ -144,76 +202,115 @@ class UserScreen extends Component {
 }
 const styles = StyleSheet.create({
   userScreen: {
-    backgroundColor: '#E7F5E8',
-    flex: 1
+    backgroundColor: "#113755",
+    flex: 1,
   },
   gamificationTitle: {
     fontSize: 20,
-    textAlign: 'center',
-    color: '#113755',
+    textAlign: "center",
+    color: "#113755",
     paddingBottom: 5,
-    fontWeight: 'bold',
-    fontFamily: 'Nunito_600SemiBold'
+    fontWeight: "bold",
+    fontFamily: "Nunito_600SemiBold",
   },
   gamificationStat: {
     fontSize: 15,
-    textAlign: 'center',
-    color: '#113755',
+    textAlign: "center",
+    color: "#113755",
     padding: 2,
     marginBottom: 5,
-    fontFamily: 'Lato_400Regular'
+    fontFamily: "Lato_400Regular",
   },
   gamificationFlags: {
     fontSize: 15,
-    textAlign: 'center',
+    textAlign: "center",
     marginHorizontal: 40,
-    letterSpacing: 8
+    letterSpacing: 8,
   },
+
   item: {
-    backgroundColor: '#f9c2ff',
+    backgroundColor: "#f9c2ff",
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   title: {
-    fontSize: 32
+    fontSize: 32,
   },
+
+  flagBackground: {
+    width: 370,
+    height: 150,
+    margin: 2,
+    alignSelf: "center",
+    justifyContent: "center",
+    alignContent: "center",
+  },
+  flagText: {
+    fontSize: 35,
+    textAlign: "center",
+  },
+  statsCardContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  statsCard: {
+    width: 88,
+    height: 150,
+    flex: 1,
+    justifyContent: "center",
+    alignContent: "center",
+    margin: 2,
+  },
+  statsCardText: {
+    color: "#E8F3B9",
+    fontSize: 18,
+
   mapDisplay: {
     height: 500,
     width: 500
   },
 
-  map: {
-    width: '100%',
-    height: undefined,
-    aspectRatio: 1.5
+
+    textAlign: "center",
   },
+  // mapDisplay: {
+  //   height: 500,
+  //   width: 500,
+  // },
+
+  // map: {
+  //   width: "100%",
+  //   height: undefined,
+  //   aspectRatio: 1.5,
+  // },
   btn: {
-    color: '#E8F3B9',
+    color: "#E8F3B9",
     borderRadius: 3,
-    backgroundColor: '#34A0A4',
-    textAlign: 'center',
+    backgroundColor: "#34A0A4",
+    textAlign: "center",
     width: 120,
     padding: 10,
-    fontFamily: 'Nunito_600SemiBold'
+    fontFamily: "Nunito_600SemiBold",
   },
   btnContainer: {
-    alignItems: 'center',
-    margin: 10
+    alignItems: "center",
+    margin: 10,
   },
   text: {
     fontSize: 20,
-    color: '#113755',
+    color: "#113755",
     borderRadius: 3,
-    textAlign: 'center',
-    paddingVertical: 2
+    textAlign: "center",
+    paddingVertical: 2,
   },
   gamificationContainer: {
     borderRadius: 10,
-    backgroundColor: '#D4EDE2',
-    textAlign: 'center',
-    paddingVertical: 2
-  }
+    backgroundColor: "#D4EDE2",
+    textAlign: "center",
+    paddingVertical: 2,
+  },
 });
 
 export default UserScreen;

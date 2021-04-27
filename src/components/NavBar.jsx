@@ -3,6 +3,7 @@ import {
   faMapMarkedAlt,
   faSignOutAlt,
   faUser,
+  faUserFriends,
 } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useNavigation } from "@react-navigation/native";
@@ -14,21 +15,19 @@ import {
   TouchableOpacity,
   View,
 } from "react-native";
-import firebase from '../firebase/config'
+import firebase from "../firebase/config";
 
 // import styles from "../styles/styles";
 
 // const { height, width } = Dimensions.get("window");
 const handlePress = () => {
-    console.log('in here');
-    firebase
-      .auth()
-      .signOut()
-      // .then(() => {
-      //   console.log('in navigate');
-      //   navigation.replace('Login');
-      // });
-  };
+  console.log("in here");
+  firebase.auth().signOut();
+  // .then(() => {
+  //   console.log('in navigate');
+  //   navigation.replace('Login');
+  // });
+};
 const NavBar = () => {
   const navigation = useNavigation();
 
@@ -40,7 +39,13 @@ const NavBar = () => {
         <FontAwesomeIcon icon={faHome} style={styles.logo} size={30} />
         <Text style={styles.text}>Home</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.replace("Profile Page", { userUid: firebase.auth().currentUser.uid})}>
+      <TouchableOpacity
+        onPress={() =>
+          navigation.replace("Profile Page", {
+            userUid: firebase.auth().currentUser.uid,
+          })
+        }
+      >
         <FontAwesomeIcon icon={faUser} style={styles.logo} size={30} />
         <Text style={styles.text}>Profile</Text>
       </TouchableOpacity>
@@ -53,7 +58,7 @@ const NavBar = () => {
       <TouchableOpacity
         onPress={() => navigation.replace("Trips", { page: "Explore" })}
       >
-        <FontAwesomeIcon icon={faSignOutAlt} style={styles.logo} size={30} />
+        <FontAwesomeIcon icon={faUserFriends} style={styles.logo} size={30} />
         <Text style={styles.text}>Explore</Text>
       </TouchableOpacity>
       <TouchableOpacity onPress={handlePress}>
@@ -65,7 +70,6 @@ const NavBar = () => {
     // </StickyContainer>
   );
 };
-  
 
 const styles = StyleSheet.create({
   navbar: {
