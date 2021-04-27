@@ -8,12 +8,11 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  View,
+  View
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import NavBar from '../../components/NavBar';
 import firebase from '../../firebase/config';
-import image from '../../images/indo.jpeg';
 import s from '../../styles/styles';
 
 import MapViewer from '../../components/MapViewer';
@@ -22,7 +21,7 @@ class SingleTripScreen extends Component {
   state = {
     trip: {},
     destinations: [],
-    currentUserUID: firebase.auth().currentUser.uid,
+    currentUserUID: firebase.auth().currentUser.uid
   };
 
   componentDidMount() {
@@ -80,16 +79,16 @@ class SingleTripScreen extends Component {
             tripRef.delete().then(() => {
               navigation.replace('My Trips', { trips: filteredTrips });
             });
-          },
+          }
         },
         {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          },
-        },
+          }
+        }
       ],
-      { cancelable: true },
+      { cancelable: true }
     );
   };
 
@@ -111,15 +110,19 @@ class SingleTripScreen extends Component {
     );
 
     const renderItem = ({ item }) => (
-      <>
-        <ImageBackground source={image} style={styles.image}>
+      <View style={styles.itemContainer}>
+        <ImageBackground
+          source={{ uri: item.uploadedUrl }}
+          imageStyle={{ opacity: 0.6 }}
+          style={styles.image}
+        >
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Single Destination', {
                 destinationUid: item.id,
                 tripUid,
                 destinations,
-                tripName: trip.name,
+                tripName: trip.name
               });
             }}
           >
@@ -127,20 +130,24 @@ class SingleTripScreen extends Component {
             <Item title={item.destination.formatted} />
           </TouchableOpacity>
         </ImageBackground>
-      </>
+      </View>
     );
+
+    console.log(destinations);
 
     return (
       <FlatList
         style={styles.page}
-        ListHeaderComponent={(
+        ListHeaderComponent={
           <>
             <View>
-              <MapViewer destinations={destinations} />
+              {destinations &&
+                destinations[0] &&
+                destinations[0].destination && (
+                  <MapViewer destinations={destinations} />
+                )}
               <Text style={s.buttonText}>
-                Places visited:
-                {' '}
-                {destinations.length}
+                Places visited: {destinations.length}
               </Text>
             </View>
 
@@ -161,7 +168,7 @@ class SingleTripScreen extends Component {
               </View>
             )}
           </>
-        )}
+        }
         data={destinations}
         renderItem={renderItem}
         keyExtractor={(item) => item.id}
@@ -174,7 +181,7 @@ class SingleTripScreen extends Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
+    marginTop: StatusBar.currentHeight || 0
   },
   item: {
     // backgroundColor: "#f9c2ff",
@@ -183,12 +190,18 @@ const styles = StyleSheet.create({
     // marginHorizontal: 16,
     // zIndex: 15,
   },
+  itemContainer: {
+    borderRadius: 5,
+    width: 300
+  },
   title: {
-    fontSize: 32,
+    fontSize: 20,
+    fontFamily: 'Nunito_600SemiBold',
+    color: 'white'
   },
   mapDisplay: {
     height: 500,
-    width: 500,
+    width: 500
   },
   image: {
     flex: 1,
@@ -198,10 +211,11 @@ const styles = StyleSheet.create({
     marginVertical: 8,
     marginHorizontal: 16,
     zIndex: 20,
+    borderRadius: 5
   },
   page: {
-    backgroundColor: '#1E6091',
-  },
+    backgroundColor: '#1E6091'
+  }
 });
 
 export default SingleTripScreen;

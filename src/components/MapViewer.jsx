@@ -29,7 +29,6 @@ class MapViewer extends React.Component {
 const { destinations } =  this.props;
     const { popUpVisible, modalDestination } = this.state;
 
-// initialRegion={{latitude: this.props.destinations[0].destination.geometry.lat, longitude: this.props.destinations[0].destination.geometry.lng }
     return (
       <View style={styles.container}>
         {popUpVisible && (
@@ -41,9 +40,9 @@ const { destinations } =  this.props;
             modalDestination={modalDestination}
           />
         )}
-        {destinations && 
-       
-        <MapView style={styles.map} >  
+        <MapView style={styles.map} initialRegion={{latitude: destinations[0].destination.geometry.lat, longitude: destinations[0].destination.geometry.lng, latitudeDelta: 60.0922,
+      longitudeDelta: 60.0421,
+ }}>  
           {destinations.map((destination) => {
             const { geometry } = destination.destination;
             const latitude = geometry.lat;
@@ -59,7 +58,7 @@ const { destinations } =  this.props;
               />
             );
           })}
-        </MapView> }
+        </MapView>
 
       </View>
     );

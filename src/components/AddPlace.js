@@ -11,27 +11,17 @@ import {
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import { Dropdown } from 'react-native-material-dropdown-v2';
+import firebase from '../firebase/config';
 
-export default function AddPlace() {
-  // function urlLocate() {
-  // var url = document.getElementById("url").value;
-  // var regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
-  // if (url != "") {
-  //     if (!regexp.test(url)) {
-  //         alert("Please enter valid url.");
-  //     } else {
-  //         window.location.assign(url);
-  //     }
-  // }
-  // else {
-  //     alert("Please upload an image.");
-  // }
+export default function AddPlace(props) {
+  const regexp = /^(?:(?:https?|ftp):\/\/)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)(?:\.(?:[a-z\u00a1-\uffff0-9]-*)*[a-z\u00a1-\uffff0-9]+)*(?:\.(?:[a-z\u00a1-\uffff]{2,})))(?::\d{2,5})?(?:\/\S*)?$/;
 
   const [modalVisible, setModalVisible] = useState(false);
   const [name, setName] = useState('');
   const [url, setUrl] = useState('');
   const [type, setType] = useState('');
   const [post, setPost] = useState('');
+  const [successMessage, setSuccessMessage] = useState('');
 
   const types = [
     {
@@ -44,6 +34,47 @@ export default function AddPlace() {
       value: 'To visit',
     },
   ];
+
+  const handlePress = () => {
+    if (!name) {
+      Alert.alert('Name field is required.');
+    } else if (!url) {
+      Alert.alert('URL field is required.');
+    } else if (!post) {
+      Alert.alert('Post field is required.');
+    } else if (!type) {
+      Alert.alert('Type field is required.');
+    } else if (!regexp.test(url)) {
+      Alert.alert('Please enter a valid url');
+    } else {
+      const db = firebase.firestore();
+      const { tripUid, destinationUid } = props;
+      const placesRef = db
+        .collection('trips')
+        .doc(tripUid)
+        .collection('destinations')
+        .doc(destinationUid)
+        .collection('places');
+
+      placesRef
+        .add({
+          destinationUid,
+          name,
+          post,
+          url,
+          type,
+        })
+        .then(() => {
+          setSuccessMessage('Place successfully submitted');
+
+          setName('');
+          setUrl('');
+          setType('');
+          setPost('');
+        });
+    }
+  };
+
   console.log(type);
   return (
     <View style={styles.centeredView}>
@@ -109,8 +140,14 @@ export default function AddPlace() {
                 setType(value);
               }}
             />
+            <Text>{successMessage}</Text>
 
-            {/* <TextInput style={styles.modalText}>Hello World!</TextInput> */}
+            <Pressable
+              style={[styles.button, styles.buttonOpen]}
+              onPress={() => handlePress()}
+            >
+              <Text style={styles.textStyle}>Submit</Text>
+            </Pressable>
           </View>
         </View>
       </Modal>
@@ -118,7 +155,7 @@ export default function AddPlace() {
         style={[styles.button, styles.buttonOpen]}
         onPress={() => setModalVisible(true)}
       >
-        <Text style={styles.textStyle}>Show Modal</Text>
+        <Text style={styles.textStyle}>Add places</Text>
       </Pressable>
     </View>
   );
@@ -152,10 +189,10 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#F194FF',
+    backgroundColor: '#52b69a',
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#52b69a',
   },
   textStyle: {
     color: 'white',
@@ -182,8 +219,13 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   dropdown: {
-    width: 200,
-    backgroundColor: '#f5f5f5',
+    height: 60,
     borderRadius: 5,
+    overflow: 'hidden',
+    backgroundColor: '#f5f5f5',
+    width: 250,
+    marginTop: 10,
+    marginBottom: 10,
+    paddingLeft: 10,
   },
 });

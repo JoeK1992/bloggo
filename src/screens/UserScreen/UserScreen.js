@@ -2,16 +2,15 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import React, { Component } from 'react';
 
-import ColouredMap from '../../components/ColouredMap';
-
 import {
   Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from 'react-native';
+import ColouredMap from '../../components/ColouredMap';
 
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
@@ -29,7 +28,7 @@ class UserScreen extends Component {
       tripUids: [],
       continents: [],
       countries: [],
-      flags: []
+      flags: [],
       // user: null,
       // userUID: '',
     };
@@ -87,7 +86,7 @@ class UserScreen extends Component {
                 this.setState({
                   countries,
                   flags,
-                  continents
+                  continents,
                 });
               }
             });
@@ -105,7 +104,9 @@ class UserScreen extends Component {
     } else {
       currentUserUID = firebase.auth().currentUser.uid;
     }
-    const { trips, continents, countries, flags } = this.state;
+    const {
+      trips, continents, countries, flags,
+    } = this.state;
     const { navigation } = this.props;
     return (
       <ScrollView style={styles.userScreen}>
@@ -133,7 +134,9 @@ class UserScreen extends Component {
             {countries.length === 1
               ? '1 Country'
               : `${countries.length} Countries`}
-            | {trips === 1 ? '1 Trip' : `${trips} Trips`}
+            |
+            {' '}
+            {trips === 1 ? '1 Trip' : `${trips} Trips`}
           </Text>
           <Text style={styles.gamificationFlags}>{flags}</Text>
         </View>
@@ -145,7 +148,7 @@ class UserScreen extends Component {
 const styles = StyleSheet.create({
   userScreen: {
     backgroundColor: '#E7F5E8',
-    flex: 1
+    flex: 1,
   },
   gamificationTitle: {
     fontSize: 20,
@@ -153,7 +156,7 @@ const styles = StyleSheet.create({
     color: '#113755',
     paddingBottom: 5,
     fontWeight: 'bold',
-    fontFamily: 'Nunito_600SemiBold'
+    fontFamily: 'Nunito_600SemiBold',
   },
   gamificationStat: {
     fontSize: 15,
@@ -161,32 +164,32 @@ const styles = StyleSheet.create({
     color: '#113755',
     padding: 2,
     marginBottom: 5,
-    fontFamily: 'Lato_400Regular'
+    fontFamily: 'Lato_400Regular',
   },
   gamificationFlags: {
     fontSize: 15,
     textAlign: 'center',
     marginHorizontal: 40,
-    letterSpacing: 8
+    letterSpacing: 8,
   },
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   title: {
-    fontSize: 32
+    fontSize: 32,
   },
   mapDisplay: {
     height: 500,
-    width: 500
+    width: 500,
   },
 
   map: {
     width: '100%',
     height: undefined,
-    aspectRatio: 1.5
+    aspectRatio: 1.5,
   },
   btn: {
     color: '#E8F3B9',
@@ -195,25 +198,25 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: 120,
     padding: 10,
-    fontFamily: 'Nunito_600SemiBold'
+    fontFamily: 'Nunito_600SemiBold',
   },
   btnContainer: {
     alignItems: 'center',
-    margin: 10
+    margin: 10,
   },
   text: {
     fontSize: 20,
     color: '#113755',
     borderRadius: 3,
     textAlign: 'center',
-    paddingVertical: 2
+    paddingVertical: 2,
   },
   gamificationContainer: {
     borderRadius: 10,
     backgroundColor: '#D4EDE2',
     textAlign: 'center',
-    paddingVertical: 2
-  }
+    paddingVertical: 2,
+  },
 });
 
 export default UserScreen;

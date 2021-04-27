@@ -54,7 +54,6 @@ const styles = StyleSheet.create({
   logoContainer: {},
   container: {
     paddingVertical: 10, 
-    backgroundColor: "#113755"
   },
 
   userHeader: {},

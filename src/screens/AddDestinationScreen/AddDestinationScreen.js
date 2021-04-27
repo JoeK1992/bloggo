@@ -33,6 +33,7 @@ export default function AddDestinationScreen(props) {
 
   const fetchResults = (textInput) => {
     if (textInput.length > 1) {
+      console.log('in here');
       const search = textInput.split(' ').join('+');
       getDestination(search).then((results) => {
         setResults(results);
