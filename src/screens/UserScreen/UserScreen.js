@@ -2,7 +2,9 @@ import "firebase/auth";
 import "firebase/firestore";
 import React, { Component } from "react";
 
+
 import ColouredMap from "../../components/ColouredMap";
+
 
 import {
   Image,
@@ -126,7 +128,11 @@ class UserScreen extends Component {
         <ProfileHeader userUID={currentUserUID} />
         <View style={styles.mapContainer} />
         <View style={styles.mapDisplay}>
+
           <ColouredMap countries={countries} />
+
+        
+
         </View>
         <View style={styles.btnContainer}>
           <TouchableOpacity
@@ -231,6 +237,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 32,
   },
+
   flagBackground: {
     width: 370,
     height: 150,
@@ -259,6 +266,12 @@ const styles = StyleSheet.create({
   statsCardText: {
     color: "#E8F3B9",
     fontSize: 18,
+
+  mapDisplay: {
+    height: 500,
+    width: 500
+  },
+
 
     textAlign: "center",
   },

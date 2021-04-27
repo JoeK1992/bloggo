@@ -1,8 +1,3 @@
-import React, { Component } from "react";
-import { View, StyleSheet } from "react-native";
-import MapView, { Polygon } from "react-native-maps";
-import { fetchCoordinates } from "./utils/GeoJsonUtils";
-
 mapstyle = [
   {
     elementType: "labels",
@@ -73,9 +68,16 @@ mapstyle = [
   },
 ];
 
+import React, { Component } from 'react';
+import { View, StyleSheet } from 'react-native';
+import MapView, { Polygon } from 'react-native-maps';
+import { fetchPolygonCoordinates } from './utils/GeoJsonUtils';
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
     backgroundColor: "#fff",
     alignItems: "center",
     justifyContent: "center",
@@ -95,18 +97,18 @@ class ColouredMap extends Component {
 
     return (
       <View style={styles.container}>
-        <MapView
-          style={styles.map}
+
+
+        <MapView   style={styles.map}
           initialRegion={{
             latitude: 15.1201,
             longitude: -23.6052,
             latitudeDelta: 180,
             longitudeDelta: 360,
-          }}
-          customMapStyle={mapstyle}
-        >
+          }} customMapStyle={mapstyle}>
           {countries.map((country) => {
-            return fetchCoordinates(country).map((polygon, index) => {
+            return fetchPolygonCoordinates(country).map((polygon, index) => {
+
               return (
                 <Polygon
                   coordinates={polygon}
