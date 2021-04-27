@@ -1,128 +1,80 @@
-import React, { Component } from 'react';
+import * as React from 'react';
+import MapView, { Marker } from 'react-native-maps';
+import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
+import MapPopUp from '../components/MapPopUp';
 
-import { GoogleApiWrapper, Map, Marker, InfoWindow } from 'google-maps-react';
-
-import { Modal, Text, TouchableOpacity, View, StyleSheet } from 'react-native';
-
-const styles = StyleSheet.create({
-  mapContainer: {
-    position: 'relative',
-    flex: 1
-  },
-  popUp: {
-    padding: 20,
-    position: 'absolute',
-    left: '50%',
-    top: '50%',
-
-    backgroundColor: 'blue',
-    fontSize: 40
-  }
-});
-
-class MapViewer extends Component {
+class MapViewer extends React.Component {
   state = {
-    markerClicked: false,
-    showingInfoWindow: false,
-    activeMarker: {},
-    selectedPlace: {},
-    destinations: [],
-    selecterCenter: null,
-    modalDestinationKey: '',
-    modalVisible: false,
-    modalDestination: {},
-    modalPlaceName: ''
+    popUpVisible: false,
+    modalDestination: {}
   };
 
-
-  clickMarker = (id, destination) => {
-    const { modalVisible } = this.state;
-    if (destination) {
-      const placeName = destination.formatted;
-      const commaIndex = placeName.indexOf(',');
-      const formattedPlaceName = placeName.slice(0, commaIndex);
-     
-      this.setState({
-        modalVisible: !modalVisible,
-        modalDestination: destination,
-        modalPlaceName: formattedPlaceName
-      });
-    } else {
-      this.setState({
-        modalVisible: !modalVisible
-      });
-    }
+  handlePress = (destination) => {
+    this.setState({ popUpVisible: true, modalDestination: destination });
   };
 
-  displayMarkers = () => {
-    return this.props.destinations.map(({ id, destination }) => {
-      return (
-        <Marker
-          position={destination.geometry}
-          onClick={() => {
-            this.clickMarker(id, destination);
-          }}
-          key={id}
-          initialCenter={{
-            lat: -1.2884,
-            lng: 36.8233
-          }}
-        />
-      );
-    });
+  closeModal = () => {
+    console.log('closing');
+    this.setState({ popUpVisible: false });
   };
 
   render() {
-    const { modalVisible, modalDestination, modalPlaceName } = this.state;
-    
-let popUp;
+    const { destinations } = this.props;
+    const { popUpVisible, modalDestination } = this.state;
 
-    if (modalVisible) {
-      popUp = (
-        <View style={styles.popUp}>
-          <Text>{modalPlaceName}</Text>
-          <TouchableOpacity
-            onPress={() => {
-              this.clickMarker();
-            }}
-          >
-            <Text>Close</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              console.log('navigating to single trip page');
-            }}
-          >
-            <Text>This Trip</Text>
-          </TouchableOpacity>
-        </View>
-      );
-    } else {
-      popUp = <View />;
-    }
     return (
-      <View>
-        <Map
-          className="map"
-          google={this.props.google}
-          zoom={3}
-          style={{
-            width: '50%',
-            height: '50%'
-          }}
-          initialCenter={this.props.destinations[0]}
-        >
-          {this.displayMarkers()}
-          {popUp}
-        </Map>
+      <View style={styles.container}>
+        {popUpVisible && (
+          <MapPopUp
+            closeModal={() => {
+              this.closeModal();
+            }}
+            style={{ position: 'absolute', top: 100, left: 50 }}
+            modalDestination={modalDestination}
+          />
+        )}
+        <MapView style={styles.map}>
+          {destinations.map((destination) => {
+            const { geometry } = destination.destination;
+            const latitude = geometry.lat;
+            const longitude = geometry.lng;
+
+            return (
+              <Marker
+                coordinate={{ latitude: latitude, longitude: longitude }}
+                key={destination.id}
+                onPress={() => {
+                  this.handlePress(destination);
+                }}
+              />
+            );
+          })}
+        </MapView>
       </View>
     );
   }
 }
 
-export default GoogleApiWrapper({
-  apiKey: 'AIzaSyBlzgz8XpUdCQgmvThnz6m5IDNf0ozT8R8'
-})(MapViewer);
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center'
+  },
+  map: {
+    width: 500,
+    height: 500,
+    position: 'relative'
+  },
+  popUp: {
+    position: 'absolute',
+    width: 500,
+    height: 500,
+    left: '16vh',
+    top: '16vh',
+    backgroundColor: 'green'
+  }
+});
 
-
-
+export default MapViewer;
