@@ -2,7 +2,6 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import React, { Component } from 'react';
 
-
 import ColouredMap from '../../components/ColouredMap';
 
 import {
@@ -109,11 +108,10 @@ class UserScreen extends Component {
     const { trips, continents, countries, flags } = this.state;
     const { navigation } = this.props;
     return (
-
       <ScrollView style={styles.userScreen}>
         <ProfileHeader userUID={currentUserUID} />
         <View style={styles.mapContainer} />
-       <View style={styles.mapDisplay}>
+        <View style={styles.mapDisplay}>
           <ColouredMap />
         </View>
         <Image style={styles.map} source={map} />
@@ -141,7 +139,6 @@ class UserScreen extends Component {
         </View>
         <NavBar style={styles.navBar} />
       </ScrollView>
-
     );
   }
 }
@@ -172,8 +169,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 40,
     letterSpacing: 8
   },
-
-const styles = StyleSheet.create({
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
@@ -186,9 +181,7 @@ const styles = StyleSheet.create({
   mapDisplay: {
     height: 500,
     width: 500
-  }
-});
-
+  },
 
   map: {
     width: '100%',
