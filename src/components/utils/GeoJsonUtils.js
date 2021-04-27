@@ -21,7 +21,7 @@ const formatCountryData = (coordinateArray) => {
       for (let j = 0; j < flattenedArray[i].length; j += 1) {
         tempData.push({
           longitude: flattenedArray[i][j][0],
-          latitude: flattenedArray[i][j][1]
+          latitude: flattenedArray[i][j][1],
         });
       }
       finalData.push(tempData);
@@ -31,7 +31,7 @@ const formatCountryData = (coordinateArray) => {
     for (let i = 0; i < flattenedArray.length; i += 1) {
       finalData.push({
         longitude: flattenedArray[i][0],
-        latitude: flattenedArray[i][1]
+        latitude: flattenedArray[i][1],
       });
     }
     return [finalData];

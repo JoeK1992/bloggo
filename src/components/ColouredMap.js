@@ -8,13 +8,13 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: '#fff',
     alignItems: 'center',
-    justifyContent: 'center'
+    justifyContent: 'center',
   },
   map: {
     width: 500,
     height: 500,
-    position: 'relative'
-  }
+    position: 'relative',
+  },
 });
 
 const example = ['Indonesia', 'Canada', 'France', 'San Marino', 'Finland'];
