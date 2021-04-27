@@ -2,19 +2,19 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import React, { Component } from 'react';
 import {
+  Alert,
   FlatList,
+  ImageBackground,
   StatusBar,
   StyleSheet,
   Text,
   View,
-  Alert,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import s from '../../styles/styles';
-
 import NavBar from '../../components/NavBar';
-import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
+import image from '../../images/indo.jpeg';
+import s from '../../styles/styles';
 
 import MapViewer from '../../components/MapViewer';
 
@@ -22,6 +22,7 @@ class SingleTripScreen extends Component {
   state = {
     trip: {},
     destinations: [],
+    currentUserUID: firebase.auth().currentUser.uid,
   };
 
   componentDidMount() {
@@ -98,7 +99,7 @@ class SingleTripScreen extends Component {
 
     const { trip } = this.state;
     let { destinations } = this.state;
-
+    const { currentUserUID } = this.state;
     if (route.params.destinations) {
       destinations = route.params.destinations;
     }
@@ -111,56 +112,58 @@ class SingleTripScreen extends Component {
 
     const renderItem = ({ item }) => (
       <>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Single Destination', {
-              destinationUid: item.id,
-              tripUid,
-              destinations,
-              tripName: trip.name,
-            });
-          }}
-        >
-          <Item title={item.destination.formatted} />
-        </TouchableOpacity>
+        <ImageBackground source={image} style={styles.image}>
+
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate('Single Destination', {
+                destinationUid: item.id,
+                tripUid,
+                destinations,
+                tripName: trip.name,
+              });
+            }}
+          >
+            {/* <Image source={image} style={styles.image}></Image>; */}
+            <Item title={item.destination.formatted} />
+          </TouchableOpacity>
+        </ImageBackground>
       </>
     );
 
     return (
-      <View>
-        <ProfileHeader />
-        <View style={styles.mapDisplay}>
-          <MapViewer destinations={destinations} />
-        </View>
-        <View>
-          <Text>Map Goes Here</Text>
-          <Text>Trip Stats go Here</Text>
-        </View>
-        <View>
-          <TouchableOpacity
-            style={s.button}
-            onPress={() => {
-              navigation.navigate('Add Destination', { tripUid });
-            }}
-          >
-            <TouchableOpacity />
-            <Text style={s.buttonText}> Add Destination</Text>
-          </TouchableOpacity>
+      <FlatList
+        style={styles.page}
+        ListHeaderComponent={(
+          <>
+            <View>
+              <Text>Map Goes Here</Text>
+              <Text>Trip Stats go Here</Text>
+            </View>
 
-          <TouchableOpacity style={s.button} onPress={this.deleteTrip}>
-            <Text style={s.buttonText}> Delete Trip </Text>
-          </TouchableOpacity>
-        </View>
-        <View>
-          <FlatList
-            data={destinations}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-          />
-        </View>
-
-        <NavBar />
-      </View>
+            {currentUserUID === trip.user && (
+              <View>
+                <TouchableOpacity
+                  style={s.button}
+                  onPress={() => {
+                    navigation.navigate('Add Destination', { tripUid });
+                  }}
+                >
+                  <TouchableOpacity />
+                  <Text style={s.buttonText}> Add Destination</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={s.button} onPress={this.deleteTrip}>
+                  <Text style={s.buttonText}> Delete Trip </Text>
+                </TouchableOpacity>
+              </View>
+            )}
+          </>
+        )}
+        data={destinations}
+        renderItem={renderItem}
+        keyExtractor={(item) => item.id}
+        ListFooterComponent={<NavBar />}
+      />
     );
   }
 }
@@ -171,10 +174,11 @@ const styles = StyleSheet.create({
     marginTop: StatusBar.currentHeight || 0,
   },
   item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
+    // backgroundColor: "#f9c2ff",
+    // padding: 20,
+    // marginVertical: 8,
+    // marginHorizontal: 16,
+    // zIndex: 15,
   },
   title: {
     fontSize: 32,
@@ -182,6 +186,18 @@ const styles = StyleSheet.create({
   mapDisplay: {
     height: 500,
     width: 500,
+  },
+  image: {
+    flex: 1,
+    width: 400,
+    height: 100,
+    padding: 20,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    zIndex: 20,
+  },
+  page: {
+    backgroundColor: '#1E6091',
   },
 });
 

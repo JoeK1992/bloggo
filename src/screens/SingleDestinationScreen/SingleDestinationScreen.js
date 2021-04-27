@@ -4,23 +4,33 @@ import React, { Component } from 'react';
 import {
   Alert,
   FlatList,
-  Image,
-  StyleSheet,
   Text,
   TextInput,
   View,
+  ScrollView,
+  LogBox,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
 import s from '../../styles/styles';
+import ImagesCarousel from '../../components/ImagesCarousel';
+import styles from './styles';
+import NavBar from '../../components/NavBar';
+import Comments from '../../components/Comments';
+import AddPlace from '../../components/AddPlace';
+
+LogBox.ignoreLogs([
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
+]);
 
 export default class SingleDestinationScreen extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      destination: {},
+      destination: null,
       editable: false,
       blogPost: '',
+      openedMenu: false,
     };
   }
 
@@ -29,9 +39,6 @@ export default class SingleDestinationScreen extends Component {
     const _this = this;
     const { tripUid, destinationUid } = _this.props.route.params;
 
-    // const currentUserUID = firebase.auth().currentUser.uid;
-    // const route = this.props;
-    // const { destinationUid } = route.params;
     const destinationRef = db
       .collection('trips')
       .doc(tripUid)
@@ -42,6 +49,7 @@ export default class SingleDestinationScreen extends Component {
         console.log('No such document');
       } else {
         const destination = doc.data();
+        destination.id = doc.id;
         this.setState({ destination, blogPost: destination.blogPost });
       }
     });
@@ -64,6 +72,10 @@ export default class SingleDestinationScreen extends Component {
 
   toggleEditable = () => {
     this.setState({ editable: true });
+  };
+
+  openMenu = (boolean) => {
+    this.setState({ openedMenu: boolean });
   };
 
   deleteDestination = () => {
@@ -109,7 +121,9 @@ export default class SingleDestinationScreen extends Component {
 
   render() {
     const { navigation, route } = this.props;
-    const { destination, blogPost, editable } = this.state;
+    const {
+      destination, blogPost, editable, openedMenu,
+    } = this.state;
     const {
       destinations, tripUid, destinationUid, tripName,
     } = route.params;
@@ -134,86 +148,109 @@ export default class SingleDestinationScreen extends Component {
             });
           }}
         >
-          <Item title={item.destination.formatted} />
+          <Item title={item.destination.formatted.split(',')[0]} />
         </TouchableOpacity>
       </>
     );
 
+    const Header = () => (
+      <View style={styles.container}>
+        <View style={styles.carouselContainer}>
+          {destination && <ImagesCarousel destination={destination} />}
+        </View>
+      </View>
+    );
+
+    const Footer = () => (
+      <View style={styles.container}>
+        <AddPlace />
+
+        <TextInput
+          value={blogPost}
+          multiline
+          style={[editable ? styles.input : styles.blogText]}
+          onChangeText={(blogPost) => this.setState({ blogPost })}
+          editable={editable}
+        />
+
+        {editable ? (
+          <TouchableOpacity onPress={this.editBlogPost} style={s.button}>
+            <Text style={s.buttonText}>Submit!</Text>
+          </TouchableOpacity>
+        ) : (
+          <TouchableOpacity onPress={this.toggleEditable} style={s.button}>
+            <Text style={s.buttonText}>Edit Blog</Text>
+          </TouchableOpacity>
+        )}
+        {destination && (
+          <Comments destinationUid={destination.id} tripUid={tripUid} />
+        )}
+
+        <TouchableOpacity
+          onPress={this.deleteDestination}
+          style={s.deleteButton}
+        >
+          <Text style={s.buttonText}>Delete Destination</Text>
+        </TouchableOpacity>
+        <NavBar />
+      </View>
+    );
+
+    const ExploreBtn = () => (
+      <TouchableOpacity
+        style={s.button}
+        onPress={() => {
+          this.openMenu(true);
+        }}
+      >
+        <Text style={s.buttonText}>Explore trip</Text>
+      </TouchableOpacity>
+    );
+
     return (
       <View style={styles.container}>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.navigate('Single Trip', { tripUid });
-          }}
-          style={s.button}
-        >
-          <Text style={s.buttonText}>
-            Back to
-            {tripName}
-            {' '}
-            trip!
-            {' '}
-          </Text>
-        </TouchableOpacity>
-
-        <Image style={styles.pic} source={destination.uploadedUrl} />
-
-        <View>
-          {destination.destination && (
-            <Text>{destination.destination.formatted}</Text>
+        <View style={styles.titleContainer}>
+          {destination && destination.destination && (
+            <>
+              <Text style={styles.title}>
+                {destination.destination.formatted}
+              </Text>
+              <>
+                <TouchableOpacity
+                  onPress={() => {
+                    navigation.navigate('Single Trip', { tripUid });
+                  }}
+                  style={styles.button}
+                >
+                  <Text style={styles.buttonText}>
+                    Back to
+                    {' '}
+                    {tripName}
+                    {' '}
+                    trip!
+                  </Text>
+                </TouchableOpacity>
+              </>
+            </>
           )}
-
-          <TextInput
-            value={blogPost}
-            onChangeText={(blogPost) => this.setState({ blogPost })}
-            editable={editable}
-          />
-          {editable ? (
-            <TouchableOpacity onPress={this.editBlogPost} style={s.button}>
-              <Text style={s.buttonText}>Submit!</Text>
-            </TouchableOpacity>
-          ) : (
-            <TouchableOpacity onPress={this.toggleEditable} style={s.button}>
-              <Text style={s.buttonText}>Edit Blog</Text>
-            </TouchableOpacity>
-          )}
-          <TouchableOpacity onPress={this.deleteDestination} style={s.button}>
-            <Text style={s.buttonText}>Delete Destination</Text>
-          </TouchableOpacity>
         </View>
-        <View>
+        {!openedMenu ? (
+          <ScrollView>
+            <Header />
+            {filteredDestinations.length > 1 && <ExploreBtn />}
+            <Footer />
+          </ScrollView>
+        ) : (
           <FlatList
+            ListHeaderComponent={<Header />}
             data={filteredDestinations}
             renderItem={renderItem}
             keyExtractor={(item) => item.id}
+            style={styles.listContainer}
+            ListFooterComponent={<Footer />}
           />
-        </View>
+        )}
       </View>
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    paddingTop: 50,
-    // flex: 1,
-    // marginTop: StatusBar.currentHeight || 0,
-  },
-  tinyLogo: {
-    width: 50,
-    height: 50,
-  },
-  pic: {
-    width: 100,
-    height: 100,
-  },
-  item: {
-    backgroundColor: '#f9c2ff',
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-  },
-  title: {
-    fontSize: 32,
-  },
-});

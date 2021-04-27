@@ -1,6 +1,17 @@
+import {
+  Lato_300Light,
+  Lato_400Regular,
+  Lato_700Bold,
+} from '@expo-google-fonts/lato';
+import {
+  Nunito_400Regular,
+  Nunito_600SemiBold,
+  useFonts,
+} from '@expo-google-fonts/nunito';
 import { NavigationContainer } from '@react-navigation/native';
 import { createStackNavigator } from '@react-navigation/stack';
 import { decode, encode } from 'base-64';
+import AppLoading from 'expo-app-loading';
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
@@ -32,6 +43,14 @@ export default function App() {
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState(null);
 
+  const [fontsLoaded] = useFonts({
+    Nunito_600SemiBold,
+    Lato_400Regular,
+    Lato_300Light,
+    Lato_700Bold,
+    Nunito_400Regular,
+  });
+
   useEffect(() => {
     const usersRef = firebase.firestore().collection('users');
     firebase.auth().onAuthStateChanged((user) => {
@@ -55,6 +74,9 @@ export default function App() {
   if (loading) {
     return <Text>Loading</Text>;
   }
+  if (!fontsLoaded) {
+    return <AppLoading />;
+  }
   return (
     <NavigationContainer>
       <Stack.Navigator>
@@ -70,7 +92,7 @@ export default function App() {
               component={AddDestinationScreen}
             />
 
-            <Stack.Screen name="My Trips" component={TripsScreen} />
+            <Stack.Screen name="Trips" component={TripsScreen} />
             <Stack.Screen name="Profile Page" component={UserScreen} />
             <Stack.Screen name="Single Trip" component={SingleTripScreen} />
             <Stack.Screen

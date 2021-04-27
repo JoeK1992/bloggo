@@ -1,9 +1,13 @@
 import React, { useEffect } from 'react';
 import {
-  View, Text, TouchableOpacity, Platform,
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  StyleSheet,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import s from '../styles/styles';
+import addDesStyles from '../screens/AddDestinationScreen/styles';
 
 export default function PickImage(props) {
   useEffect(() => {
@@ -24,12 +28,12 @@ export default function PickImage(props) {
       allowsEditing: true,
       aspect: [4, 3],
       base64: true,
-
-      // allowsMultipleSelection: true
     });
 
     if (!result.cancelled) {
-      const base64Img = result.uri;
+      const base64Img = Platform.OS === 'web'
+        ? result.uri
+        : `data:image/jpg;base64,${result.base64}`;
 
       const apiUrl = 'https://api.cloudinary.com/v1_1/ddxr0zldw/image/upload';
 
@@ -46,31 +50,45 @@ export default function PickImage(props) {
       })
         .then(async (r) => {
           const data = await r.json();
-          props.setUrl(data.secure_url);
+          props.setUploadedUrl(data.secure_url);
           return data.secure_url;
         })
         .catch((err) => console.log(err));
     }
   };
-  const { uploadedUrl } = props;
+  const { uploadedUrl, setUploadedUrl } = props;
   return (
     <View>
-      <TouchableOpacity style={s.button} onPress={chooseImage}>
-        <Text style={s.buttonText}>Pick Image</Text>
+      <TouchableOpacity style={addDesStyles.button} onPress={chooseImage}>
+        <Text style={addDesStyles.buttonText}>Pick Cover Image</Text>
       </TouchableOpacity>
-      {uploadedUrl && (
-        <Text>
-          Cover image
-          {' '}
-          <TouchableOpacity
-            onPress={() => {
-              props.setUrl(null);
-            }}
-          >
-            <Text>Delete Cover image</Text>
-          </TouchableOpacity>
-        </Text>
+      {uploadedUrl !== '' && (
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => {
+            setUploadedUrl(null);
+          }}
+        >
+          <Text style={styles.title}>Delete Cover image</Text>
+        </TouchableOpacity>
       )}
     </View>
   );
 }
+const styles = StyleSheet.create({
+  button: {
+    backgroundColor: '#34a0a4',
+    padding: 10,
+    marginVertical: 8,
+    marginHorizontal: 16,
+    borderRadius: 5,
+    width: 300,
+    alignSelf: 'center',
+    alignItems: 'center',
+  },
+  title: {
+    fontSize: 15,
+    fontFamily: 'Nunito_400Regular',
+    color: 'white',
+  },
+});
