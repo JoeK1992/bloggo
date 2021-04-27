@@ -17,6 +17,7 @@ import ImagesCarousel from '../../components/ImagesCarousel';
 import styles from './styles';
 import NavBar from '../../components/NavBar';
 import Comments from '../../components/Comments';
+import AddPlace from '../../components/AddPlace';
 
 LogBox.ignoreLogs([
   'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
@@ -162,6 +163,8 @@ export default class SingleDestinationScreen extends Component {
 
     const Footer = () => (
       <View style={styles.container}>
+        <AddPlace />
+
         <TextInput
           value={blogPost}
           multiline
@@ -169,6 +172,7 @@ export default class SingleDestinationScreen extends Component {
           onChangeText={(blogPost) => this.setState({ blogPost })}
           editable={editable}
         />
+
         {editable ? (
           <TouchableOpacity onPress={this.editBlogPost} style={s.button}>
             <Text style={s.buttonText}>Submit!</Text>

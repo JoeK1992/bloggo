@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, StyleSheet, FlatList } from 'react-native';
+import {
+  View, Text, TextInput, StyleSheet, FlatList,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import firebase from '../firebase/config';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
+import firebase from '../firebase/config';
 
 export default function Comments(props) {
   const [comment, setComment] = useState('');
@@ -11,9 +13,26 @@ export default function Comments(props) {
   const { tripUid, destinationUid } = props;
   const currentUserUID = firebase.auth().currentUser.uid;
 
+  // useEffect(() => {
+  //   const db = firebase.firestore();
+
+  //   const commentsRef = db
+  //     .collection('trips')
+  //     .doc(tripUid)
+  //     .collection('destinations')
+  //     .doc(destinationUid)
+  //     .collection('comments');
+  //   commentsRef.onSnapshot((querySnapshot) => {
+  //     querySnapshot.docChanges().forEach((change) => {
+  //       const comment = change.doc.data();
+  //       comment.id = change.doc.id;
+  //       setComments([comment, ...comments]);
+  //     });
+  //   });
+  // });
+
   useEffect(() => {
     const db = firebase.firestore();
-
     const commentsRef = db
       .collection('trips')
       .doc(tripUid)
@@ -30,14 +49,14 @@ export default function Comments(props) {
           comment.id = doc.id;
           newComments.push(comment);
         });
+
         setComments(newComments);
       }
     });
-  });
-  console.log(comments);
+  }, []);
+
   const handlePress = () => {
     const db = firebase.firestore();
-
     const userRef = db.collection('users').doc(currentUserUID);
     userRef
       .get()
@@ -56,41 +75,42 @@ export default function Comments(props) {
           .collection('destinations')
           .doc(destinationUid)
           .collection('comments');
-        const newComment = {
-          userName,
-          comment,
-          date: new Date().toUTCString(),
-          user: currentUserUID
-        };
-        setComments([...comments, newComment]);
+        // const newComment = {
+        //   userName,
+        //   comment,
+        //   date: new Date().toUTCString(),
+        //   user: currentUserUID,
+        // };
+        // setComments([...comments, newComment]);
         commentsRef
           .add({
             comment,
             userName,
             date: new Date().toUTCString(),
-            user: currentUserUID
+            user: currentUserUID,
           })
           .catch((err) => {
             console.log(err);
           });
       });
   };
-
-  const Item = ({ comment, date, userName, user }) => (
+  const Item = ({
+    comment, date, userName, user,
+  }) => (
     <View>
       <Text style={styles.comment}>{comment}</Text>
       <Text style={styles.comment}>
-        Posted by {userName} on {date.slice(0, 16)}
+        Posted by
+        {' '}
+        {userName}
+        {' '}
+        on
+        {' '}
+        {date.slice(0, 16)}
       </Text>
       {user === currentUserUID && (
-        <TouchableOpacity
-        // style={styles.closeButton}
-        // onPress={() => {
-        //   deleteComment();
-        // }}
-        >
-          <Text>heeey</Text>
-          <FontAwesomeIcon icon={faTimes} size={30} />
+        <TouchableOpacity style={styles.deleteBtn}>
+          <FontAwesomeIcon style={styles.deleteIcon} icon={faTimes} size={30} />
         </TouchableOpacity>
       )}
     </View>
@@ -104,7 +124,7 @@ export default function Comments(props) {
           width: 300,
           alignSelf: 'center',
           marginVertical: 10,
-          backgroundColor: 'white'
+          backgroundColor: 'white',
         }}
       />
     );
@@ -112,20 +132,17 @@ export default function Comments(props) {
 
   const renderItem = ({ item }) => (
     <>
-      <TouchableOpacity>
-        <Item
-          comment={item.comment}
-          date={item.date}
-          userName={item.userName}
-          user={item.user}
-        />
-      </TouchableOpacity>
+      <Item
+        comment={item.comment}
+        date={item.date}
+        userName={item.userName}
+        user={item.user}
+      />
     </>
   );
 
   return (
     <View>
-      <Text style={styles.title}>Comments</Text>
       <TextInput
         style={styles.input}
         placeholder="Type your comment"
@@ -145,6 +162,8 @@ export default function Comments(props) {
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
       )}
+      <Text style={styles.title}>Comments</Text>
+
       <FlatList
         data={comments}
         renderItem={renderItem}
@@ -157,6 +176,9 @@ export default function Comments(props) {
 }
 
 const styles = StyleSheet.create({
+  listContainer: {
+    paddingBottom: 30,
+  },
   input: {
     height: 48,
     borderRadius: 5,
@@ -166,21 +188,22 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,
-    paddingLeft: 16
+    paddingLeft: 16,
   },
   title: {
-    color: '#f9fced',
+    paddingTop: 30,
+    color: '#52b69a',
     textAlign: 'center',
     paddingVertical: 2,
     fontSize: 16,
-    fontFamily: 'Nunito_600SemiBold'
+    fontFamily: 'Nunito_600SemiBold',
   },
   comment: {
     color: 'white',
     textAlign: 'center',
     paddingVertical: 2,
     fontSize: 14,
-    fontFamily: 'Lato_400Regular'
+    fontFamily: 'Lato_400Regular',
   },
   button: {
     alignSelf: 'center',
@@ -193,13 +216,13 @@ const styles = StyleSheet.create({
     minWidth: 300,
     marginVertical: 7,
     alignItems: 'center',
-    textAlign: 'center'
+    textAlign: 'center',
   },
 
   buttonText: {
     color: 'white',
     fontSize: 16,
-    fontFamily: 'Nunito_400Regular'
+    fontFamily: 'Nunito_400Regular',
   },
 
   buttonDisabled: {
@@ -211,6 +234,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     margin: 2,
     minWidth: 200,
-    alignItems: 'center'
-  }
+    alignItems: 'center',
+  },
+  deleteBtn: {
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+
+  deleteIcon: {
+    color: '#ed6a5a',
+    fontSize: 12,
+  },
 });

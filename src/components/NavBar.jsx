@@ -40,7 +40,7 @@ const NavBar = () => {
         <FontAwesomeIcon icon={faHome} style={styles.logo} size={30} />
         <Text style={styles.text}>Home</Text>
       </TouchableOpacity>
-      <TouchableOpacity onPress={() => navigation.navigate("Profile Page")}>
+      <TouchableOpacity onPress={() => navigation.replace("Profile Page", { userUid: firebase.auth().currentUser.uid})}>
         <FontAwesomeIcon icon={faUser} style={styles.logo} size={30} />
         <Text style={styles.text}>Profile</Text>
       </TouchableOpacity>
@@ -74,10 +74,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingVertical: 10,
     justifyContent: "space-around",
-    // position: "absolute",
-    // bottom: 0,
-    // left: 0,
-    // right: 0,
+
     marginTop: 10,
   },
   text: {

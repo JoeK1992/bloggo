@@ -42,6 +42,7 @@ class TripsScreen extends Component {
           console.log('No matching documents.');
         } else {
           const newTrips = [];
+
           snapshot.forEach((doc) => {
             const trip = doc.data();
             trip.id = doc.id;
@@ -77,7 +78,7 @@ class TripsScreen extends Component {
     tripsRef
       .where('user', equalSign, currentUserUID)
       // .where('summary', '!=', false)
-      // .orderBy('summary')
+      .orderBy('user')
       .orderBy('startDate', order)
       .get()
       .then((snapshot) => {
@@ -86,7 +87,6 @@ class TripsScreen extends Component {
         } else {
           const newTrips = [];
           snapshot.forEach((doc) => {
-            console.log(trip);
             const trip = doc.data();
             trip.id = doc.id;
             newTrips.push(trip);
@@ -97,7 +97,6 @@ class TripsScreen extends Component {
   };
 
   render() {
-    console.log(this.props);
     let { trips } = this.state;
     const { order, currentUserUID } = this.state;
     const { route } = this.props;
@@ -137,7 +136,7 @@ class TripsScreen extends Component {
               navigation.replace('Profile Page', { userUid });
             }}
           >
-            <Text>{userName}</Text>
+            <Text style={styles.userName}>{userName}</Text>
           </TouchableOpacity>
         )}
       </View>
@@ -159,7 +158,15 @@ class TripsScreen extends Component {
       <View style={styles.container}>
         {page === 'My Trips' && <ProfileHeader userUID={currentUserUID} />}
 
-        <Text style={styles.headTitle}> Explore your trips </Text>
+        <Text style={styles.headTitle}>
+          {' '}
+          Explore your
+          {' '}
+          {page === 'Explore' && <Text>friends'</Text>}
+          {' '}
+          trips
+          {' '}
+        </Text>
 
         <View style={styles.sortBtn}>
           <Text style={styles.sortBy}> Sort by:</Text>
@@ -233,6 +240,13 @@ const styles = StyleSheet.create({
     fontSize: 15,
     textAlign: 'center',
     color: '#F9FCED',
+    fontFamily: 'Nunito_600SemiBold',
+  },
+
+  userName: {
+    fontSize: 14,
+    textAlign: 'center',
+    color: 'white',
     fontFamily: 'Nunito_600SemiBold',
   },
   sortBy: {
