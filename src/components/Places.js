@@ -5,13 +5,15 @@ import {
   TouchableOpacity,
   StyleSheet,
   FlatList,
-  Linking
+  Linking,
 } from 'react-native';
 
 export default function Places(props) {
   const { places } = props;
 
-  const Item = ({ title, url, type, post }) => (
+  const Item = ({
+    title, url, type, post,
+  }) => (
     <View style={styles.item}>
       <Text style={styles.title}>{type}</Text>
       <Text style={styles.title}>{title}</Text>
@@ -45,7 +47,7 @@ export default function Places(props) {
 const styles = StyleSheet.create({
   container: {
     backgroundColor: '#113755',
-    flex: 1
+    flex: 1,
   },
   mainTitle: {
     fontSize: 17,
@@ -56,11 +58,11 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderBottomColor: '#52B69A',
     width: 300,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
 
   listContainer: {
-    backgroundColor: '#52B69A'
+    backgroundColor: '#52B69A',
   },
   item: {
     padding: 15,
@@ -71,7 +73,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderStyle: 'solid',
     borderWidth: 1,
-    alignSelf: 'center'
+    alignSelf: 'center',
   },
 
   carouselContainer: {
@@ -79,19 +81,19 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     marginTop: 120,
     alignItems: 'center',
-    marginBottom: 10
+    marginBottom: 10,
   },
   title: {
     fontSize: 15,
     fontFamily: 'Nunito_600SemiBold',
     color: 'white',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   info: {
     fontSize: 17,
     fontFamily: 'Nunito_600SemiBold',
     color: '#52b69a',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   titleContainer: {
     fontFamily: 'Nunito_600SemiBold',
@@ -101,12 +103,12 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     paddingLeft: 20,
     paddingRight: 20,
-    zIndex: 2
+    zIndex: 2,
   },
 
   buttonText: {
     fontFamily: 'Nunito_600SemiBold',
-    color: '#f9fced'
+    color: '#f9fced',
   },
 
   input: {
@@ -118,7 +120,7 @@ const styles = StyleSheet.create({
     marginTop: 10,
     marginBottom: 10,
     marginLeft: 20,
-    marginRight: 20
+    marginRight: 20,
   },
   blogText: {
     fontSize: 15,
@@ -130,6 +132,6 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 20,
     marginRight: 20,
-    lineHeight: 20
-  }
+    lineHeight: 20,
+  },
 });
