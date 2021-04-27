@@ -17,13 +17,23 @@ const styles = StyleSheet.create({
   }
 });
 
+const example = ['Indonesia', 'Canada', 'France', 'San Marino', 'Finland'];
+
 class ColouredMap extends Component {
   render() {
     return (
       <View style={styles.container}>
         <MapView style={styles.map}>
-          {fetchCoordinates('Indonesia').map((polygon) => {
-            return <Polygon coordinates={polygon} fillColor="#0000ff" />;
+          {example.map((country) => {
+            return fetchCoordinates(country).map((polygon, index) => {
+              return (
+                <Polygon
+                  coordinates={polygon}
+                  fillColor="#0000ff"
+                  key={index}
+                />
+              );
+            });
           })}
         </MapView>
       </View>

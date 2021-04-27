@@ -5,9 +5,8 @@ const countryMapData = geoJson.features;
 const fetchCoordinates = (countryName) => {
   for (let i = 0; i < countryMapData.length; i += 1) {
     if (countryMapData[i].properties.label_en === countryName) {
-      const flattenedCountryData = countryMapData[i].geometry.coordinates;
-
-      return formatCountryData(flattenedCountryData);
+      const coordinateArray = countryMapData[i].geometry.coordinates;
+      return formatCountryData(coordinateArray);
     }
   }
 };
@@ -41,6 +40,4 @@ const formatCountryData = (coordinateArray) => {
   return finalData;
 };
 
-fetchCoordinates('San Marino');
-
-module.exports = { fetchCoordinates };
+module.exports = { fetchCoordinates, formatCountryData };
