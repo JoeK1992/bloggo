@@ -1,21 +1,24 @@
+const clonedeep = require('lodash.clonedeep');
 const geoJson = require('../colouredMapData/country-codes-data.json');
 
 const countryMapData = geoJson.features;
 
-const fetchCoordinates = (countryName) => {
-  for (let i = 0; i < countryMapData.length; i += 1) {
-    if (countryMapData[i].properties.label_en === countryName) {
-      const coordinateArray = countryMapData[i].geometry.coordinates;
-      return formatCountryData(coordinateArray);
+const fetchPolygonCoordinates = (countryName) => {
+  const countryData = clonedeep(countryMapData);
+  for (let i = 0; i < countryData.length; i += 1) {
+    if (countryData[i].properties.label_en === countryName) {
+      const coordinateArray = countryData[i].geometry.coordinates;
+      return formatCoordinates(coordinateArray);
     }
   }
 };
 
-const formatCountryData = (coordinateArray) => {
-  const finalData = [];
+const formatCoordinates = (coordinateArray) => {
+  const coodinatesClone = clonedeep(coordinateArray);
+  const polygons = [];
 
-  if (Array.isArray(coordinateArray[0][0][0])) {
-    const flattenedArray = coordinateArray.flat(1);
+  if (Array.isArray(coodinatesClone[0][0][0])) {
+    const flattenedArray = coodinatesClone.flat(1);
     for (let i = 0; i < flattenedArray.length; i += 1) {
       const tempData = [];
       for (let j = 0; j < flattenedArray[i].length; j += 1) {
@@ -24,20 +27,20 @@ const formatCountryData = (coordinateArray) => {
           latitude: flattenedArray[i][j][1],
         });
       }
-      finalData.push(tempData);
+      polygons.push(tempData);
     }
   } else {
-    const flattenedArray = coordinateArray.flat(1);
+    const flattenedArray = coodinatesClone.flat(1);
     for (let i = 0; i < flattenedArray.length; i += 1) {
-      finalData.push({
+      polygons.push({
         longitude: flattenedArray[i][0],
         latitude: flattenedArray[i][1],
       });
     }
-    return [finalData];
+    return [polygons];
   }
 
-  return finalData;
+  return polygons;
 };
 
-module.exports = { fetchCoordinates, formatCountryData };
+module.exports = { fetchPolygonCoordinates, formatCoordinates };
