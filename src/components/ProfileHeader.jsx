@@ -1,82 +1,83 @@
-import React from "react";
-import { Text, TouchableOpacity, View, StyleSheet } from "react-native";
+import { faPlaneDeparture } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import {
-  faBold,
-  faGlobeAmericas,
-  faPlaneDeparture,
-} from "@fortawesome/free-solid-svg-icons";
+import React, { Component } from "react";
+import { Image, StyleSheet, Text, View } from "react-native";
+import firebase from "../firebase/config";
 
-const ProfileHeader = () => {
-  return (
-    <View style={styles.userHeader}>
-      <View style={styles.logoContainer}>
-        <Text style={styles.logoText}>
-          <FontAwesomeIcon icon={faBold} style={styles.logo} size={30} />
-          logg
-          <FontAwesomeIcon
-            icon={faGlobeAmericas}
-            style={styles.logo}
-            size={20}
-          />
-        </Text>
+class ProfileHeader extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      userInfo: null,
+    };
+  }
+
+  componentDidMount() {
+    const { userUID } = this.props;
+    const db = firebase.firestore();
+    if (userUID) {
+      const userRef = db.collection("users").doc(userUID);
+      userRef.get().then((doc) => {
+        if (!doc.exists) {
+          console.log("No such user");
+        } else {
+          const userInfo = doc.data();
+
+          this.setState({ userInfo });
+        }
+      });
+    }
+  }
+  render() {
+    const { userInfo } = this.state;
+    return (
+      <View style={styles.container}>
+        {userInfo && (
+          <Image
+            style={styles.userImage}
+            source={{ uri: userInfo.profileImage }}
+          ></Image>
+        )}
+
+        {userInfo && (
+          <Text style={styles.userHeaderText}>
+            {`${userInfo.firstName} ${userInfo.lastName}`}
+
+          </Text>
+        )}
       </View>
-
-      <Text style={styles.userHeaderText}>
-        Gary O'Connor{" "}
-        <FontAwesomeIcon
-          icon={faPlaneDeparture}
-          style={styles.userHeaderLogo}
-          size={15}
-        />
-      </Text>
-      <TouchableOpacity
-        style={styles.userBtn}
-        onPress={() => {
-          console.log("navigating to user profile");
-        }}
-      ></TouchableOpacity>
-    </View>
-  );
-};
+    );
+  }
+}
 
 const styles = StyleSheet.create({
-  logoContainer: {
-    flex: 1,
-    flexDirection: "row",
-    color: "#52b69a",
+  logoContainer: {},
+  container: {
+    paddingVertical: 10, 
+    backgroundColor: "#113755"
   },
-  logo: {
-    color: "#52b69a",
-    alignSelf: "flex-end",
-  },
-  logoText: {
-    fontSize: 25,
-    color: "#e2f3ec",
-    fontFamily: "Nunito_600SemiBold",
-    alignSelf: "center",
-  },
-  userHeader: {
-    fontSize: 18,
-    color: "#f9fced",
 
-    padding: 5,
-    flex: 1,
-    flexDirection: "row",
-    backgroundColor: "#1e6091",
-    marginBottom: 5,
-  },
+  userHeader: {},
   userHeaderLogo: {
     color: "#f9fced",
   },
   userHeaderText: {
-    fontSize: 15,
-    color: "#e2f3ec",
-    alignSelf: "flex-end",
+    fontSize: 16,
+    color: "white",
+    alignSelf: "center",
     fontFamily: "Nunito_600SemiBold",
   },
   userBtn: {
     margin: 5,
+  },
+
+  userImage: {
+    justifyContent: "center",
+    alignSelf: "center",
+    width: 60,
+    height: 60,
+    borderRadius: 50,
+    resizeMode: "cover",
   },
 });
 

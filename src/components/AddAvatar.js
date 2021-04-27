@@ -1,15 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
-  View,
-  Text,
-  TouchableOpacity,
-  Platform,
-  StyleSheet,
+  View, Text, TouchableOpacity, Platform,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import addDesStyles from '../screens/AddDestinationScreen/styles';
+import s from '../styles/styles';
+import firebase from '../firebase/config';
+import 'firebase/auth';
 
-export default function PickImage(props) {
+export default function AddAvatar() {
+  const [profileImage, setProfileImage] = useState('');
+
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -50,45 +50,36 @@ export default function PickImage(props) {
       })
         .then(async (r) => {
           const data = await r.json();
-          props.setUploadedUrl(data.secure_url);
-          return data.secure_url;
+          setProfileImage(data.secure_url);
+          editUser();
         })
         .catch((err) => console.log(err));
     }
   };
-  const { uploadedUrl, setUploadedUrl } = props;
+
+  const editUser = () => {
+    const currentUserUID = firebase.auth().currentUser.uid;
+    const db = firebase.firestore();
+    const usersRef = db.collection('users').doc(currentUserUID);
+    usersRef.update({ profileImage }).then(() => {});
+  };
   return (
     <View>
-      <TouchableOpacity style={addDesStyles.button} onPress={chooseImage}>
-        <Text style={addDesStyles.buttonText}>Pick Cover Image</Text>
+      <TouchableOpacity style={s.button} onPress={chooseImage}>
+        <Text style={s.buttonText}>Pick your Profile Image</Text>
       </TouchableOpacity>
-      {uploadedUrl !== '' && (
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => {
-            setUploadedUrl(null);
-          }}
-        >
-          <Text style={styles.title}>Delete Cover image</Text>
-        </TouchableOpacity>
-      )}
+      {/* {profileImage && editable && (
+        <Text>
+          Profile Image
+          <TouchableOpacity
+            onPress={() => {
+              props.setProfileImage(null);
+            }}
+          >
+            <Text>Delete Profile image</Text>
+          </TouchableOpacity>
+        </Text>
+      )} */}
     </View>
   );
 }
-const styles = StyleSheet.create({
-  button: {
-    backgroundColor: '#34a0a4',
-    padding: 10,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderRadius: 5,
-    width: 300,
-    alignSelf: 'center',
-    alignItems: 'center',
-  },
-  title: {
-    fontSize: 15,
-    fontFamily: 'Nunito_400Regular',
-    color: 'white',
-  },
-});

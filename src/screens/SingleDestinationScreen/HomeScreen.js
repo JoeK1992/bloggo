@@ -12,7 +12,7 @@ import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
 import image from '../../images/mountain.jpeg';
-import styles from './styles';
+import styles from '../HomeScreen/styles';
 
 export default function HomeScreen({ navigation }) {
   const userUID = firebase.auth().currentUser.uid;
