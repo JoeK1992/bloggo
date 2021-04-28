@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Text, TextInput, TouchableOpacity, View,
-} from 'react-native';
+import { Text, TextInput, TouchableOpacity, View } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import firebase from '../../firebase/config';
@@ -9,10 +7,6 @@ import firebase from '../../firebase/config';
 export default function LoginScreen({ navigation }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-
-  const onFooterLinkPress = () => {
-    navigation.navigate('Registration');
-  };
 
   const onLoginPress = () => {
     firebase
@@ -72,8 +66,10 @@ export default function LoginScreen({ navigation }) {
         <View style={styles.footerView}>
           <Text style={styles.footerText}>
             Don't have an account?
-            {' '}
-            <Text onPress={onFooterLinkPress} style={styles.footerLink}>
+            <Text
+              onPress={() => navigation.navigate('Registration')}
+              style={styles.footerLink}
+            >
               Sign up
             </Text>
           </Text>
