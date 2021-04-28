@@ -70,7 +70,8 @@ export default function LoginScreen({ navigation }) {
               onPress={() => navigation.navigate('Registration')}
               style={styles.footerLink}
             >
-              Sign up
+              {' '}
+              Sign up{' '}
             </Text>
           </Text>
         </View>
