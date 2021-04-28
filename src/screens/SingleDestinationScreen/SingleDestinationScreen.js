@@ -8,7 +8,7 @@ import {
   TextInput,
   View,
   ScrollView,
-  LogBox,
+  LogBox
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
@@ -21,7 +21,7 @@ import AddPlace from '../../components/AddPlace';
 import Places from '../../components/Places';
 
 LogBox.ignoreLogs([
-  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
 ]);
 
 export default class SingleDestinationScreen extends Component {
@@ -32,8 +32,7 @@ export default class SingleDestinationScreen extends Component {
       editable: false,
       blogPost: '',
       openedMenu: false,
-      places: null,
-      currentUserUID: firebase.auth().currentUser.uid,
+      currentUserUID: firebase.auth().currentUser.uid
     };
   }
 
@@ -54,26 +53,6 @@ export default class SingleDestinationScreen extends Component {
         const destination = doc.data();
         destination.id = doc.id;
         this.setState({ destination, blogPost: destination.blogPost });
-      }
-    });
-
-    const placesRef = db
-      .collection('trips')
-      .doc(tripUid)
-      .collection('destinations')
-      .doc(destinationUid)
-      .collection('places');
-    placesRef.get().then((snapshot) => {
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-      } else {
-        const newPlaces = [];
-        snapshot.forEach((doc) => {
-          const place = doc.data();
-          place.id = doc.id;
-          newPlaces.push(place);
-        });
-        this.setState({ places: newPlaces });
       }
     });
   }
@@ -126,19 +105,19 @@ export default class SingleDestinationScreen extends Component {
             destinationRef.delete().then(() => {
               navigation.replace('Single Trip', {
                 tripUid,
-                destinations: filteredDestinations,
+                destinations: filteredDestinations
               });
             });
-          },
+          }
         },
         {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          },
-        },
+          }
+        }
       ],
-      { cancelable: true },
+      { cancelable: true }
     );
   };
 
@@ -150,11 +129,9 @@ export default class SingleDestinationScreen extends Component {
       editable,
       openedMenu,
       places,
-      currentUserUID,
+      currentUserUID
     } = this.state;
-    const {
-      destinations, tripUid, destinationUid, tripName,
-    } = route.params;
+    const { destinations, tripUid, destinationUid, tripName } = route.params;
     const filteredDestinations = destinations.filter((destination) => {
       return destination.id !== destinationUid;
     });
@@ -172,7 +149,7 @@ export default class SingleDestinationScreen extends Component {
               destinationUid: item.id,
               tripUid,
               destinations,
-              tripName,
+              tripName
             });
           }}
         >
@@ -261,11 +238,7 @@ export default class SingleDestinationScreen extends Component {
                   style={styles.button}
                 >
                   <Text style={styles.buttonText}>
-                    Back to
-                    {' '}
-                    {tripName}
-                    {' '}
-                    trip!
+                    Back to {tripName} trip!
                   </Text>
                 </TouchableOpacity>
               </>
