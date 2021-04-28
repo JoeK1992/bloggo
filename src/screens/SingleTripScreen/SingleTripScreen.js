@@ -11,12 +11,10 @@ import {
   ActivityIndicator
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import MapViewer from '../../components/MapViewer';
-import NavBar from '../../components/NavBar';
+import { MapViewer, NavBar, ProfileHeader } from '../../components';
 import firebase from '../../firebase/config';
 import s from '../../styles/styles';
 import styles from './styles';
-import ProfileHeader from '../../components/ProfileHeader';
 
 class SingleTripScreen extends Component {
   state = {
@@ -97,10 +95,8 @@ class SingleTripScreen extends Component {
   render() {
     const { navigation, route } = this.props;
     const { tripUid } = route.params;
-
-    const { trip } = this.state;
+    const { trip, currentUserUID, loading } = this.state;
     let { destinations } = this.state;
-    const { currentUserUID, loading } = this.state;
     if (route.params.destinations) {
       destinations = route.params.destinations;
     }
