@@ -10,6 +10,7 @@ import firebase from '../firebase/config';
 export default function Comments(props) {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const [username, setUsername] = useState('');
   const { tripUid, destinationUid } = props;
   const currentUserUID = firebase.auth().currentUser.uid;
 
@@ -37,31 +38,19 @@ export default function Comments(props) {
         setComments(newComments);
       }
     });
-
-    commentsRef.onSnapshot((querySnapshot) => {
-      querySnapshot.docChanges().forEach((change) => {
-        if (change.type === 'added') {
-          console.log('in added');
-          const newComment = change.doc.data();
-          newComment.id = change.doc.id;
-          setComments([newComment, ...comments]);
-        }
-        if (change.type === 'removed') {
-          console.log('removed');
-          const filteredComments = comments.filter((comment) => {
-            console.log(comment.id, '///', change.doc.id);
-            return comment.id !== change.doc.id;
-          });
-          setComments(filteredComments);
-        }
-      });
-    });
   }, []);
 
   const handlePress = () => {
     const db = firebase.firestore();
     const userRef = db.collection('users').doc(currentUserUID);
     setComment('');
+    const newComment = {
+      comment,
+      username,
+      date: new Date().toUTCString(),
+      user: currentUserUID,
+    };
+    setComments([newComment, ...comments]);
 
     userRef
       .get()
@@ -80,7 +69,7 @@ export default function Comments(props) {
           .collection('destinations')
           .doc(destinationUid)
           .collection('comments');
-
+        setUsername(userName);
         commentsRef
           .add({
             comment,
@@ -97,6 +86,10 @@ export default function Comments(props) {
 
   const deleteComment = (id) => {
     const db = firebase.firestore();
+    const filteredComments = comments.filter((comment) => {
+      return comment.id !== id;
+    });
+    setComments(filteredComments);
 
     const commentRef = db
       .collection('trips')

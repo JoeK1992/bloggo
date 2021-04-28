@@ -1,7 +1,5 @@
-import { faBold, faGlobeAmericas } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
-import "firebase/firestore";
-import React from "react";
+import 'firebase/firestore';
+import React from 'react';
 import {
   ImageBackground,
   Text,

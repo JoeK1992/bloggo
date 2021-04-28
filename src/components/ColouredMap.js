@@ -1,7 +1,7 @@
-import React, { Component } from "react";
-import { View, StyleSheet } from "react-native";
-import MapView, { Polygon } from "react-native-maps";
-import { fetchPolygonCoordinates } from "./utils/GeoJsonUtils";
+import React, { Component } from 'react';
+import { View, StyleSheet } from 'react-native';
+import MapView, { Polygon } from 'react-native-maps';
+import { fetchPolygonCoordinates } from './utils/GeoJsonUtils';
 
 // const mapstyle = [
 //   {
@@ -76,11 +76,11 @@ import { fetchPolygonCoordinates } from "./utils/GeoJsonUtils";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    position: "absolute",
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-    borderColor: "#52b69a",
+    position: 'absolute',
+    backgroundColor: '#fff',
+    alignItems: 'center',
+    justifyContent: 'center',
+    borderColor: '#52b69a',
     borderWidth: 7,
     // alignSelf: 'center'
   },
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
     flex: 1,
     width: 300,
     height: 250,
-    position: "relative",
+    position: 'relative',
   },
 });
 

@@ -32,23 +32,20 @@ class TripsScreen extends Component {
       equalSign = '==';
     }
     const tripsRef = db.collection('trips');
-    tripsRef
-      .where('user', equalSign, currentUserUID)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.empty) {
-          console.log('No matching documents.');
-        } else {
-          const newTrips = [];
+    tripsRef.where('user', equalSign, currentUserUID).onSnapshot((snapshot) => {
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+      } else {
+        const newTrips = [];
 
-          snapshot.forEach((doc) => {
-            const trip = doc.data();
-            trip.id = doc.id;
-            newTrips.push(trip);
-          });
-          this.setState({ trips: newTrips });
-        }
-      });
+        snapshot.forEach((doc) => {
+          const trip = doc.data();
+          trip.id = doc.id;
+          newTrips.push(trip);
+        });
+        this.setState({ trips: newTrips });
+      }
+    });
   }
 
   reverseOrder = () => {

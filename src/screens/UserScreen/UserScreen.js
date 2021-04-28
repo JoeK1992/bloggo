@@ -6,7 +6,8 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ImageBackground
+  ImageBackground,
+  ActivityIndicator
 } from 'react-native';
 import {
   AddAvatar,
@@ -14,14 +15,7 @@ import {
   ProfileHeader,
   ColouredMap
 } from '../../components';
-// ActivityIndicator,
 import firebase from '../../firebase/config';
-// import TripsScreen from '../TripsScreen/TripsScreen';
-// import AddAvatar from '../../components/AddAvatar';
-// import globe from '../../images/globe.png';
-// import trip from '../../images/trip.png';
-// import country from '../../images/country.jpeg';
-// import continent from '../../images/continents.jpg';
 import first from '../../images/1.jpeg';
 import second from '../../images/2.jpg';
 import third from '../../images/3.jpg';
@@ -38,10 +32,8 @@ class UserScreen extends Component {
       tripUids: [],
       continents: [],
       countries: [],
-      flags: []
-      // loading: true
-      // user: null,
-      // userUID: '',
+      flags: [],
+      loading: true
     };
   }
 
@@ -105,6 +97,7 @@ class UserScreen extends Component {
                     countries: [...currState.countries, ...countries],
                     continents: [...currState.continents, ...continents],
                     flags: [...currState.flags, ...flags],
+                    loading: false
                   };
                 });
               }
@@ -116,7 +109,7 @@ class UserScreen extends Component {
 
   render() {
     const { route, navigation } = this.props;
-    const { trips, continents, countries, flags } = this.state;
+    const { trips, continents, countries, flags, loading } = this.state;
 
     let currentUserUID;
     let page;
@@ -135,88 +128,97 @@ class UserScreen extends Component {
     const globePercentage = Math.round((countries.length / 195) * 100);
 
     return (
-    // <View>
-
-    /* {loading ?  <ActivityIndicator /> :  */
-
-      <View style={{ flex: 1, backgroundColor: '#1E6091' }}>
-        <ScrollView style={styles.userScreen}>
-          <ProfileHeader userUID={currentUserUID} />
-          {/* <View style={styles.mapContainer} /> */}
-          {usersOwnProfile && <AddAvatar />}
-
-          <View style={styles.mapDisplay}>
-            <ColouredMap countries={countries} />
+      <View style={styles.userScreen}>
+        {loading ? (
+          <View
+            style={{
+              flex: 1,
+              alignItems: 'center',
+              justifyContent: 'center',
+              zIndex: 20
+            }}
+          >
+            <ActivityIndicator size="large" color="#52b69a" />
           </View>
+        ) : (
+          <ScrollView>
+            <ProfileHeader userUID={currentUserUID} />
+            {/* <View style={styles.mapContainer} /> */}
+            {usersOwnProfile && <AddAvatar />}
 
-          {page === 'My Profile' && (
-            <View style={styles.btnContainer}>
-              <TouchableOpacity
-                onPress={() => navigation.navigate('Trips', { page: '' })}
-                style={styles.btn}
-              >
-                <Text style={styles.text}>My Trips</Text>
-              </TouchableOpacity>
+            <View style={styles.mapDisplay}>
+              <ColouredMap countries={countries} />
             </View>
-          )}
 
-          <View style={styles.gamificationContainer}>
-            <Text style={styles.gamificationTitle}>My World</Text>
+            {page === 'My Profile' && (
+              <View style={styles.btnContainer}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Trips', { page: '' })}
+                  style={styles.btn}
+                >
+                  <Text style={styles.text}>My Trips</Text>
+                </TouchableOpacity>
+              </View>
+            )}
 
-            <View style={styles.statsCardContainer}>
+            <View style={styles.gamificationContainer}>
+              <Text style={styles.gamificationTitle}>My World</Text>
+
+              <View style={styles.statsCardContainer}>
+                <ImageBackground
+                  imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                  source={third}
+                  style={styles.statsCard}
+                >
+                  <Text style={styles.statsCardText}>
+                    {continents.length === 1
+                      ? '1 Continent'
+                      : `${continents.length} Continents`}
+                  </Text>
+                </ImageBackground>
+
+                <ImageBackground
+                  imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                  source={fourth}
+                  style={styles.statsCard}
+                >
+                  <Text style={styles.statsCardText}>
+                    {countries.length === 1
+                      ? '1 Country'
+                      : `${countries.length} Countries`}
+                  </Text>
+                </ImageBackground>
+
+                <ImageBackground
+                  imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                  source={first}
+                  style={styles.statsCard}
+                >
+                  <Text style={styles.statsCardText}>
+                    {trips === 1 ? '1 Trip' : `${trips} Trips`}
+                  </Text>
+                </ImageBackground>
+
+                <ImageBackground
+                  imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                  source={second}
+                  style={styles.statsCard}
+                >
+                  <Text style={styles.statsCardText}>
+                    {`${globePercentage}% of the world`}
+                  </Text>
+                </ImageBackground>
+              </View>
               <ImageBackground
-                imageStyle={{ borderRadius: 20, opacity: 0.8 }}
-                source={third}
-                style={styles.statsCard}
+                imageStyle={{ borderRadius: 20, opacity: 0.3 }}
+                source={flagBackground}
+                style={styles.flagBackground}
               >
-                <Text style={styles.statsCardText}>
-                  {continents.length === 1
-                    ? '1 Continent'
-                    : `${continents.length} Continents`}
-                </Text>
-              </ImageBackground>
-
-              <ImageBackground
-                imageStyle={{ borderRadius: 20, opacity: 0.8 }}
-                source={fourth}
-                style={styles.statsCard}
-              >
-                <Text style={styles.statsCardText}>
-                  {countries.length === 1
-                    ? '1 Country'
-                    : `${countries.length} Countries`}
-                </Text>
-              </ImageBackground>
-
-              <ImageBackground
-                imageStyle={{ borderRadius: 20, opacity: 0.8 }}
-                source={first}
-                style={styles.statsCard}
-              >
-                <Text style={styles.statsCardText}>
-                  {trips === 1 ? '1 Trip' : `${trips} Trips`}
-                </Text>
-              </ImageBackground>
-
-              <ImageBackground
-                imageStyle={{ borderRadius: 20, opacity: 0.8 }}
-                source={second}
-                style={styles.statsCard}
-              >
-                <Text style={styles.statsCardText}>
-                  {`${globePercentage}% of the world`}
-                </Text>
+                <Text style={styles.flagText}>{flags}</Text>
               </ImageBackground>
             </View>
-            <ImageBackground
-              imageStyle={{ borderRadius: 20, opacity: 0.3 }}
-              source={flagBackground}
-              style={styles.flagBackground}
-            >
-              <Text style={styles.flagText}>{flags}</Text>
-            </ImageBackground>
-          </View>
-        </ScrollView>
+          </ScrollView>
+        )}
 
         <View>
           <NavBar />

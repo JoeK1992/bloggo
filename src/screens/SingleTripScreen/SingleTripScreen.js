@@ -30,6 +30,7 @@ class SingleTripScreen extends Component {
     const { tripUid } = route.params;
 
     const tripRef = db.collection('trips').doc(tripUid);
+
     tripRef.get().then((doc) => {
       if (!doc.exists) {
         console.log('No such document');
@@ -42,18 +43,16 @@ class SingleTripScreen extends Component {
       .collection('trips')
       .doc(tripUid)
       .collection('destinations');
-    destinationsRef.get().then((snapshot) => {
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-      } else {
-        const newDestinations = [];
-        snapshot.forEach((doc) => {
-          const destination = doc.data();
-          destination.id = doc.id;
-          newDestinations.push(destination);
-        });
-        this.setState({ destinations: newDestinations, loading: false });
-      }
+
+    destinationsRef.onSnapshot((querySnapshot) => {
+      const newDestinations = [];
+
+      querySnapshot.forEach((doc) => {
+        const destination = doc.data();
+        destination.id = doc.id;
+        newDestinations.push(destination);
+      });
+      this.setState({ destinations: newDestinations, loading: false });
     });
   }
 
@@ -77,7 +76,7 @@ class SingleTripScreen extends Component {
             const db = firebase.firestore();
             const tripRef = db.collection('trips').doc(tripUid);
             tripRef.delete().then(() => {
-              navigation.replace('My Trips', { trips: filteredTrips });
+              navigation.navigate('Trips', { trips: filteredTrips });
             });
           }
         },
@@ -94,7 +93,7 @@ class SingleTripScreen extends Component {
 
   render() {
     const { navigation, route } = this.props;
-    const { tripUid } = route.params;
+    const { tripUid, trips } = route.params;
     const { trip, currentUserUID, loading } = this.state;
     let { destinations } = this.state;
     if (route.params.destinations) {
@@ -134,7 +133,16 @@ class SingleTripScreen extends Component {
       <View style={{ flex: 1, backgroundColor: '#1E6091' }}>
         <ScrollView>
           {loading ? (
-            <ActivityIndicator />
+            <View
+              style={{
+                flex: 1,
+                alignItems: 'center',
+                justifyContent: 'center',
+                zIndex: 20
+              }}
+            >
+              <ActivityIndicator size="large" color="#52b69a" />
+            </View>
           ) : (
             <FlatList
               style={styles.page}
@@ -160,7 +168,10 @@ class SingleTripScreen extends Component {
                       <TouchableOpacity
                         style={s.button}
                         onPress={() => {
-                          navigation.navigate('Add Destination', { tripUid });
+                          navigation.navigate('Add Destination', {
+                            tripUid,
+                            trips
+                          });
                         }}
                       >
                         <TouchableOpacity />

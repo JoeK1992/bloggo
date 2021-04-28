@@ -1,13 +1,13 @@
-import { StyleSheet } from "react-native";
+import { StyleSheet } from 'react-native';
 
 export default StyleSheet.create({
   container: {
-    height: "100%",
-    backgroundColor: "#113755",
-    position: "relative",
+    height: '100%',
+    backgroundColor: '#113755',
+    position: 'relative',
   },
   logoContainer: {
-    position: "absolute",
+    position: 'absolute',
     top: 0,
     left: 0,
     paddingTop: 10,
@@ -19,29 +19,29 @@ export default StyleSheet.create({
     marginLeft: 5,
   },
   button: {
-    alignSelf: "center",
+    alignSelf: 'center',
     borderRadius: 5,
-    backgroundColor: "#52b69a",
-    justifyContent: "center",
+    backgroundColor: '#52b69a',
+    justifyContent: 'center',
     margin: 2,
     padding: 10,
     marginVertical: 7,
-    alignItems: "center",
-    textAlign: "center",
+    alignItems: 'center',
+    textAlign: 'center',
     width: 200,
   },
 
   buttonText: {
-    color: "white",
+    color: 'white',
     fontSize: 16,
-    fontFamily: "Nunito_400Regular",
+    fontFamily: 'Nunito_400Regular',
   },
 
   image: {
     flex: 1,
-    resizeMode: "cover",
-    justifyContent: "center",
+    resizeMode: 'cover',
+    justifyContent: 'center',
     borderRadius: 5,
-    height: "100%",
+    height: '100%',
   },
 });

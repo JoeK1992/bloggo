@@ -1,6 +1,6 @@
 import 'firebase/auth';
 import 'firebase/firestore';
-import React, { Component } from 'react';
+import React, { setState, useEffect } from 'react';
 import {
   Alert,
   FlatList,
@@ -8,7 +8,7 @@ import {
   TextInput,
   View,
   ScrollView,
-  LogBox
+  LogBox,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
@@ -23,26 +23,21 @@ import s from '../../styles/styles';
 import styles from './styles';
 
 LogBox.ignoreLogs([
-  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
 ]);
 
-export default class SingleDestinationScreen extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      destination: null,
-      editable: false,
-      blogPost: '',
-      openedMenu: false,
-      currentUserUID: firebase.auth().currentUser.uid,
-      places: []
-    };
-  }
+export default function SingleDestinationScreen(props) {
+  const [destination, setDestination] = setState(null);
+  const [editable, setEditable] = setState(false);
+  const [blogPost, setBlogPost] = setState('');
+  const [openedMenu, setOpenedMenu] = setState(false);
+  const [places, setPlaces] = setState([]);
+  // const [loading, setLoading] = setState(false);
+  const currentUserUID = firebase.auth().currentUser.uid;
 
-  componentDidMount() {
+  useEffect(() => {
     const db = firebase.firestore();
-    const _this = this;
-    const { tripUid, destinationUid } = _this.props.route.params;
+    const { tripUid, destinationUid } = props.route.params;
     const placesRef = db
       .collection('trips')
       .doc(tripUid)
@@ -61,7 +56,7 @@ export default class SingleDestinationScreen extends Component {
           place.id = doc.id;
           newPlaces.push(place);
         });
-        this.setState({ places: newPlaces });
+        setPlaces(newPlaces);
       }
     });
     const destinationRef = db
@@ -69,21 +64,22 @@ export default class SingleDestinationScreen extends Component {
       .doc(tripUid)
       .collection('destinations')
       .doc(destinationUid);
+
     destinationRef.get().then((doc) => {
       if (!doc.exists) {
         console.log('No such document');
       } else {
         const destination = doc.data();
         destination.id = doc.id;
-        this.setState({ destination, blogPost: destination.blogPost });
+        setDestination(destination);
+        setBlogPost(destination.blogPost);
+        // setLoading(false);
       }
     });
-  }
+  }, []);
 
-  editBlogPost = () => {
-    const _this = this;
-    const { tripUid, destinationUid } = _this.props.route.params;
-    const { blogPost } = this.state;
+  const editBlogPost = () => {
+    const { tripUid, destinationUid } = props.route.params;
     const db = firebase.firestore();
     const destinationRef = db
       .collection('trips')
@@ -91,22 +87,21 @@ export default class SingleDestinationScreen extends Component {
       .collection('destinations')
       .doc(destinationUid);
     destinationRef.update({ blogPost }).then(() => {
-      this.setState({ editable: false });
+      setEditable(false);
     });
   };
 
-  toggleEditable = () => {
-    this.setState({ editable: true });
+  const toggleEditable = () => {
+    setEditable(true);
   };
 
-  openMenu = (boolean) => {
-    this.setState({ openedMenu: boolean });
+  const openMenu = (boolean) => {
+    setOpenedMenu(boolean);
   };
 
-  deleteDestination = () => {
-    const _this = this;
-    const { tripUid, destinationUid, destinations } = _this.props.route.params;
-    const { navigation } = _this.props;
+  const deleteDestination = () => {
+    const { tripUid, destinationUid, destinations } = props.route.params;
+    const { navigation } = props;
 
     const filteredDestinations = destinations.filter((destination) => {
       return destination.id !== destinationUid;
@@ -128,168 +123,162 @@ export default class SingleDestinationScreen extends Component {
             destinationRef.delete().then(() => {
               navigation.replace('Single Trip', {
                 tripUid,
-                destinations: filteredDestinations
+                destinations: filteredDestinations,
               });
             });
-          }
+          },
         },
         {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          }
-        }
+          },
+        },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
-  render() {
-    const { navigation, route } = this.props;
-    const {
-      destination,
-      blogPost,
-      editable,
-      openedMenu,
-      places,
-      currentUserUID
-    } = this.state;
-    const { destinations, tripUid, destinationUid, tripName } = route.params;
-    const filteredDestinations = destinations.filter((destination) => {
-      return destination.id !== destinationUid;
-    });
-    const Item = ({ title }) => (
-      <View style={styles.item}>
-        <Text style={styles.title}>{title}</Text>
-      </View>
-    );
+  const { navigation, route } = props;
 
-    const renderItem = ({ item }) => (
-      <>
-        <TouchableOpacity
-          onPress={() => {
-            navigation.replace('Single Destination', {
-              destinationUid: item.id,
-              tripUid,
-              destinations,
-              tripName
-            });
-          }}
-        >
-          <Item title={item.destination.formatted.split(',')[0]} />
-        </TouchableOpacity>
-      </>
-    );
+  const {
+    destinations, tripUid, destinationUid, tripName,
+  } = route.params;
+  const filteredDestinations = destinations.filter((destination) => {
+    return destination.id !== destinationUid;
+  });
+  const Item = ({ title }) => (
+    <View style={styles.item}>
+      <Text style={styles.title}>{title}</Text>
+    </View>
+  );
 
-    const Header = () => (
-      <View style={styles.container}>
-        <View style={styles.carouselContainer}>
-          {destination && <ImagesCarousel destination={destination} />}
-        </View>
-      </View>
-    );
-
-    const Footer = () => (
-      <View style={styles.container}>
-        {destination && destination.user === currentUserUID && (
-          <AddPlace tripUid={tripUid} destinationUid={destinationUid} />
-        )}
-
-        <TextInput
-          value={blogPost}
-          multiline
-          style={[editable ? styles.input : styles.blogText]}
-          onChangeText={(blogPost) => this.setState({ blogPost })}
-          editable={editable}
-        />
-        {destination && destination.user === currentUserUID && (
-          <>
-            {editable ? (
-              <TouchableOpacity onPress={this.editBlogPost} style={s.button}>
-                <Text style={s.buttonText}>Submit!</Text>
-              </TouchableOpacity>
-            ) : (
-              <TouchableOpacity onPress={this.toggleEditable} style={s.button}>
-                <Text style={s.buttonText}>Edit Blog</Text>
-              </TouchableOpacity>
-            )}
-          </>
-        )}
-        <Places
-          places={places}
-          tripUid={tripUid}
-          destinationUid={destinationUid}
-        />
-        {destination && (
-          <Comments destinationUid={destination.id} tripUid={tripUid} />
-        )}
-
-        {destination && destination.user === currentUserUID && (
-          <TouchableOpacity
-            onPress={this.deleteDestination}
-            style={s.deleteButton}
-          >
-            <Text style={s.buttonText}>Delete Destination</Text>
-          </TouchableOpacity>
-        )}
-      </View>
-    );
-
-    const ExploreBtn = () => (
+  const renderItem = ({ item }) => (
+    <>
       <TouchableOpacity
-        style={s.button}
         onPress={() => {
-          this.openMenu(true);
+          navigation.replace('Single Destination', {
+            destinationUid: item.id,
+            tripUid,
+            destinations,
+            tripName,
+          });
         }}
       >
-        <Text style={s.buttonText}>Explore trip</Text>
+        <Item title={item.destination.formatted.split(',')[0]} />
       </TouchableOpacity>
-    );
+    </>
+  );
 
-    return (
-      <View style={styles.container}>
-        <View style={styles.titleContainer}>
-          {destination && destination.destination && (
-            <>
-              <Text style={styles.title}>
-                {destination.destination.formatted}
-              </Text>
-              <>
-                <TouchableOpacity
-                  onPress={() => {
-                    navigation.navigate('Single Trip', { tripUid });
-                  }}
-                  style={styles.button}
-                >
-                  <Text style={styles.buttonText}>
-                    Back to {tripName} trip!
-                  </Text>
-                </TouchableOpacity>
-              </>
-            </>
-          )}
-        </View>
-        {!openedMenu ? (
-          <ScrollView>
-            <Header />
-            {filteredDestinations.length > 1 && <ExploreBtn />}
-            <Footer />
-          </ScrollView>
-        ) : (
-          <FlatList
-            ListHeaderComponent={<Header />}
-            data={filteredDestinations}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            style={styles.listContainer}
-            ListFooterComponent={<Footer />}
-          />
-        )}
-
-        <View>
-          <NavBar />
-        </View>
+  const Header = () => (
+    <View style={styles.container}>
+      <View style={styles.carouselContainer}>
+        {destination && <ImagesCarousel destination={destination} />}
       </View>
-    );
-  }
+    </View>
+  );
+
+  const Footer = () => (
+    <View style={styles.container}>
+      {destination && destination.user === currentUserUID && (
+        <AddPlace tripUid={tripUid} destinationUid={destinationUid} />
+      )}
+
+      <TextInput
+        value={blogPost}
+        multiline
+        style={[editable ? styles.input : styles.blogText]}
+        onChangeText={(blogPost) => setBlogPost(blogPost)}
+        editable={editable}
+      />
+      {destination && destination.user === currentUserUID && (
+        <>
+          {editable ? (
+            <TouchableOpacity onPress={editBlogPost} style={s.button}>
+              <Text style={s.buttonText}>Submit!</Text>
+            </TouchableOpacity>
+          ) : (
+            <TouchableOpacity onPress={toggleEditable} style={s.button}>
+              <Text style={s.buttonText}>Edit Blog</Text>
+            </TouchableOpacity>
+          )}
+        </>
+      )}
+      <Places
+        places={places}
+        triUid={tripUid}
+        destinationUid={destinationUid}
+        setPlaces={setPlaces}
+      />
+      {destination && (
+        <Comments destinationUid={destination.id} tripUid={tripUid} />
+      )}
+
+      {destination && destination.user === currentUserUID && (
+        <TouchableOpacity onPress={deleteDestination} style={s.deleteButton}>
+          <Text style={s.buttonText}>Delete Destination</Text>
+        </TouchableOpacity>
+      )}
+    </View>
+  );
+
+  const ExploreBtn = () => (
+    <TouchableOpacity
+      style={s.button}
+      onPress={() => {
+        openMenu(true);
+      }}
+    >
+      <Text style={s.buttonText}>Explore trip</Text>
+    </TouchableOpacity>
+  );
+
+  return (
+    <View style={styles.container}>
+      <View style={styles.titleContainer}>
+        {destination && destination.destination && (
+          <>
+            <Text style={styles.title}>
+              {destination.destination.formatted}
+            </Text>
+            <>
+              <TouchableOpacity
+                onPress={() => {
+                  navigation.navigate('Single Trip', { tripUid });
+                }}
+                style={styles.button}
+              >
+                <Text style={styles.buttonText}>
+                  Back to
+                  {tripName}
+                  {' '}
+                  trip!
+                </Text>
+              </TouchableOpacity>
+            </>
+          </>
+        )}
+      </View>
+      {!openedMenu ? (
+        <ScrollView>
+          <Header />
+          {filteredDestinations.length > 1 && <ExploreBtn />}
+          <Footer />
+        </ScrollView>
+      ) : (
+        <FlatList
+          ListHeaderComponent={<Header />}
+          data={filteredDestinations}
+          renderItem={renderItem}
+          keyExtractor={(item) => item.id}
+          style={styles.listContainer}
+          ListFooterComponent={<Footer />}
+        />
+      )}
+
+      <View>
+        <NavBar />
+      </View>
+    </View>
+  );
 }

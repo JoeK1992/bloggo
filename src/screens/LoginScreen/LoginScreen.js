@@ -1,13 +1,15 @@
-import React, { useState } from "react";
-import { Text, TextInput, TouchableOpacity, View, Image } from "react-native";
-import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
-import styles from "./styles";
-import firebase from "../../firebase/config";
-import logo from "../../images/bloggoLogo.png";
+import React, { useState } from 'react';
+import {
+  Text, TextInput, TouchableOpacity, View, Image,
+} from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
+import styles from './styles';
+import firebase from '../../firebase/config';
+import logo from '../../images/bloggoLogo.png';
 
 export default function LoginScreen({ navigation }) {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
 
   const onLoginPress = () => {
     firebase
@@ -15,17 +17,17 @@ export default function LoginScreen({ navigation }) {
       .signInWithEmailAndPassword(email, password)
       .then((response) => {
         const { uid } = response.user;
-        const usersRef = firebase.firestore().collection("users");
+        const usersRef = firebase.firestore().collection('users');
         usersRef
           .doc(uid)
           .get()
           .then((firestoreDocument) => {
             if (!firestoreDocument.exists) {
-              alert("User does not exist anymore.");
+              alert('User does not exist anymore.');
               return;
             }
             const user = firestoreDocument.data();
-            navigation.navigate("Home", { user });
+            navigation.navigate('Home', { user });
           })
           .catch((error) => {
             alert(error);
@@ -42,7 +44,7 @@ export default function LoginScreen({ navigation }) {
         <Image source={logo} style={styles.logoImage} />
       </View>
       <KeyboardAwareScrollView
-        style={{ flex: 1, width: "100%" }}
+        style={{ flex: 1, width: '100%' }}
         keyboardShouldPersistTaps="always"
       >
         <TextInput

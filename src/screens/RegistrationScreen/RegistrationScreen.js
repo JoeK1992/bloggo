@@ -13,7 +13,7 @@ export default function RegistrationScreen({ navigation }) {
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
-      alert("Passwords don't match.");
+      alert('Passwords don\'t match.');
       return;
     }
     firebase
