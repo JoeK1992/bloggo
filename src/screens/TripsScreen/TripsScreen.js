@@ -3,7 +3,11 @@ import 'firebase/firestore';
 import moment from 'moment';
 import React, { Component } from 'react';
 import {
-  FlatList, StyleSheet, Text, View,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import NavBar from '../../components/NavBar';
@@ -156,7 +160,7 @@ class TripsScreen extends Component {
     return (
       <View style={styles.container}>
         {page === 'My Trips' && <ProfileHeader userUID={currentUserUID} />}
-
+        <ActivityIndicator />
         <Text style={styles.headTitle}>
           {' '}
           Explore your

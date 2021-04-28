@@ -3,75 +3,75 @@ import { View, StyleSheet } from 'react-native';
 import MapView, { Polygon } from 'react-native-maps';
 import { fetchPolygonCoordinates } from './utils/GeoJsonUtils';
 
-const mapstyle = [
-  {
-    elementType: 'labels',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'administrative',
-    elementType: 'geometry',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'administrative.neighborhood',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'landscape.man_made',
-    elementType: 'geometry.fill',
-    stylers: [
-      {
-        color: '#ffea05',
-      },
-    ],
-  },
-  {
-    featureType: 'poi',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'road',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'road',
-    elementType: 'labels.icon',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-  {
-    featureType: 'transit',
-    stylers: [
-      {
-        visibility: 'off',
-      },
-    ],
-  },
-];
+// const mapstyle = [
+//   {
+//     elementType: 'labels',
+//     stylers: [
+//       {
+//         visibility: 'off'
+//       }
+//     ]
+//   },
+//   {
+//     featureType: 'administrative',
+//     elementType: 'geometry',
+//     stylers: [
+//       {
+//         visibility: 'off'
+//       }
+//     ]
+//   },
+//   {
+//     featureType: 'administrative.neighborhood',
+//     stylers: [
+//       {
+//         visibility: 'off'
+//       }
+//     ]
+//   },
+//   {
+//     featureType: 'landscape.man_made',
+//     elementType: 'geometry.fill',
+//     stylers: [
+//       {
+//         color: '#ffea05'
+//       }
+//     ]
+//   },
+//   {
+//     featureType: 'poi',
+//     stylers: [
+//       {
+//         visibility: 'off'
+//       }
+//     ]
+//   },
+//   {
+//     featureType: 'road',
+//     stylers: [
+//       {
+//         visibility: 'off'
+//       }
+//     ]
+//   },
+//   {
+//     featureType: 'road',
+//     elementType: 'labels.icon',
+//     stylers: [
+//       {
+//         visibility: 'off'
+//       }
+//     ]
+//   },
+//   {
+//     featureType: 'transit',
+//     stylers: [
+//       {
+//         visibility: 'off'
+//       }
+//     ]
+//   }
+// ];
 
 const styles = StyleSheet.create({
   container: {
@@ -104,7 +104,7 @@ class ColouredMap extends Component {
             latitudeDelta: 180,
             longitudeDelta: 360,
           }}
-          customMapStyle={mapstyle}
+          // customMapStyle={mapstyle}
         >
           {countries.map((country) => {
             return fetchPolygonCoordinates(country).map((polygon, index) => {

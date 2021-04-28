@@ -3,7 +3,6 @@ import 'firebase/firestore';
 import React, { Component } from 'react';
 
 import {
-  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -12,6 +11,7 @@ import {
   ImageBackground
 } from 'react-native';
 import ColouredMap from '../../components/ColouredMap';
+// ActivityIndicator,
 
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
@@ -38,6 +38,7 @@ class UserScreen extends Component {
       continents: [],
       countries: [],
       flags: []
+      // loading: true
       // user: null,
       // userUID: '',
     };
@@ -97,6 +98,7 @@ class UserScreen extends Component {
                   countries,
                   flags,
                   continents
+                  // loading: false
                 });
               }
             });
@@ -108,33 +110,41 @@ class UserScreen extends Component {
   render() {
     // console.log(this.state.countries.length);
     let currentUserUID;
+    let page;
     const { route } = this.props;
     if (route.params) {
       const { userUid } = route.params;
       currentUserUID = userUid;
     } else {
       currentUserUID = firebase.auth().currentUser.uid;
+      page = 'My Profile';
     }
     const { trips, continents, countries, flags } = this.state;
 
     const globePercentage = Math.round((countries.length / 195) * 100);
 
     const { navigation } = this.props;
+
     return (
+      // <View>
+
+      /* {loading ?  <ActivityIndicator /> :  */
       <ScrollView style={styles.userScreen}>
         <ProfileHeader userUID={currentUserUID} />
         <View style={styles.mapContainer} />
         <View style={styles.mapDisplay}>
           <ColouredMap countries={countries} />
         </View>
-        <View style={styles.btnContainer}>
-          <TouchableOpacity
-            onPress={() => navigation.navigate('My Trips')}
-            style={styles.btn}
-          >
-            <Text style={styles.text}>My Trips</Text>
-          </TouchableOpacity>
-        </View>
+        {page === 'My Profile' && (
+          <View style={styles.btnContainer}>
+            <TouchableOpacity
+              onPress={() => navigation.navigate('Trips', { page: '' })}
+              style={styles.btn}
+            >
+              <Text style={styles.text}>My Trips</Text>
+            </TouchableOpacity>
+          </View>
+        )}
         <View style={styles.gamificationContainer}>
           <Text style={styles.gamificationTitle}>My World</Text>
 
@@ -188,8 +198,11 @@ class UserScreen extends Component {
             <Text style={styles.flagText}>{flags}</Text>
           </ImageBackground>
         </View>
+
         <NavBar style={styles.navBar} />
       </ScrollView>
+      //  }
+      // <View/>
     );
   }
 }
@@ -203,7 +216,6 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#113755',
     paddingBottom: 5,
-    fontWeight: 'bold',
     fontFamily: 'Nunito_600SemiBold'
   },
   gamificationStat: {
@@ -212,7 +224,7 @@ const styles = StyleSheet.create({
     color: '#113755',
     padding: 2,
     marginBottom: 5,
-    fontFamily: 'Lato_400Regular'
+    fontFamily: 'Nunito_600SemiBold'
   },
   gamificationFlags: {
     fontSize: 15,
@@ -257,16 +269,17 @@ const styles = StyleSheet.create({
     margin: 2
   },
   statsCardText: {
-    color: '#E8F3B9',
+    color: 'white',
+    textAlign: 'center',
     fontSize: 18,
-
-    mapDisplay: {
-      height: 500,
-      width: 500
-    },
-
+    fontFamily: 'Nunito_600SemiBold'
+  },
+  mapDisplay: {
+    height: 500,
+    width: 500,
     textAlign: 'center'
   },
+
   // mapDisplay: {
   //   height: 500,
   //   width: 500,
@@ -292,10 +305,11 @@ const styles = StyleSheet.create({
   },
   text: {
     fontSize: 20,
-    color: '#113755',
+    color: 'white',
     borderRadius: 3,
     textAlign: 'center',
-    paddingVertical: 2
+    paddingVertical: 2,
+    fontFamily: 'Nunito_600SemiBold'
   },
   gamificationContainer: {
     borderRadius: 10,
