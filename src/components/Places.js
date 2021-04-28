@@ -8,53 +8,9 @@ import {
   FlatList,
   Linking
 } from 'react-native';
-import firebase from '../firebase/config';
 
 export default function Places(props) {
-  const { tripUid, destinationUid } = props;
-  const [places, setPlaces] = useState([]);
-  useEffect(() => {
-    const db = firebase.firestore();
-    const placesRef = db
-      .collection('trips')
-      .doc(tripUid)
-      .collection('destinations')
-      .doc(destinationUid)
-      .collection('places');
-
-    placesRef.get().then((snapshot) => {
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-      } else {
-        const newPlaces = [];
-        snapshot.forEach((doc) => {
-          const place = doc.data();
-          place.id = doc.id;
-          newPlaces.push(place);
-        });
-        setPlaces(newPlaces);
-      }
-    });
-
-    placesRef.onSnapshot((querySnapshot) => {
-      querySnapshot.docChanges().forEach((change) => {
-        if (change.type === 'added') {
-          console.log('in added');
-          const newPlace = change.doc.data();
-          newPlace.id = change.doc.id;
-          setPlaces([newPlace, ...places]);
-        }
-        if (change.type === 'removed') {
-          console.log('removed');
-          // const filteredComments = comments.filter((comment) => {
-          //   console.log(comment.id, '///', change.doc.id);
-          //   return comment.id !== change.doc.id;
-          // });
-          // setComments(filteredComments);
-        }
-      });
-    });
-  }, []);
+  const { places } = props;
 
   const Item = ({ title, url, type, post }) => (
     <View style={styles.item}>

@@ -7,7 +7,8 @@ import {
   ImageBackground,
   ScrollView,
   Text,
-  View
+  View,
+  ActivityIndicator
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import MapViewer from '../../components/MapViewer';
@@ -15,12 +16,14 @@ import NavBar from '../../components/NavBar';
 import firebase from '../../firebase/config';
 import s from '../../styles/styles';
 import styles from './styles';
+import ProfileHeader from '../../components/ProfileHeader';
 
 class SingleTripScreen extends Component {
   state = {
     trip: {},
     destinations: [],
-    currentUserUID: firebase.auth().currentUser.uid
+    currentUserUID: firebase.auth().currentUser.uid,
+    loading: false
   };
 
   componentDidMount() {
@@ -51,7 +54,7 @@ class SingleTripScreen extends Component {
           destination.id = doc.id;
           newDestinations.push(destination);
         });
-        this.setState({ destinations: newDestinations });
+        this.setState({ destinations: newDestinations, loading: false });
       }
     });
   }
@@ -97,7 +100,7 @@ class SingleTripScreen extends Component {
 
     const { trip } = this.state;
     let { destinations } = this.state;
-    const { currentUserUID } = this.state;
+    const { currentUserUID, loading } = this.state;
     if (route.params.destinations) {
       destinations = route.params.destinations;
     }
@@ -134,51 +137,54 @@ class SingleTripScreen extends Component {
     return (
       <View style={{ flex: 1, backgroundColor: '#1E6091' }}>
         <ScrollView>
-          <FlatList
-            style={styles.page}
-            ListHeaderComponent={
-              <>
-                <View>
-                  {trip.user && trip.user !== currentUserUID && (
-                    <ProfileHeader userUID={trip.user} />
-                  )}
-
-                  {destinations &&
-                    destinations[0] &&
-                    destinations[0].destination && (
-                      <MapViewer destinations={destinations} />
-                    )}
-                  <Text style={styles.stats}>
-                    Places visited: {destinations.length}
-                  </Text>
-                </View>
-
-                {currentUserUID === trip.user && (
+          {loading ? (
+            <ActivityIndicator />
+          ) : (
+            <FlatList
+              style={styles.page}
+              ListHeaderComponent={
+                <>
                   <View>
-                    <TouchableOpacity
-                      style={s.button}
-                      onPress={() => {
-                        navigation.navigate('Add Destination', { tripUid });
-                      }}
-                    >
-                      <TouchableOpacity />
-                      <Text style={s.buttonText}> Add Destination</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity
-                      style={s.button}
-                      onPress={this.deleteTrip}
-                    >
-                      <Text style={s.buttonText}> Delete Trip </Text>
-                    </TouchableOpacity>
+                    {trip.user && trip.user !== currentUserUID && (
+                      <ProfileHeader userUID={trip.user} />
+                    )}
+
+                    {destinations &&
+                      destinations[0] &&
+                      destinations[0].destination && (
+                        <MapViewer destinations={destinations} />
+                      )}
+                    <Text style={styles.stats}>
+                      Places visited: {destinations.length}
+                    </Text>
                   </View>
-                )}
-              </>
-            }
-            data={destinations}
-            renderItem={renderItem}
-            keyExtractor={(item) => item.id}
-            ListFooterComponent={<NavBar />}
-          />
+
+                  {currentUserUID === trip.user && (
+                    <View>
+                      <TouchableOpacity
+                        style={s.button}
+                        onPress={() => {
+                          navigation.navigate('Add Destination', { tripUid });
+                        }}
+                      >
+                        <TouchableOpacity />
+                        <Text style={s.buttonText}> Add Destination</Text>
+                      </TouchableOpacity>
+                      <TouchableOpacity
+                        style={s.button}
+                        onPress={this.deleteTrip}
+                      >
+                        <Text style={s.buttonText}> Delete Trip </Text>
+                      </TouchableOpacity>
+                    </View>
+                  )}
+                </>
+              }
+              data={destinations}
+              renderItem={renderItem}
+              keyExtractor={(item) => item.id}
+            />
+          )}
         </ScrollView>
         <View>
           <NavBar />

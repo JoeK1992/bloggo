@@ -6,7 +6,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ImageBackground
+  ImageBackground,
 } from 'react-native';
 import ColouredMap from '../../components/ColouredMap';
 // ActivityIndicator,
@@ -34,7 +34,7 @@ class UserScreen extends Component {
       trips: 0,
       tripUids: [],
       continents: [],
-      countries: []
+      countries: [],
       // flags: [],
       // loading: true
       // user: null,
@@ -95,7 +95,7 @@ class UserScreen extends Component {
                 this.setState({
                   countries,
                   // flags,
-                  continents
+                  continents,
                   // loading: false
                 });
               }
@@ -124,9 +124,9 @@ class UserScreen extends Component {
     const { navigation } = this.props;
 
     return (
-      // <View>
+    // <View>
 
-      /* {loading ?  <ActivityIndicator /> :  */
+    /* {loading ?  <ActivityIndicator /> :  */
 
       <View style={{ flex: 1, backgroundColor: '#1E6091' }}>
         <ScrollView style={styles.userScreen}>

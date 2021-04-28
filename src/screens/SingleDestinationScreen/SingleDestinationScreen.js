@@ -32,7 +32,8 @@ export default class SingleDestinationScreen extends Component {
       editable: false,
       blogPost: '',
       openedMenu: false,
-      currentUserUID: firebase.auth().currentUser.uid
+      currentUserUID: firebase.auth().currentUser.uid,
+      places: []
     };
   }
 
@@ -40,7 +41,27 @@ export default class SingleDestinationScreen extends Component {
     const db = firebase.firestore();
     const _this = this;
     const { tripUid, destinationUid } = _this.props.route.params;
+    const placesRef = db
+      .collection('trips')
+      .doc(tripUid)
+      .collection('destinations')
+      .doc(destinationUid)
+      .collection('places');
 
+    placesRef.get().then((snapshot) => {
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+      } else {
+        const newPlaces = [];
+        snapshot.forEach((doc) => {
+          const place = doc.data();
+          console.log(place);
+          place.id = doc.id;
+          newPlaces.push(place);
+        });
+        this.setState({ places: newPlaces });
+      }
+    });
     const destinationRef = db
       .collection('trips')
       .doc(tripUid)
@@ -168,7 +189,9 @@ export default class SingleDestinationScreen extends Component {
 
     const Footer = () => (
       <View style={styles.container}>
-        <AddPlace tripUid={tripUid} destinationUid={destinationUid} />
+        {destination && destination.user === currentUserUID && (
+          <AddPlace tripUid={tripUid} destinationUid={destinationUid} />
+        )}
 
         <TextInput
           value={blogPost}
@@ -207,7 +230,6 @@ export default class SingleDestinationScreen extends Component {
             <Text style={s.buttonText}>Delete Destination</Text>
           </TouchableOpacity>
         )}
-        <NavBar />
       </View>
     );
 
@@ -261,6 +283,10 @@ export default class SingleDestinationScreen extends Component {
             ListFooterComponent={<Footer />}
           />
         )}
+
+        <View>
+          <NavBar />
+        </View>
       </View>
     );
   }
