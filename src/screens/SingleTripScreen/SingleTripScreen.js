@@ -1,27 +1,26 @@
-import "firebase/auth";
-import "firebase/firestore";
-import React, { Component } from "react";
+import 'firebase/auth';
+import 'firebase/firestore';
+import React, { Component } from 'react';
 import {
   Alert,
   FlatList,
   ImageBackground,
   ScrollView,
-  StatusBar,
-  StyleSheet,
   Text,
-  View,
-} from "react-native";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import MapViewer from "../../components/MapViewer";
-import NavBar from "../../components/NavBar";
-import firebase from "../../firebase/config";
-import s from "../../styles/styles";
+  View
+} from 'react-native';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import MapViewer from '../../components/MapViewer';
+import NavBar from '../../components/NavBar';
+import firebase from '../../firebase/config';
+import s from '../../styles/styles';
+import styles from './styles';
 
 class SingleTripScreen extends Component {
   state = {
     trip: {},
     destinations: [],
-    currentUserUID: firebase.auth().currentUser.uid,
+    currentUserUID: firebase.auth().currentUser.uid
   };
 
   componentDidMount() {
@@ -29,22 +28,22 @@ class SingleTripScreen extends Component {
     const { route } = this.props;
     const { tripUid } = route.params;
 
-    const tripRef = db.collection("trips").doc(tripUid);
+    const tripRef = db.collection('trips').doc(tripUid);
     tripRef.get().then((doc) => {
       if (!doc.exists) {
-        console.log("No such document");
+        console.log('No such document');
       } else {
         this.setState({ trip: doc.data() });
       }
     });
 
     const destinationsRef = db
-      .collection("trips")
+      .collection('trips')
       .doc(tripUid)
-      .collection("destinations");
+      .collection('destinations');
     destinationsRef.get().then((snapshot) => {
       if (snapshot.empty) {
-        console.log("No matching documents.");
+        console.log('No matching documents.');
       } else {
         const newDestinations = [];
         snapshot.forEach((doc) => {
@@ -65,28 +64,28 @@ class SingleTripScreen extends Component {
       return trip.id !== tripUid;
     });
     Alert.alert(
-      "Delete",
-      "Are you sure you want to delete your trip?",
+      'Delete',
+      'Are you sure you want to delete your trip?',
       [
         {
-          text: "Confirm",
+          text: 'Confirm',
           onPress: () => {
             const { route, navigation } = this.props;
             const { tripUid } = route.params;
 
             const db = firebase.firestore();
-            const tripRef = db.collection("trips").doc(tripUid);
+            const tripRef = db.collection('trips').doc(tripUid);
             tripRef.delete().then(() => {
-              navigation.replace("My Trips", { trips: filteredTrips });
+              navigation.replace('My Trips', { trips: filteredTrips });
             });
-          },
+          }
         },
         {
-          text: "Cancel",
+          text: 'Cancel',
           onPress: () => {
-            "cancel";
-          },
-        },
+            'cancel';
+          }
+        }
       ],
       { cancelable: true }
     );
@@ -118,11 +117,11 @@ class SingleTripScreen extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate("Single Destination", {
+              navigation.navigate('Single Destination', {
                 destinationUid: item.id,
                 tripUid,
                 destinations,
-                tripName: trip.name,
+                tripName: trip.name
               });
             }}
           >
@@ -134,7 +133,7 @@ class SingleTripScreen extends Component {
     );
 
     return (
-      <View style={{ flex: 1, backgroundColor: "#1E6091" }}>
+      <View style={{ flex: 1, backgroundColor: '#1E6091' }}>
         <ScrollView>
           <FlatList
             style={styles.page}
@@ -156,7 +155,7 @@ class SingleTripScreen extends Component {
                     <TouchableOpacity
                       style={s.button}
                       onPress={() => {
-                        navigation.navigate("Add Destination", { tripUid });
+                        navigation.navigate('Add Destination', { tripUid });
                       }}
                     >
                       <TouchableOpacity />
@@ -185,67 +184,5 @@ class SingleTripScreen extends Component {
     );
   }
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: StatusBar.currentHeight || 0,
-  },
-
-  stats: {
-    color: "white",
-    fontSize: 20,
-    fontFamily: "Nunito_600SemiBold",
-    alignSelf: "center",
-    marginVertical: 10,
-  },
-  item: {
-    borderRadius: 5,
-
-    justifyContent: "center",
-    textAlign: "center",
-
-    // backgroundColor: "#f9c2ff",
-    // padding: 20,
-    // marginVertical: 8,
-    // marginHorizontal: 16,
-    // zIndex: 15,
-
-    marginVertical: 10,
-  },
-  itemContainer: {
-    borderRadius: 5,
-    width: 300,
-
-    alignSelf: "center",
-
-  },
-  title: {
-    fontSize: 20,
-    fontFamily: "Nunito_600SemiBold",
-    color: "white",
-    alignSelf: "center",
-  },
-  mapDisplay: {
-    height: 500,
-    width: 500,
-  },
-  image: {
-    borderRadius: 5,
-    height: 80,
-
-    display: 'flex',
-    marginVertical: 10,
-    justifyContent: 'center',
-    textAlign: 'center',
-    alignItems: 'center',
-    alignContent: 'center',
-
-  },
-  page: {
-    backgroundColor: "#1E6091",
-    height: 580,
-  },
-});
 
 export default SingleTripScreen;
