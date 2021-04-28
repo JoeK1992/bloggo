@@ -100,11 +100,12 @@ class UserScreen extends Component {
                     flags.push(annotations.flag);
                   }
                 });
-                this.setState({
-                  countries,
-                  flags,
-                  continents
-                  // loading: false
+                this.setState((currState) => {
+                  return {
+                    countries: [...currState.countries, ...countries],
+                    continents: [...currState.continents, ...continents],
+                    flags: [...currState.flags, ...flags],
+                  };
                 });
               }
             });
@@ -134,9 +135,9 @@ class UserScreen extends Component {
     const globePercentage = Math.round((countries.length / 195) * 100);
 
     return (
-      // <View>
+    // <View>
 
-      /* {loading ?  <ActivityIndicator /> :  */
+    /* {loading ?  <ActivityIndicator /> :  */
 
       <View style={{ flex: 1, backgroundColor: '#1E6091' }}>
         <ScrollView style={styles.userScreen}>
@@ -144,9 +145,9 @@ class UserScreen extends Component {
           {/* <View style={styles.mapContainer} /> */}
           {usersOwnProfile && <AddAvatar />}
 
-          {/* <View style={styles.mapDisplay}>
+          <View style={styles.mapDisplay}>
             <ColouredMap countries={countries} />
-          </View> */}
+          </View>
 
           {page === 'My Profile' && (
             <View style={styles.btnContainer}>
