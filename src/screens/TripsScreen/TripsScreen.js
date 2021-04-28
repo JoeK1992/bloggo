@@ -2,18 +2,13 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import moment from 'moment';
 import React, { Component } from 'react';
-import {
-  FlatList,
-  StyleSheet,
-  Text,
-  View,
-  ActivityIndicator,
-} from 'react-native';
+import { FlatList, Text, View, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
 import s from '../../styles/styles';
+import styles from './styles';
 
 class TripsScreen extends Component {
   constructor(props) {
@@ -21,7 +16,7 @@ class TripsScreen extends Component {
     this.state = {
       trips: [],
       order: 'desc',
-      currentUserUID: firebase.auth().currentUser.uid,
+      currentUserUID: firebase.auth().currentUser.uid
     };
   }
 
@@ -115,7 +110,7 @@ class TripsScreen extends Component {
       endDate,
       userName,
       userUid,
-      tripUid,
+      tripUid
     }) => (
       <View style={styles.item}>
         <TouchableOpacity
@@ -125,9 +120,7 @@ class TripsScreen extends Component {
         >
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.dates}>
-            {moment(startDate).format('MMM Do YYYY')}
-            {' '}
-            -
+            {moment(startDate).format('MMM Do YYYY')} -
             {moment(endDate).format('MMM Do YYYY')}
           </Text>
         </TouchableOpacity>
@@ -163,12 +156,7 @@ class TripsScreen extends Component {
         <ActivityIndicator />
         <Text style={styles.headTitle}>
           {' '}
-          Explore your
-          {' '}
-          {page === 'Explore' && <Text>friends'</Text>}
-          {' '}
-          trips
-          {' '}
+          Explore your {page === 'Explore' && <Text>friends'</Text>} trips{' '}
         </Text>
 
         <View style={styles.sortBtn}>
@@ -196,62 +184,4 @@ class TripsScreen extends Component {
   }
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#113755',
-  },
-  item: {
-    backgroundColor: '#1a759f',
-    padding: 10,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    borderRadius: 5,
-  },
-  title: {
-    fontSize: 20,
-    color: '#F9FCED',
-    textAlign: 'center',
-    fontFamily: 'Nunito_600SemiBold',
-  },
-  dates: {
-    fontSize: 15,
-    color: '#F9FCED',
-    textAlign: 'center',
-    fontFamily: 'Nunito_400Regular',
-  },
-
-  sortBtn: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  sortText: {
-    fontSize: 15,
-    color: 'white',
-    marginLeft: 10,
-    fontFamily: 'Nunito_600SemiBold',
-    paddingBottom: 3,
-    borderBottomWidth: 1,
-    borderBottomColor: 'white',
-  },
-  headTitle: {
-    padding: 10,
-    fontSize: 15,
-    textAlign: 'center',
-    color: 'white',
-    fontFamily: 'Nunito_600SemiBold',
-  },
-
-  userName: {
-    fontSize: 14,
-    textAlign: 'center',
-    color: 'white',
-    fontFamily: 'Nunito_600SemiBold',
-  },
-  sortBy: {
-    fontSize: 15,
-    fontFamily: 'Nunito_600SemiBold',
-    color: 'white',
-  },
-});
 export default TripsScreen;

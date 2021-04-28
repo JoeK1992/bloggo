@@ -7,14 +7,15 @@ export default function ImagesCarousel(props) {
   const isCarousel = useRef(null);
   const [index, setIndex] = useState(0);
   const { destination } = props;
-
+  const urls = [...destination.uploadedUrls, { url: destination.uploadedUrl }];
+  console.log(urls, 'here');
   return (
     <View>
       <Carousel
         layout="default"
         layoutCardOffset={9}
         ref={isCarousel}
-        data={destination.uploadedUrls || []}
+        data={urls || []}
         renderItem={ImageCarousel}
         sliderWidth={SLIDER_WIDTH}
         itemWidth={ITEM_WIDTH}
@@ -22,7 +23,7 @@ export default function ImagesCarousel(props) {
         onSnapToItem={(index) => setIndex(index)}
       />
       <Pagination
-        dotsLength={destination.uploadedUrls.length}
+        dotsLength={urls.length}
         activeDotIndex={index}
         carouselRef={isCarousel}
         dotStyle={{

@@ -7,7 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ImageBackground
+  ImageBackground,
 } from 'react-native';
 import ColouredMap from '../../components/ColouredMap';
 // ActivityIndicator,
@@ -37,7 +37,7 @@ class UserScreen extends Component {
       tripUids: [],
       continents: [],
       countries: [],
-      flags: []
+      flags: [],
       // loading: true
       // user: null,
       // userUID: '',
@@ -97,7 +97,7 @@ class UserScreen extends Component {
                 this.setState({
                   countries,
                   flags,
-                  continents
+                  continents,
                   // loading: false
                 });
               }
@@ -119,14 +119,16 @@ class UserScreen extends Component {
       currentUserUID = firebase.auth().currentUser.uid;
       page = 'My Profile';
     }
-    const { trips, continents, countries, flags } = this.state;
+    const {
+      trips, continents, countries, flags,
+    } = this.state;
 
     const globePercentage = Math.round((countries.length / 195) * 100);
 
     const { navigation } = this.props;
 
     return (
-      // <View>
+    // <View>
 
       /* {loading ?  <ActivityIndicator /> :  */
       <ScrollView style={styles.userScreen}>
