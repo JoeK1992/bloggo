@@ -6,22 +6,15 @@ import {
   TouchableOpacity,
   View,
   Image,
-} from 'react-native';
-import NavBar from '../../components/NavBar';
-import ProfileHeader from '../../components/ProfileHeader';
-import firebase from '../../firebase/config';
-import image from '../../images/road.jpg';
-import styles from './styles';
-import logo from '../../images/bloggowhite.png';
+} from "react-native";
+import { NavBar, ProfileHeader } from '../../components';
+import firebase from "../../firebase/config";
+import image from "../../images/road.jpg";
+import styles from "./styles";
+import logo from "../../images/bloggoLogo.png";
 
 export default function HomeScreen({ navigation }) {
   const userUID = firebase.auth().currentUser.uid;
-
-  const onLinkPress = () => {
-    navigation.navigate('Add Trip');
-  };
-
-  // const Stack = createStackNavigator();
 
   return (
     <View style={styles.container}>
@@ -35,20 +28,19 @@ export default function HomeScreen({ navigation }) {
         </View>
         <ProfileHeader userUID={userUID} />
 
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText} onPress={onLinkPress}>
-            Add Trip
-          </Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Add Trip')}
+        >
+          <Text style={styles.buttonText}>Add Trip</Text>
         </TouchableOpacity>
 
         <View style={styles.header}>
-          <TouchableOpacity style={styles.button}>
-            <Text
-              style={styles.buttonText}
-              onPress={() => navigation.replace('Trips', { page: 'My Trips' })}
-            >
-              My Trips
-            </Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.replace('Trips', { page: 'My Trips' })}
+          >
+            <Text style={styles.buttonText}>My Trips</Text>
           </TouchableOpacity>
           {/* <AddAvatar /> */}
         </View>

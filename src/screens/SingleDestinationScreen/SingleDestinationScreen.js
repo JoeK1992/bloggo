@@ -12,13 +12,15 @@ import {
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
+import {
+  ImagesCarousel,
+  NavBar,
+  Comments,
+  AddPlace,
+  Places
+} from '../../components';
 import s from '../../styles/styles';
-import ImagesCarousel from '../../components/ImagesCarousel';
 import styles from './styles';
-import NavBar from '../../components/NavBar';
-import Comments from '../../components/Comments';
-import AddPlace from '../../components/Places/AddPlace';
-import Places from '../../components/Places/Places';
 
 LogBox.ignoreLogs([
   'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',

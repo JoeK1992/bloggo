@@ -2,12 +2,9 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import moment from 'moment';
 import React, { Component } from 'react';
-import {
-  FlatList, Text, View, ActivityIndicator,
-} from 'react-native';
+import { FlatList, Text, View, ActivityIndicator } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import NavBar from '../../components/NavBar';
-import ProfileHeader from '../../components/ProfileHeader';
+import { NavBar, ProfileHeader } from '../../components';
 import firebase from '../../firebase/config';
 import s from '../../styles/styles';
 import styles from './styles';
@@ -18,7 +15,7 @@ class TripsScreen extends Component {
     this.state = {
       trips: [],
       order: 'desc',
-      currentUserUID: firebase.auth().currentUser.uid,
+      currentUserUID: firebase.auth().currentUser.uid
     };
   }
 
@@ -55,10 +52,8 @@ class TripsScreen extends Component {
     const db = firebase.firestore();
 
     const _this = this;
-    const { currentUserUID } = this.state;
+    const { currentUserUID, order } = this.state;
     const { page } = _this.props.route.params;
-
-    const { order } = this.state;
 
     if (order === 'desc') {
       this.setState({ order: 'asc' });
@@ -96,20 +91,18 @@ class TripsScreen extends Component {
   render() {
     let { trips } = this.state;
     const { order, currentUserUID } = this.state;
-    const { route } = this.props;
+    const { route, navigation } = this.props;
     const { page } = route.params;
     if (route.params.trips) {
       trips = route.params.trips;
     }
-    const { navigation } = this.props;
-    // ,
     const Item = ({
       title,
       startDate,
       endDate,
       userName,
       userUid,
-      tripUid,
+      tripUid
     }) => (
       <View style={styles.item}>
         <TouchableOpacity
@@ -119,9 +112,7 @@ class TripsScreen extends Component {
         >
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.dates}>
-            {moment(startDate).format('MMM Do YYYY')}
-            {' '}
-            -
+            {moment(startDate).format('MMM Do YYYY')} -
             {moment(endDate).format('MMM Do YYYY')}
           </Text>
         </TouchableOpacity>
@@ -157,12 +148,7 @@ class TripsScreen extends Component {
         <ActivityIndicator />
         <Text style={styles.headTitle}>
           {' '}
-          Explore your
-          {' '}
-          {page === 'Explore' && <Text>friends'</Text>}
-          {' '}
-          trips
-          {' '}
+          Explore your {page === 'Explore' && <Text>friends'</Text>} trips{' '}
         </Text>
 
         <View style={styles.sortBtn}>
