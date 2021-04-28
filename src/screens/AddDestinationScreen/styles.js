@@ -4,7 +4,6 @@ export default StyleSheet.create({
   container: {
     flex: 1,
     backgroundColor: '#113755',
-    color: '#f9fced',
   },
   titles: {
     alignSelf: 'center',

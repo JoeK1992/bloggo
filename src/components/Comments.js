@@ -1,7 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {
-  View, Text, TextInput, StyleSheet, FlatList,
-} from 'react-native';
+import { View, Text, TextInput, StyleSheet, FlatList } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -10,6 +8,7 @@ import firebase from '../firebase/config';
 export default function Comments(props) {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
+  const [username, setUsername] = useState('');
   const { tripUid, destinationUid } = props;
   const currentUserUID = firebase.auth().currentUser.uid;
 
@@ -37,31 +36,19 @@ export default function Comments(props) {
         setComments(newComments);
       }
     });
-
-    commentsRef.onSnapshot((querySnapshot) => {
-      querySnapshot.docChanges().forEach((change) => {
-        if (change.type === 'added') {
-          console.log('in added');
-          const newComment = change.doc.data();
-          newComment.id = change.doc.id;
-          setComments([newComment, ...comments]);
-        }
-        if (change.type === 'removed') {
-          console.log('removed');
-          const filteredComments = comments.filter((comment) => {
-            console.log(comment.id, '///', change.doc.id);
-            return comment.id !== change.doc.id;
-          });
-          setComments(filteredComments);
-        }
-      });
-    });
   }, []);
 
   const handlePress = () => {
     const db = firebase.firestore();
     const userRef = db.collection('users').doc(currentUserUID);
     setComment('');
+    const newComment = {
+      comment,
+      username,
+      date: new Date().toUTCString(),
+      user: currentUserUID
+    };
+    setComments([newComment, ...comments]);
 
     userRef
       .get()
@@ -80,13 +67,13 @@ export default function Comments(props) {
           .collection('destinations')
           .doc(destinationUid)
           .collection('comments');
-
+        setUsername(userName);
         commentsRef
           .add({
             comment,
             userName,
             date: new Date().toUTCString(),
-            user: currentUserUID,
+            user: currentUserUID
           })
 
           .catch((err) => {
@@ -97,6 +84,10 @@ export default function Comments(props) {
 
   const deleteComment = (id) => {
     const db = firebase.firestore();
+    const filteredComments = comments.filter((comment) => {
+      return comment.id !== id;
+    });
+    setComments(filteredComments);
 
     const commentRef = db
       .collection('trips')
@@ -107,19 +98,11 @@ export default function Comments(props) {
       .doc(id);
     commentRef.delete();
   };
-  const Item = ({
-    comment, date, userName, user, id,
-  }) => (
+  const Item = ({ comment, date, userName, user, id }) => (
     <View style={styles.item}>
       <Text style={styles.comment}>{comment}</Text>
       <Text style={styles.comment}>
-        Posted by
-        {' '}
-        {userName}
-        {' '}
-        on
-        {' '}
-        {date.slice(0, 16)}
+        Posted by {userName} on {date.slice(0, 16)}
       </Text>
       {user === currentUserUID && (
         <TouchableOpacity
@@ -142,7 +125,7 @@ export default function Comments(props) {
           width: 300,
           alignSelf: 'center',
           marginVertical: 10,
-          backgroundColor: 'white',
+          backgroundColor: 'white'
         }}
       />
     );
@@ -196,11 +179,11 @@ export default function Comments(props) {
 
 const styles = StyleSheet.create({
   listContainer: {
-    paddingVertical: 30,
+    paddingVertical: 30
   },
   item: {
     width: 300,
-    alignSelf: 'center',
+    alignSelf: 'center'
   },
   input: {
     height: 48,
@@ -211,7 +194,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     marginLeft: 30,
     marginRight: 30,
-    paddingLeft: 16,
+    paddingLeft: 16
   },
   title: {
     paddingTop: 30,
@@ -219,14 +202,14 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     paddingVertical: 2,
     fontSize: 16,
-    fontFamily: 'Nunito_600SemiBold',
+    fontFamily: 'Nunito_600SemiBold'
   },
   comment: {
     color: 'white',
     textAlign: 'center',
     paddingVertical: 2,
     fontSize: 14,
-    fontFamily: 'Lato_400Regular',
+    fontFamily: 'Lato_400Regular'
   },
   button: {
     alignSelf: 'center',
@@ -239,13 +222,13 @@ const styles = StyleSheet.create({
     minWidth: 300,
     marginVertical: 7,
     alignItems: 'center',
-    textAlign: 'center',
+    textAlign: 'center'
   },
 
   buttonText: {
     color: 'white',
     fontSize: 16,
-    fontFamily: 'Nunito_400Regular',
+    fontFamily: 'Nunito_400Regular'
   },
 
   buttonDisabled: {
@@ -257,15 +240,15 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     margin: 2,
     minWidth: 200,
-    alignItems: 'center',
+    alignItems: 'center'
   },
   deleteBtn: {
     justifyContent: 'center',
-    alignItems: 'center',
+    alignItems: 'center'
   },
 
   deleteIcon: {
     color: '#ed6a5a',
-    fontSize: 12,
-  },
+    fontSize: 12
+  }
 });
