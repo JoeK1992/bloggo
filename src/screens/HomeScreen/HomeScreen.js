@@ -1,12 +1,19 @@
-import { faBold, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
-import 'firebase/firestore';
-import React from 'react';
-import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
+import { faBold, faGlobeAmericas } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
+import "firebase/firestore";
+import React from "react";
+import {
+  ImageBackground,
+  Text,
+  TouchableOpacity,
+  View,
+  Image,
+} from "react-native";
 import { NavBar, ProfileHeader } from '../../components';
-import firebase from '../../firebase/config';
-import image from '../../images/road.jpg';
-import styles from './styles';
+import firebase from "../../firebase/config";
+import image from "../../images/road.jpg";
+import styles from "./styles";
+import logo from "../../images/bloggoLogo.png";
 
 export default function HomeScreen({ navigation }) {
   const userUID = firebase.auth().currentUser.uid;
@@ -19,15 +26,7 @@ export default function HomeScreen({ navigation }) {
         imageStyle={{ opacity: 0.6 }}
       >
         <View style={styles.logoContainer}>
-          <Text style={styles.logoText}>
-            <FontAwesomeIcon icon={faBold} style={styles.logo} size={30} />
-            logg
-            <FontAwesomeIcon
-              icon={faGlobeAmericas}
-              style={styles.logo}
-              size={20}
-            />
-          </Text>
+          <Image source={logo} style={styles.logoImage} />
         </View>
         <ProfileHeader userUID={userUID} />
 
