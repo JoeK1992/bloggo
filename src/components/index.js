@@ -8,7 +8,7 @@ export { default as ImageCarousel } from './ImageCarousel';
 export { default as ImagesCarousel } from './ImagesCarousel';
 export { default as MapPopUp } from './MapPopUp';
 export { default as MapViewer } from './MapViewer';
-export { default as Navbar } from './NavBar';
+export { default as NavBar } from './NavBar';
 export { default as PickImage } from './PickImage';
 export { default as PickImages } from './PickImages';
 export { default as Places } from './Places';
