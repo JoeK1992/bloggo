@@ -1,31 +1,33 @@
-import "firebase/auth";
-import "firebase/firestore";
-import React, { Component } from "react";
+import 'firebase/auth';
+import 'firebase/firestore';
+import React, { Component } from 'react';
 import {
   ScrollView,
   Text,
   TouchableOpacity,
   View,
-  ImageBackground,
-} from "react-native";
-import AddAvatar from "../../components/AddAvatar";
-import ColouredMap from "../../components/ColouredMap";
+  ImageBackground
+} from 'react-native';
+import {
+  AddAvatar,
+  NavBar,
+  ProfileHeader,
+  ColouredMap
+} from '../../components';
 // ActivityIndicator,
-import NavBar from "../../components/NavBar";
-import ProfileHeader from "../../components/ProfileHeader";
-import firebase from "../../firebase/config";
+import firebase from '../../firebase/config';
 // import TripsScreen from '../TripsScreen/TripsScreen';
 // import AddAvatar from '../../components/AddAvatar';
 // import globe from '../../images/globe.png';
 // import trip from '../../images/trip.png';
 // import country from '../../images/country.jpeg';
 // import continent from '../../images/continents.jpg';
-import first from "../../images/1.jpeg";
-import second from "../../images/2.jpg";
-import third from "../../images/3.jpg";
-import fourth from "../../images/4.jpg";
-import flagBackground from "../../images/flag.jpg";
-import styles from "./styles";
+import first from '../../images/1.jpeg';
+import second from '../../images/2.jpg';
+import third from '../../images/3.jpg';
+import fourth from '../../images/4.jpg';
+import flagBackground from '../../images/flag.jpg';
+import styles from './styles';
 
 // const { height, width } = Dimensions.get('window');
 class UserScreen extends Component {
@@ -36,7 +38,7 @@ class UserScreen extends Component {
       tripUids: [],
       continents: [],
       countries: [],
-      flags: [],
+      flags: []
       // loading: true
       // user: null,
       // userUID: '',
@@ -54,14 +56,14 @@ class UserScreen extends Component {
     }
 
     const db = firebase.firestore();
-    const tripsRef = db.collection("trips");
+    const tripsRef = db.collection('trips');
     tripsRef
-      .where("user", "==", currentUserUID)
-      .where("summary", "!=", false)
+      .where('user', '==', currentUserUID)
+      .where('summary', '!=', false)
       .get()
       .then((snapshot) => {
         if (snapshot.empty) {
-          console.log("No matching documents.");
+          console.log('No matching documents.');
         } else {
           const tripUidsArr = [];
           let trips = 0;
@@ -75,12 +77,12 @@ class UserScreen extends Component {
           const { tripUids } = this.state;
           tripUids.forEach((tripUid) => {
             const destinationsRef = db
-              .collection("trips")
+              .collection('trips')
               .doc(tripUid)
-              .collection("destinations");
+              .collection('destinations');
             destinationsRef.get().then((snapshot) => {
               if (snapshot.empty) {
-                console.log("No matching documents.");
+                console.log('No matching documents.');
               } else {
                 const continents = [];
                 const countries = [];
@@ -101,7 +103,7 @@ class UserScreen extends Component {
                 this.setState({
                   countries,
                   flags,
-                  continents,
+                  continents
                   // loading: false
                 });
               }
@@ -112,11 +114,13 @@ class UserScreen extends Component {
   }
 
   render() {
-    // console.log(this.state.countries.length);
+    const { route, navigation } = this.props;
+    const { trips, continents, countries, flags } = this.state;
+
     let currentUserUID;
     let page;
     let usersOwnProfile;
-    const { route } = this.props;
+
     if (route.params) {
       usersOwnProfile = true;
       const { userUid } = route.params;
@@ -124,20 +128,17 @@ class UserScreen extends Component {
     } else {
       usersOwnProfile = false;
       currentUserUID = firebase.auth().currentUser.uid;
-      page = "My Profile";
+      page = 'My Profile';
     }
-    const { trips, continents, countries, flags } = this.state;
 
     const globePercentage = Math.round((countries.length / 195) * 100);
-
-    const { navigation } = this.props;
 
     return (
       // <View>
 
       /* {loading ?  <ActivityIndicator /> :  */
 
-      <View style={{ flex: 1, backgroundColor: "#1E6091" }}>
+      <View style={{ flex: 1, backgroundColor: '#1E6091' }}>
         <ScrollView style={styles.userScreen}>
           <ProfileHeader userUID={currentUserUID} />
           {/* <View style={styles.mapContainer} /> */}
@@ -147,10 +148,10 @@ class UserScreen extends Component {
             <ColouredMap countries={countries} />
           </View> */}
 
-          {page === "My Profile" && (
+          {page === 'My Profile' && (
             <View style={styles.btnContainer}>
               <TouchableOpacity
-                onPress={() => navigation.navigate("Trips", { page: "" })}
+                onPress={() => navigation.navigate('Trips', { page: '' })}
                 style={styles.btn}
               >
                 <Text style={styles.text}>My Trips</Text>
@@ -169,7 +170,7 @@ class UserScreen extends Component {
               >
                 <Text style={styles.statsCardText}>
                   {continents.length === 1
-                    ? "1 Continent"
+                    ? '1 Continent'
                     : `${continents.length} Continents`}
                 </Text>
               </ImageBackground>
@@ -181,7 +182,7 @@ class UserScreen extends Component {
               >
                 <Text style={styles.statsCardText}>
                   {countries.length === 1
-                    ? "1 Country"
+                    ? '1 Country'
                     : `${countries.length} Countries`}
                 </Text>
               </ImageBackground>
@@ -192,7 +193,7 @@ class UserScreen extends Component {
                 style={styles.statsCard}
               >
                 <Text style={styles.statsCardText}>
-                  {trips === 1 ? "1 Trip" : `${trips} Trips`}
+                  {trips === 1 ? '1 Trip' : `${trips} Trips`}
                 </Text>
               </ImageBackground>
 
