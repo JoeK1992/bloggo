@@ -76,18 +76,20 @@ import { fetchPolygonCoordinates } from './utils/GeoJsonUtils';
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-
+    position: 'absolute',
     backgroundColor: '#fff',
     alignItems: 'center',
     justifyContent: 'center',
     borderColor: '#52b69a',
-    borderWidth: 7,
+    borderWidth: 7
+    // alignSelf: 'center'
   },
   map: {
-    width: 400,
-    height: 450,
-    position: 'relative',
-  },
+    flex: 1,
+    width: 300,
+    height: 250,
+    position: 'relative'
+  }
 });
 
 class ColouredMap extends Component {
@@ -102,8 +104,10 @@ class ColouredMap extends Component {
             latitude: 15.1201,
             longitude: -23.6052,
             latitudeDelta: 180,
-            longitudeDelta: 360,
+            longitudeDelta: 250
           }}
+          mapType="standard"
+          liteMode={true}
           // customMapStyle={mapstyle}
         >
           {countries.map((country) => {

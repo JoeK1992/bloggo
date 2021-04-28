@@ -201,6 +201,7 @@ const styles = StyleSheet.create({
   },
   item: {
     borderRadius: 5,
+
     justifyContent: "center",
     textAlign: "center",
 
@@ -209,11 +210,15 @@ const styles = StyleSheet.create({
     // marginVertical: 8,
     // marginHorizontal: 16,
     // zIndex: 15,
+
+    marginVertical: 10,
   },
   itemContainer: {
     borderRadius: 5,
     width: 300,
+
     alignSelf: "center",
+
   },
   title: {
     fontSize: 20,
@@ -228,8 +233,14 @@ const styles = StyleSheet.create({
   image: {
     borderRadius: 5,
     height: 80,
-    display: "flex",
-    justifyContent: "center",
+
+    display: 'flex',
+    marginVertical: 10,
+    justifyContent: 'center',
+    textAlign: 'center',
+    alignItems: 'center',
+    alignContent: 'center',
+
   },
   page: {
     backgroundColor: "#1E6091",

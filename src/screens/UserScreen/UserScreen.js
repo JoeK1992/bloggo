@@ -4,12 +4,14 @@ import React, { Component } from "react";
 import {
   ImageBackground,
   ScrollView,
-  StyleSheet,
   Text,
   TouchableOpacity,
   View,
-} from "react-native";
-import ColouredMap from "../../components/ColouredMap";
+
+  ImageBackground,
+} from 'react-native';
+import ColouredMap from '../../components/ColouredMap';
+
 // ActivityIndicator,
 import NavBar from "../../components/NavBar";
 import ProfileHeader from "../../components/ProfileHeader";
@@ -20,11 +22,14 @@ import firebase from "../../firebase/config";
 // import trip from '../../images/trip.png';
 // import country from '../../images/country.jpeg';
 // import continent from '../../images/continents.jpg';
-import first from "../../images/1.jpeg";
-import second from "../../images/2.jpg";
-import third from "../../images/3.jpg";
-import fourth from "../../images/4.jpg";
-import flagBackground from "../../images/flag.jpg";
+
+import first from '../../images/1.jpeg';
+import second from '../../images/2.jpg';
+import third from '../../images/3.jpg';
+import fourth from '../../images/4.jpg';
+import flagBackground from '../../images/flag.jpg';
+import styles from './styles';
+
 
 // const { height, width } = Dimensions.get('window');
 class UserScreen extends Component {
@@ -117,16 +122,19 @@ class UserScreen extends Component {
       currentUserUID = firebase.auth().currentUser.uid;
       page = "My Profile";
     }
-    const { trips, continents, countries, flags } = this.state;
+    const {
+      trips, continents, countries, flags,
+    } = this.state;
 
     const globePercentage = Math.round((countries.length / 195) * 100);
 
     const { navigation } = this.props;
 
     return (
-      // <View>
+    // <View>
 
       /* {loading ?  <ActivityIndicator /> :  */
+
       <View style={{ flex: 1, backgroundColor: "#1E6091" }}>
         <ScrollView style={styles.userScreen}>
           <ProfileHeader userUID={currentUserUID} />
@@ -134,6 +142,7 @@ class UserScreen extends Component {
           <View style={styles.mapDisplay}>
             <ColouredMap countries={countries} />
           </View>
+        </View>
           {page === "My Profile" && (
             <View style={styles.btnContainer}>
               <TouchableOpacity
@@ -207,6 +216,7 @@ class UserScreen extends Component {
     );
   }
 }
+
 const styles = StyleSheet.create({
   userScreen: {
     backgroundColor: "#113755",
@@ -319,5 +329,6 @@ const styles = StyleSheet.create({
     paddingVertical: 2,
   },
 });
+
 
 export default UserScreen;

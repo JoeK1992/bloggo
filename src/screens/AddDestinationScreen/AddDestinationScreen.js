@@ -75,13 +75,16 @@ export default function AddDestinationScreen(props) {
       setStartDate("");
       setEndDate("");
       setUploadedUrls([]);
-      setSuccessMessage("Destination successfully submitted");
+      setUploadedUrl('');
+      setSuccessMessage('Destination successfully submitted');
     }
   };
 
   return (
+
     <View style={(styles.container, { flex: 1, backgroundColor: "#1E6091" })}>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
+
         <DestinationDropDown
           results={results}
           fetchResults={fetchResults}
