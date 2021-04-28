@@ -5,8 +5,7 @@ import {
   Alert, ScrollView, Text, TextInput, View,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import Calendar from '../../components/Calendar';
-import NavBar from '../../components/NavBar';
+import { Calendar, NavBar } from '../../components';
 import firebase from '../../firebase/config';
 import s from '../../styles/styles';
 import styles from './styles';
