@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import AddAvatar from '../../components/AddAvatar';
 import ColouredMap from '../../components/ColouredMap';
@@ -38,7 +38,7 @@ class UserScreen extends Component {
       continents: [],
       countries: [],
       flags: [],
-      loading: true
+      loading: true,
       // user: null,
       // userUID: '',
     };
@@ -103,7 +103,7 @@ class UserScreen extends Component {
                   return {
                     countries: [...currState.countries, ...countries],
                     continents: [...currState.continents, ...continents],
-                    flags: [...currState.flags, ...flags]
+                    flags: [...currState.flags, ...flags],
                   };
                 });
               }
@@ -127,7 +127,9 @@ class UserScreen extends Component {
       const { userUid } = route.params;
       currentUserUID = userUid;
     }
-    const { trips, continents, countries, flags, loading } = this.state;
+    const {
+      trips, continents, countries, flags, loading,
+    } = this.state;
 
     const globePercentage = Math.round((countries.length / 195) * 100);
 
@@ -141,7 +143,7 @@ class UserScreen extends Component {
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-              zIndex: 20
+              zIndex: 20,
             }}
           >
             <ActivityIndicator size="large" color="#52b69a" />
@@ -149,19 +151,16 @@ class UserScreen extends Component {
         ) : (
           <ScrollView>
             <ProfileHeader userUID={currentUserUID} />
-            {/* <View style={styles.mapContainer} /> */}
             {page === 'My Profile' && <AddAvatar />}
 
-            {/* <View style={styles.mapDisplay}>
+            <View style={styles.mapDisplay}>
               <ColouredMap countries={countries} />
-            </View> */}
+            </View>
 
             {page === 'My Profile' ? (
               <View style={styles.btnContainer}>
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('Trips', { page: 'My Trips' })
-                  }
+                  onPress={() => navigation.navigate('Trips', { page: 'My Trips' })}
                   style={styles.btn}
                 >
                   <Text style={styles.text}>My Trips</Text>
@@ -170,9 +169,7 @@ class UserScreen extends Component {
             ) : (
               <View style={styles.btnContainer}>
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('Trips', { page: 'Explore' })
-                  }
+                  onPress={() => navigation.navigate('Trips', { page: 'Explore' })}
                   style={styles.btn}
                 >
                   <Text style={styles.text}>Explore trips</Text>

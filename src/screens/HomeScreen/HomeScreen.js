@@ -5,7 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image
+  Image,
 } from 'react-native';
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';

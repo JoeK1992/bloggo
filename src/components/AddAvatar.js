@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { View, Text, TouchableOpacity, Platform } from 'react-native';
+import {
+  View, Text, TouchableOpacity, Platform,
+} from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import s from '../styles/styles';
 import firebase from '../firebase/config';
@@ -12,7 +14,7 @@ export default function AddAvatar() {
     (async () => {
       if (Platform.OS !== 'web') {
         const {
-          status
+          status,
         } = await ImagePicker.requestMediaLibraryPermissionsAsync();
         if (status !== 'granted') {
           alert('Sorry, we need camera roll permissions to make this work!');
@@ -25,27 +27,26 @@ export default function AddAvatar() {
     const result = await ImagePicker.launchImageLibraryAsync({
       allowsEditing: true,
       aspect: [4, 3],
-      base64: true
+      base64: true,
     });
 
     if (!result.cancelled) {
-      const base64Img =
-        Platform.OS === 'web'
-          ? result.uri
-          : `data:image/jpg;base64,${result.base64}`;
+      const base64Img = Platform.OS === 'web'
+        ? result.uri
+        : `data:image/jpg;base64,${result.base64}`;
 
       const apiUrl = 'https://api.cloudinary.com/v1_1/ddxr0zldw/image/upload';
 
       const data = {
         file: base64Img,
-        upload_preset: 'eqvu0yhl'
+        upload_preset: 'eqvu0yhl',
       };
       fetch(apiUrl, {
         body: JSON.stringify(data),
         headers: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
         },
-        method: 'POST'
+        method: 'POST',
       })
         .then(async (r) => {
           const data = await r.json();
