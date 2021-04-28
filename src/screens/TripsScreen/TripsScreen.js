@@ -107,7 +107,7 @@ class TripsScreen extends Component {
       <View style={styles.item}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Single Trip', { tripUid, trips });
+            navigation.navigate('Single Trip', { tripUid });
           }}
         >
           <Text style={styles.title}>{title}</Text>

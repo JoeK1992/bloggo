@@ -112,6 +112,12 @@ export default function SingleDestinationScreen(props) {
       'Are you sure you want to delete your destination post?',
       [
         {
+          text: 'Cancel',
+          onPress: () => {
+            'cancel';
+          }
+        },
+        {
           text: 'Confirm',
           onPress: () => {
             const db = firebase.firestore();
@@ -126,12 +132,6 @@ export default function SingleDestinationScreen(props) {
                 destinations: filteredDestinations
               });
             });
-          }
-        },
-        {
-          text: 'Cancel',
-          onPress: () => {
-            'cancel';
           }
         }
       ],

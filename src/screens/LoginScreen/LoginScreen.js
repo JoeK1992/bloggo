@@ -77,7 +77,8 @@ export default function LoginScreen({ navigation }) {
               style={styles.footerLink}
             >
               {' '}
-              Sign up{' '}
+              Sign up
+              {' '}
             </Text>
           </Text>
         </View>

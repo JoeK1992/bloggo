@@ -57,16 +57,16 @@ class SingleTripScreen extends Component {
   }
 
   deleteTrip = () => {
-    const { route } = this.props;
-    const { trips, tripUid } = route.params;
-
-    const filteredTrips = trips.filter((trip) => {
-      return trip.id !== tripUid;
-    });
     Alert.alert(
       'Delete',
       'Are you sure you want to delete your trip?',
       [
+        {
+          text: 'Cancel',
+          onPress: () => {
+            'cancel';
+          }
+        },
         {
           text: 'Confirm',
           onPress: () => {
@@ -76,14 +76,8 @@ class SingleTripScreen extends Component {
             const db = firebase.firestore();
             const tripRef = db.collection('trips').doc(tripUid);
             tripRef.delete().then(() => {
-              navigation.navigate('Trips', { trips: filteredTrips });
+              navigation.navigate('Trips', { page: 'My Trips' });
             });
-          }
-        },
-        {
-          text: 'Cancel',
-          onPress: () => {
-            'cancel';
           }
         }
       ],
@@ -93,7 +87,7 @@ class SingleTripScreen extends Component {
 
   render() {
     const { navigation, route } = this.props;
-    const { tripUid, trips } = route.params;
+    const { tripUid } = route.params;
     const { trip, currentUserUID, loading } = this.state;
     let { destinations } = this.state;
     if (route.params.destinations) {
@@ -169,8 +163,7 @@ class SingleTripScreen extends Component {
                         style={s.button}
                         onPress={() => {
                           navigation.navigate('Add Destination', {
-                            tripUid,
-                            trips
+                            tripUid
                           });
                         }}
                       >
