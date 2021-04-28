@@ -115,7 +115,7 @@ class ColouredMap extends Component {
               return (
                 <Polygon
                   coordinates={polygon}
-                  fillColor="rgba(255, 0, 0, 0.1)"
+                  fillColor="rgba(255, 0, 0, 0.5)"
                   strokeColor="rgba(46, 49, 49, 0.05)"
                   key={index}
                 />

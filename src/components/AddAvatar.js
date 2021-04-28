@@ -66,7 +66,7 @@ export default function AddAvatar() {
   return (
     <View>
       <TouchableOpacity style={s.button} onPress={chooseImage}>
-        <Text style={s.buttonText}>Pick your Profile Image</Text>
+        <Text style={s.buttonText}>Change Profile Image</Text>
       </TouchableOpacity>
       {/* {profileImage && editable && (
         <Text>

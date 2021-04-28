@@ -96,33 +96,31 @@ class UserScreen extends Component {
                   return {
                     countries: [...currState.countries, ...countries],
                     continents: [...currState.continents, ...continents],
-                    flags: [...currState.flags, ...flags],
-                    loading: false
+                    flags: [...currState.flags, ...flags]
                   };
                 });
               }
             });
           });
         }
+      })
+      .then(() => {
+        this.setState({ loading: false });
       });
   }
 
   render() {
     const { route, navigation } = this.props;
     const { trips, continents, countries, flags, loading } = this.state;
+    const { page } = route.params;
 
     let currentUserUID;
-    let page;
-    let usersOwnProfile;
 
-    if (route.params) {
-      usersOwnProfile = true;
+    if (route.params.page) {
+      currentUserUID = firebase.auth().currentUser.uid;
+    } else {
       const { userUid } = route.params;
       currentUserUID = userUid;
-    } else {
-      usersOwnProfile = false;
-      currentUserUID = firebase.auth().currentUser.uid;
-      page = 'My Profile';
     }
 
     const globePercentage = Math.round((countries.length / 195) * 100);
@@ -143,20 +141,32 @@ class UserScreen extends Component {
         ) : (
           <ScrollView>
             <ProfileHeader userUID={currentUserUID} />
-            {/* <View style={styles.mapContainer} /> */}
-            {usersOwnProfile && <AddAvatar />}
+            {page === 'My Profile' && <AddAvatar />}
 
             <View style={styles.mapDisplay}>
               <ColouredMap countries={countries} />
             </View>
 
-            {page === 'My Profile' && (
+            {page === 'My Profile' ? (
               <View style={styles.btnContainer}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Trips', { page: '' })}
+                  onPress={() =>
+                    navigation.navigate('Trips', { page: 'My Trips' })
+                  }
                   style={styles.btn}
                 >
                   <Text style={styles.text}>My Trips</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.btnContainer}>
+                <TouchableOpacity
+                  onPress={() =>
+                    navigation.navigate('Trips', { page: 'Explore' })
+                  }
+                  style={styles.btn}
+                >
+                  <Text style={styles.text}>Explore trips</Text>
                 </TouchableOpacity>
               </View>
             )}
