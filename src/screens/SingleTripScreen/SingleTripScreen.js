@@ -14,6 +14,7 @@ import { TouchableOpacity } from 'react-native-gesture-handler';
 import NavBar from '../../components/NavBar';
 import firebase from '../../firebase/config';
 import s from '../../styles/styles';
+import ProfileHeader from '../../components/ProfileHeader';
 
 import MapViewer from '../../components/MapViewer';
 
@@ -132,13 +133,16 @@ class SingleTripScreen extends Component {
         </ImageBackground>
       </View>
     );
-
     return (
       <FlatList
         style={styles.page}
         ListHeaderComponent={(
           <>
             <View>
+              {trip.user && trip.user !== currentUserUID && (
+                <ProfileHeader userUID={trip.user} />
+              )}
+
               {destinations
                 && destinations[0]
                 && destinations[0].destination && (

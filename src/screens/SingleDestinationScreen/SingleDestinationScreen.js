@@ -33,6 +33,7 @@ export default class SingleDestinationScreen extends Component {
       blogPost: '',
       openedMenu: false,
       places: null,
+      currentUserUID: firebase.auth().currentUser.uid,
     };
   }
 
@@ -144,7 +145,12 @@ export default class SingleDestinationScreen extends Component {
   render() {
     const { navigation, route } = this.props;
     const {
-      destination, blogPost, editable, openedMenu, places,
+      destination,
+      blogPost,
+      editable,
+      openedMenu,
+      places,
+      currentUserUID,
     } = this.state;
     const {
       destinations, tripUid, destinationUid, tripName,
@@ -194,15 +200,18 @@ export default class SingleDestinationScreen extends Component {
           onChangeText={(blogPost) => this.setState({ blogPost })}
           editable={editable}
         />
-
-        {editable ? (
-          <TouchableOpacity onPress={this.editBlogPost} style={s.button}>
-            <Text style={s.buttonText}>Submit!</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={this.toggleEditable} style={s.button}>
-            <Text style={s.buttonText}>Edit Blog</Text>
-          </TouchableOpacity>
+        {destination && destination.user === currentUserUID && (
+          <>
+            {editable ? (
+              <TouchableOpacity onPress={this.editBlogPost} style={s.button}>
+                <Text style={s.buttonText}>Submit!</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={this.toggleEditable} style={s.button}>
+                <Text style={s.buttonText}>Edit Blog</Text>
+              </TouchableOpacity>
+            )}
+          </>
         )}
         <Places
           places={places}
@@ -213,12 +222,14 @@ export default class SingleDestinationScreen extends Component {
           <Comments destinationUid={destination.id} tripUid={tripUid} />
         )}
 
-        <TouchableOpacity
-          onPress={this.deleteDestination}
-          style={s.deleteButton}
-        >
-          <Text style={s.buttonText}>Delete Destination</Text>
-        </TouchableOpacity>
+        {destination && destination.user === currentUserUID && (
+          <TouchableOpacity
+            onPress={this.deleteDestination}
+            style={s.deleteButton}
+          >
+            <Text style={s.buttonText}>Delete Destination</Text>
+          </TouchableOpacity>
+        )}
         <NavBar />
       </View>
     );

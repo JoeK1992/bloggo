@@ -1,17 +1,15 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { Component } from 'react';
-
 import {
   ScrollView,
   Text,
   TouchableOpacity,
   View,
-  ImageBackground,
+  ImageBackground
 } from 'react-native';
 import ColouredMap from '../../components/ColouredMap';
 // ActivityIndicator,
-
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
@@ -25,7 +23,7 @@ import first from '../../images/1.jpeg';
 import second from '../../images/2.jpg';
 import third from '../../images/3.jpg';
 import fourth from '../../images/4.jpg';
-import flagBackground from '../../images/flag.jpg';
+// import flagBackground from '../../images/flag.jpg';
 import styles from './styles';
 
 // const { height, width } = Dimensions.get('window');
@@ -36,8 +34,8 @@ class UserScreen extends Component {
       trips: 0,
       tripUids: [],
       continents: [],
-      countries: [],
-      flags: [],
+      countries: []
+      // flags: [],
       // loading: true
       // user: null,
       // userUID: '',
@@ -96,8 +94,8 @@ class UserScreen extends Component {
                 });
                 this.setState({
                   countries,
-                  flags,
-                  continents,
+                  // flags,
+                  continents
                   // loading: false
                 });
               }
@@ -119,50 +117,86 @@ class UserScreen extends Component {
       currentUserUID = firebase.auth().currentUser.uid;
       page = 'My Profile';
     }
-    const {
-      trips, continents, countries, flags,
-    } = this.state;
+    const { trips, continents, countries } = this.state;
 
     const globePercentage = Math.round((countries.length / 195) * 100);
 
     const { navigation } = this.props;
 
     return (
-    // <View>
+      // <View>
 
       /* {loading ?  <ActivityIndicator /> :  */
-      <ScrollView style={styles.userScreen}>
-        <ProfileHeader userUID={currentUserUID} />
-        <View style={styles.mapContainer}>
+
+      <View style={{ flex: 1, backgroundColor: '#1E6091' }}>
+        <ScrollView style={styles.userScreen}>
+          <ProfileHeader userUID={currentUserUID} />
+          {/* <View style={styles.mapContainer} /> */}
+
           <View style={styles.mapDisplay}>
             <ColouredMap countries={countries} />
           </View>
-        </View>
-        {page === 'My Profile' && (
-          <View style={styles.btnContainer}>
-            <TouchableOpacity
-              onPress={() => navigation.navigate('Trips', { page: '' })}
-              style={styles.btn}
-            >
-              <Text style={styles.text}>My Trips</Text>
-            </TouchableOpacity>
-          </View>
-        )}
-        <View style={styles.gamificationContainer}>
-          <Text style={styles.gamificationTitle}>My World</Text>
 
-          <View style={styles.statsCardContainer}>
-            <ImageBackground
-              imageStyle={{ borderRadius: 20, opacity: 0.8 }}
-              source={third}
-              style={styles.statsCard}
-            >
-              <Text style={styles.statsCardText}>
-                {continents.length === 1
-                  ? '1 Continent'
-                  : `${continents.length} Continents`}
-              </Text>
-            </ImageBackground>
+          {page === 'My Profile' && (
+            <View style={styles.btnContainer}>
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Trips', { page: '' })}
+                style={styles.btn}
+              >
+                <Text style={styles.text}>My Trips</Text>
+              </TouchableOpacity>
+            </View>
+          )}
+
+          <View style={styles.gamificationContainer}>
+            <Text style={styles.gamificationTitle}>My World</Text>
+
+            <View style={styles.statsCardContainer}>
+              <ImageBackground
+                imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                source={third}
+                style={styles.statsCard}
+              >
+                <Text style={styles.statsCardText}>
+                  {continents.length === 1
+                    ? '1 Continent'
+                    : `${continents.length} Continents`}
+                </Text>
+              </ImageBackground>
+
+              <ImageBackground
+                imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                source={fourth}
+                style={styles.statsCard}
+              >
+                <Text style={styles.statsCardText}>
+                  {countries.length === 1
+                    ? '1 Country'
+                    : `${countries.length} Countries`}
+                </Text>
+              </ImageBackground>
+
+              <ImageBackground
+                imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                source={first}
+                style={styles.statsCard}
+              >
+                <Text style={styles.statsCardText}>
+                  {trips === 1 ? '1 Trip' : `${trips} Trips`}
+                </Text>
+              </ImageBackground>
+
+              <ImageBackground
+                imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                source={second}
+                style={styles.statsCard}
+              >
+                <Text style={styles.statsCardText}>
+                  {`${globePercentage}% of the world`}
+                </Text>
+              </ImageBackground>
+            </View>
+
             <ImageBackground
               imageStyle={{ borderRadius: 20, opacity: 0.8 }}
               source={fourth}
@@ -193,19 +227,12 @@ class UserScreen extends Component {
               </Text>
             </ImageBackground>
           </View>
-          <ImageBackground
-            imageStyle={{ borderRadius: 20, opacity: 0.3 }}
-            source={flagBackground}
-            style={styles.flagBackground}
-          >
-            <Text style={styles.flagText}>{flags}</Text>
-          </ImageBackground>
-        </View>
+        </ScrollView>
 
-        <NavBar style={styles.navBar} />
-      </ScrollView>
-      //  }
-      // <View/>
+        <View>
+          <NavBar />
+        </View>
+      </View>
     );
   }
 }
