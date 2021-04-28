@@ -1,24 +1,23 @@
-import React, { useState } from 'react';
-import {
-  Text, TextInput, TouchableOpacity, View,
-} from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
-import styles from './styles';
-import firebase from '../../firebase/config';
+import React, { useState } from "react";
+import { Text, TextInput, TouchableOpacity, View, Image } from "react-native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import styles from "./styles";
+import firebase from "../../firebase/config";
+import logo from "../../images/bloggoLogo.png";
 
 export default function RegistrationScreen({ navigation }) {
-  const [fullName, setFullName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
+  const [fullName, setFullName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
 
   const onFooterLinkPress = () => {
-    navigation.navigate('Login');
+    navigation.navigate("Login");
   };
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
-      alert('Passwords don\'t match.');
+      alert("Passwords don't match.");
       return;
     }
     firebase
@@ -31,12 +30,12 @@ export default function RegistrationScreen({ navigation }) {
           email,
           fullName,
         };
-        const usersRef = firebase.firestore().collection('users');
+        const usersRef = firebase.firestore().collection("users");
         usersRef
           .doc(uid)
           .set(data)
           .then(() => {
-            navigation.navigate('Home', { user: data });
+            navigation.navigate("Home", { user: data });
           })
           .catch((error) => {
             alert(error);
@@ -49,8 +48,11 @@ export default function RegistrationScreen({ navigation }) {
 
   return (
     <View style={styles.container}>
+      <View style={styles.logoContainer}>
+        <Image source={logo} style={styles.logoImage} />
+      </View>
       <KeyboardAwareScrollView
-        style={{ flex: 1, width: '100%' }}
+        style={{ flex: 1, width: "100%" }}
         keyboardShouldPersistTaps="always"
       >
         {/* <Image
@@ -103,8 +105,7 @@ export default function RegistrationScreen({ navigation }) {
         </TouchableOpacity>
         <View style={styles.footerView}>
           <Text style={styles.footerText}>
-            Already got an account?
-            {' '}
+            Already got an account?{" "}
             <Text onPress={onFooterLinkPress} style={styles.footerLink}>
               Log in
             </Text>
