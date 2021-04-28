@@ -1,11 +1,16 @@
 import React from 'react';
 
-import { View, Text, TouchableOpacity, FlatList, Linking } from 'react-native';
+import {
+  View, Text, TouchableOpacity, FlatList, Linking,
+} from 'react-native';
 import styles from './styles';
+
 export default function Places(props) {
   const { places } = props;
 
-  const Item = ({ title, url, type, post }) => (
+  const Item = ({
+    title, url, type, post,
+  }) => (
     <View style={styles.item}>
       <Text style={styles.title}>{type}</Text>
       <Text style={styles.postTitle}>{title}</Text>
