@@ -36,7 +36,7 @@ export default function PickImage(props) {
         : `data:image/jpg;base64,${result.base64}`;
 
       const apiUrl = 'https://api.cloudinary.com/v1_1/ddxr0zldw/image/upload';
-
+      console.log('in here');
       const data = {
         file: base64Img,
         upload_preset: 'eqvu0yhl',
@@ -51,6 +51,7 @@ export default function PickImage(props) {
         .then(async (r) => {
           const data = await r.json();
           props.setUploadedUrl(data.secure_url);
+          console.log(data.secure_url);
           return data.secure_url;
         })
         .catch((err) => console.log(err));

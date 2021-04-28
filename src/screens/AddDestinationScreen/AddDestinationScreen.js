@@ -30,7 +30,8 @@ export default function AddDestinationScreen(props) {
   const startDate = selectedStartDate ? selectedStartDate.toString() : '';
   const endDate = selectedEndDate ? selectedEndDate.toString() : '';
   const currentUserUID = firebase.auth().currentUser.uid;
-
+  const { route, navigation } = props;
+  const { tripUid, trips } = route.params;
   const fetchResults = (textInput) => {
     if (textInput.length > 1) {
       const search = textInput.split(' ').join('+');
@@ -50,8 +51,6 @@ export default function AddDestinationScreen(props) {
   };
 
   const handlePress = () => {
-    const { route } = props;
-    const { tripUid } = route.params;
     if (!destination) {
       Alert.alert('Destination field is required.');
     } else if (!startDate) {
@@ -83,7 +82,7 @@ export default function AddDestinationScreen(props) {
   };
 
   return (
-    <View style={(styles.container, { flex: 1, backgroundColor: '#1E6091' })}>
+    <View style={styles.container}>
       <ScrollView keyboardShouldPersistTaps="handled">
         <DestinationDropDown
           results={results}
@@ -116,6 +115,13 @@ export default function AddDestinationScreen(props) {
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
         <Text style={styles.successMessage}>{successMessage}</Text>
+        <TouchableOpacity
+          onPress={() => {
+            navigation.navigate('Single Trip', { tripUid, trips });
+          }}
+        >
+          <Text>Go Back to Trip</Text>
+        </TouchableOpacity>
         <NavBar />
       </ScrollView>
     </View>

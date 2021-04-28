@@ -15,7 +15,7 @@ import AppLoading from 'expo-app-loading';
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { ActivityIndicator } from 'react-native';
+import { ActivityIndicator, View } from 'react-native';
 import 'react-native-gesture-handler';
 import firebase from './src/firebase/config';
 import {
@@ -72,7 +72,18 @@ export default function App() {
     });
   }, []);
   if (loading) {
-    return <ActivityIndicator />;
+    return (
+      <View
+        style={{
+          flex: 1,
+          alignItems: 'center',
+          justifyContent: 'center',
+          zIndex: 20,
+        }}
+      >
+        <ActivityIndicator size="large" color="#52b69a" />
+      </View>
+    );
   }
   if (!fontsLoaded) {
     return <AppLoading />;

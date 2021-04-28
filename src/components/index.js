@@ -1,5 +1,5 @@
 export { default as AddAvatar } from './AddAvatar';
-export { default as AddPlace } from './AddPlace';
+export { default as AddPlace } from './Places/AddPlace';
 export { default as Calendar } from './Calendar';
 export { default as ColouredMap } from './ColouredMap';
 export { default as Comments } from './Comments';
@@ -11,5 +11,5 @@ export { default as MapViewer } from './MapViewer';
 export { default as Navbar } from './NavBar';
 export { default as PickImage } from './PickImage';
 export { default as PickImages } from './PickImages';
-export { default as Places } from './Places';
+export { default as Places } from './Places/Places';
 export { default as ProfileHeader } from './ProfileHeader';

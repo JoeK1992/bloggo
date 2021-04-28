@@ -55,6 +55,7 @@ export default function PickImages(props) {
           const data = await r.json();
           const newImage = { name: `Image ${counter}`, url: data.secure_url };
           const newArray = [...props.uploadedUrls, newImage];
+          console.log(newArray);
           props.setUploadedUrls(newArray);
           return data.secure_url;
         })
