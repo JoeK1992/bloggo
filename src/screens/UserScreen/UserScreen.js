@@ -2,14 +2,13 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import React, { Component } from 'react';
 import {
-  ImageBackground,
   ScrollView,
   Text,
   TouchableOpacity,
-  View
+  View,
+  ImageBackground,
 } from 'react-native';
 import ColouredMap from '../../components/ColouredMap';
-
 // ActivityIndicator,
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
@@ -20,12 +19,11 @@ import firebase from '../../firebase/config';
 // import trip from '../../images/trip.png';
 // import country from '../../images/country.jpeg';
 // import continent from '../../images/continents.jpg';
-
 import first from '../../images/1.jpeg';
 import second from '../../images/2.jpg';
 import third from '../../images/3.jpg';
 import fourth from '../../images/4.jpg';
-import flagBackground from '../../images/flag.jpg';
+// import flagBackground from '../../images/flag.jpg';
 import styles from './styles';
 
 // const { height, width } = Dimensions.get('window');
@@ -37,7 +35,7 @@ class UserScreen extends Component {
       tripUids: [],
       continents: [],
       countries: [],
-      flags: []
+      // flags: [],
       // loading: true
       // user: null,
       // userUID: '',
@@ -96,8 +94,8 @@ class UserScreen extends Component {
                 });
                 this.setState({
                   countries,
-                  flags,
-                  continents
+                  // flags,
+                  continents,
                   // loading: false
                 });
               }
@@ -119,16 +117,16 @@ class UserScreen extends Component {
       currentUserUID = firebase.auth().currentUser.uid;
       page = 'My Profile';
     }
-    const { trips, continents, countries, flags } = this.state;
+    const { trips, continents, countries } = this.state;
 
     const globePercentage = Math.round((countries.length / 195) * 100);
 
     const { navigation } = this.props;
 
     return (
-      // <View>
+    // <View>
 
-      /* {loading ?  <ActivityIndicator /> :  */
+    /* {loading ?  <ActivityIndicator /> :  */
 
       <View style={{ flex: 1, backgroundColor: '#1E6091' }}>
         <ScrollView style={styles.userScreen}>
@@ -200,11 +198,33 @@ class UserScreen extends Component {
             </View>
 
             <ImageBackground
-              imageStyle={{ borderRadius: 20, opacity: 0.3 }}
-              source={flagBackground}
-              style={styles.flagBackground}
+              imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+              source={fourth}
+              style={styles.statsCard}
             >
-              <Text style={styles.flagText}>{flags}</Text>
+              <Text style={styles.statsCardText}>
+                {countries.length === 1
+                  ? '1 Country'
+                  : `${countries.length} Countries`}
+              </Text>
+            </ImageBackground>
+            <ImageBackground
+              imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+              source={first}
+              style={styles.statsCard}
+            >
+              <Text style={styles.statsCardText}>
+                {trips === 1 ? '1 Trip' : `${trips} Trips`}
+              </Text>
+            </ImageBackground>
+            <ImageBackground
+              imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+              source={second}
+              style={styles.statsCard}
+            >
+              <Text style={styles.statsCardText}>
+                {`${globePercentage}% of the world`}
+              </Text>
             </ImageBackground>
           </View>
         </ScrollView>

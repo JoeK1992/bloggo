@@ -8,7 +8,7 @@ import {
   TextInput,
   View,
   ScrollView,
-  LogBox,
+  LogBox
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
@@ -21,7 +21,7 @@ import AddPlace from '../../components/AddPlace';
 import Places from '../../components/Places';
 
 LogBox.ignoreLogs([
-  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
 ]);
 
 export default class SingleDestinationScreen extends Component {
@@ -32,7 +32,8 @@ export default class SingleDestinationScreen extends Component {
       editable: false,
       blogPost: '',
       openedMenu: false,
-      places: null,
+      currentUserUID: firebase.auth().currentUser.uid,
+      places: []
     };
   }
 
@@ -40,7 +41,27 @@ export default class SingleDestinationScreen extends Component {
     const db = firebase.firestore();
     const _this = this;
     const { tripUid, destinationUid } = _this.props.route.params;
+    const placesRef = db
+      .collection('trips')
+      .doc(tripUid)
+      .collection('destinations')
+      .doc(destinationUid)
+      .collection('places');
 
+    placesRef.get().then((snapshot) => {
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+      } else {
+        const newPlaces = [];
+        snapshot.forEach((doc) => {
+          const place = doc.data();
+          console.log(place);
+          place.id = doc.id;
+          newPlaces.push(place);
+        });
+        this.setState({ places: newPlaces });
+      }
+    });
     const destinationRef = db
       .collection('trips')
       .doc(tripUid)
@@ -53,26 +74,6 @@ export default class SingleDestinationScreen extends Component {
         const destination = doc.data();
         destination.id = doc.id;
         this.setState({ destination, blogPost: destination.blogPost });
-      }
-    });
-
-    const placesRef = db
-      .collection('trips')
-      .doc(tripUid)
-      .collection('destinations')
-      .doc(destinationUid)
-      .collection('places');
-    placesRef.get().then((snapshot) => {
-      if (snapshot.empty) {
-        console.log('No matching documents.');
-      } else {
-        const newPlaces = [];
-        snapshot.forEach((doc) => {
-          const place = doc.data();
-          place.id = doc.id;
-          newPlaces.push(place);
-        });
-        this.setState({ places: newPlaces });
       }
     });
   }
@@ -125,30 +126,33 @@ export default class SingleDestinationScreen extends Component {
             destinationRef.delete().then(() => {
               navigation.replace('Single Trip', {
                 tripUid,
-                destinations: filteredDestinations,
+                destinations: filteredDestinations
               });
             });
-          },
+          }
         },
         {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          },
-        },
+          }
+        }
       ],
-      { cancelable: true },
+      { cancelable: true }
     );
   };
 
   render() {
     const { navigation, route } = this.props;
     const {
-      destination, blogPost, editable, openedMenu, places,
+      destination,
+      blogPost,
+      editable,
+      openedMenu,
+      places,
+      currentUserUID
     } = this.state;
-    const {
-      destinations, tripUid, destinationUid, tripName,
-    } = route.params;
+    const { destinations, tripUid, destinationUid, tripName } = route.params;
     const filteredDestinations = destinations.filter((destination) => {
       return destination.id !== destinationUid;
     });
@@ -166,7 +170,7 @@ export default class SingleDestinationScreen extends Component {
               destinationUid: item.id,
               tripUid,
               destinations,
-              tripName,
+              tripName
             });
           }}
         >
@@ -185,7 +189,9 @@ export default class SingleDestinationScreen extends Component {
 
     const Footer = () => (
       <View style={styles.container}>
-        <AddPlace tripUid={tripUid} destinationUid={destinationUid} />
+        {destination && destination.user === currentUserUID && (
+          <AddPlace tripUid={tripUid} destinationUid={destinationUid} />
+        )}
 
         <TextInput
           value={blogPost}
@@ -194,28 +200,36 @@ export default class SingleDestinationScreen extends Component {
           onChangeText={(blogPost) => this.setState({ blogPost })}
           editable={editable}
         />
-
-        {editable ? (
-          <TouchableOpacity onPress={this.editBlogPost} style={s.button}>
-            <Text style={s.buttonText}>Submit!</Text>
-          </TouchableOpacity>
-        ) : (
-          <TouchableOpacity onPress={this.toggleEditable} style={s.button}>
-            <Text style={s.buttonText}>Edit Blog</Text>
-          </TouchableOpacity>
+        {destination && destination.user === currentUserUID && (
+          <>
+            {editable ? (
+              <TouchableOpacity onPress={this.editBlogPost} style={s.button}>
+                <Text style={s.buttonText}>Submit!</Text>
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity onPress={this.toggleEditable} style={s.button}>
+                <Text style={s.buttonText}>Edit Blog</Text>
+              </TouchableOpacity>
+            )}
+          </>
         )}
-        <Places places={places} />
+        <Places
+          places={places}
+          tripUid={tripUid}
+          destinationUid={destinationUid}
+        />
         {destination && (
           <Comments destinationUid={destination.id} tripUid={tripUid} />
         )}
 
-        <TouchableOpacity
-          onPress={this.deleteDestination}
-          style={s.deleteButton}
-        >
-          <Text style={s.buttonText}>Delete Destination</Text>
-        </TouchableOpacity>
-        <NavBar />
+        {destination && destination.user === currentUserUID && (
+          <TouchableOpacity
+            onPress={this.deleteDestination}
+            style={s.deleteButton}
+          >
+            <Text style={s.buttonText}>Delete Destination</Text>
+          </TouchableOpacity>
+        )}
       </View>
     );
 
@@ -246,11 +260,7 @@ export default class SingleDestinationScreen extends Component {
                   style={styles.button}
                 >
                   <Text style={styles.buttonText}>
-                    Back to
-                    {' '}
-                    {tripName}
-                    {' '}
-                    trip!
+                    Back to {tripName} trip!
                   </Text>
                 </TouchableOpacity>
               </>
@@ -273,6 +283,10 @@ export default class SingleDestinationScreen extends Component {
             ListFooterComponent={<Footer />}
           />
         )}
+
+        <View>
+          <NavBar />
+        </View>
       </View>
     );
   }

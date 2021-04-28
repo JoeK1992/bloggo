@@ -52,7 +52,7 @@ export default StyleSheet.create({
   },
 
   input: {
-    paddingLeft: 16,
+    padding: 16,
     color: '#1e6091',
     flex: 1,
     borderRadius: 5,

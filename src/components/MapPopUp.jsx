@@ -73,6 +73,7 @@ const MapPopUp = ({ closeModal, modalDestination }) => {
   return (
     <Modal
       animationType="slide"
+      useNativeDriver="true"
       transparent={true}
       onRequestClose={() => closeModal()}
     >
