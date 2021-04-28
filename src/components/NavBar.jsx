@@ -9,7 +9,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-native-fontawesome";
 import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import {
-  Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -43,6 +42,7 @@ const NavBar = () => {
         onPress={() =>
           navigation.replace("Profile Page", {
             userUid: firebase.auth().currentUser.uid,
+            page: 'My Profile'
           })
         }
       >

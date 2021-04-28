@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import AddAvatar from '../../components/AddAvatar';
 import ColouredMap from '../../components/ColouredMap';
@@ -38,7 +38,7 @@ class UserScreen extends Component {
       continents: [],
       countries: [],
       flags: [],
-      loading: true
+      loading: true,
       // user: null,
       // userUID: '',
     };
@@ -104,52 +104,38 @@ class UserScreen extends Component {
                     countries: [...currState.countries, ...countries],
                     continents: [...currState.continents, ...continents],
                     flags: [...currState.flags, ...flags],
-                    loading: false
                   };
                 });
               }
             });
           });
         }
+      })
+      .then(() => {
+        this.setState({ loading: false });
       });
   }
 
   render() {
     let currentUserUID;
-    let page;
-    let usersOwnProfile;
     const { route } = this.props;
-    if (route.params) {
-      usersOwnProfile = true;
+    const { page } = route.params;
+    console.log(page, 'page');
+    if (route.params.page) {
+      currentUserUID = firebase.auth().currentUser.uid;
+    } else {
       const { userUid } = route.params;
       currentUserUID = userUid;
-    } else {
-      usersOwnProfile = false;
-      currentUserUID = firebase.auth().currentUser.uid;
-      page = 'My Profile';
     }
-    const { trips, continents, countries, flags, loading } = this.state;
+    const {
+      trips, continents, countries, flags, loading,
+    } = this.state;
 
     const globePercentage = Math.round((countries.length / 195) * 100);
 
     const { navigation } = this.props;
-
+    console.log(page);
     return (
-      // <View>
-
-      /* {loading ?  <ActivityIndicator /> :  */
-
-      //  <View
-      //         style={{
-      //           flex: 1,
-      //           alignItems: 'center',
-      //           justifyContent: 'center',
-      //           zIndex: 20,
-      //         }}
-      //       >
-      //         <ActivityIndicator size="large" color="#52b69a" />
-      //       </View>
-
       <View style={styles.userScreen}>
         {loading ? (
           <View
@@ -157,7 +143,7 @@ class UserScreen extends Component {
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-              zIndex: 20
+              zIndex: 20,
             }}
           >
             <ActivityIndicator size="large" color="#52b69a" />
@@ -165,20 +151,28 @@ class UserScreen extends Component {
         ) : (
           <ScrollView>
             <ProfileHeader userUID={currentUserUID} />
-            {/* <View style={styles.mapContainer} /> */}
-            {usersOwnProfile && <AddAvatar />}
+            {page === 'My Profile' && <AddAvatar />}
 
             <View style={styles.mapDisplay}>
               <ColouredMap countries={countries} />
             </View>
 
-            {page === 'My Profile' && (
+            {page === 'My Profile' ? (
               <View style={styles.btnContainer}>
                 <TouchableOpacity
-                  onPress={() => navigation.navigate('Trips', { page: '' })}
+                  onPress={() => navigation.navigate('Trips', { page: 'My Trips' })}
                   style={styles.btn}
                 >
                   <Text style={styles.text}>My Trips</Text>
+                </TouchableOpacity>
+              </View>
+            ) : (
+              <View style={styles.btnContainer}>
+                <TouchableOpacity
+                  onPress={() => navigation.navigate('Trips', { page: 'Explore' })}
+                  style={styles.btn}
+                >
+                  <Text style={styles.text}>Explore trips</Text>
                 </TouchableOpacity>
               </View>
             )}
