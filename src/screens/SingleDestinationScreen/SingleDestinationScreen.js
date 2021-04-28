@@ -1,6 +1,6 @@
 import 'firebase/auth';
 import 'firebase/firestore';
-import React, { setState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
   Alert,
   FlatList,
@@ -8,7 +8,7 @@ import {
   TextInput,
   View,
   ScrollView,
-  LogBox,
+  LogBox
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
@@ -23,15 +23,15 @@ import s from '../../styles/styles';
 import styles from './styles';
 
 LogBox.ignoreLogs([
-  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
 ]);
 
 export default function SingleDestinationScreen(props) {
-  const [destination, setDestination] = setState(null);
-  const [editable, setEditable] = setState(false);
-  const [blogPost, setBlogPost] = setState('');
-  const [openedMenu, setOpenedMenu] = setState(false);
-  const [places, setPlaces] = setState([]);
+  const [destination, setDestination] = useState(null);
+  const [editable, setEditable] = useState(false);
+  const [blogPost, setBlogPost] = useState('');
+  const [openedMenu, setOpenedMenu] = useState(false);
+  const [places, setPlaces] = useState([]);
   // const [loading, setLoading] = setState(false);
   const currentUserUID = firebase.auth().currentUser.uid;
 
@@ -123,27 +123,25 @@ export default function SingleDestinationScreen(props) {
             destinationRef.delete().then(() => {
               navigation.replace('Single Trip', {
                 tripUid,
-                destinations: filteredDestinations,
+                destinations: filteredDestinations
               });
             });
-          },
+          }
         },
         {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          },
-        },
+          }
+        }
       ],
-      { cancelable: true },
+      { cancelable: true }
     );
   };
 
   const { navigation, route } = props;
 
-  const {
-    destinations, tripUid, destinationUid, tripName,
-  } = route.params;
+  const { destinations, tripUid, destinationUid, tripName } = route.params;
   const filteredDestinations = destinations.filter((destination) => {
     return destination.id !== destinationUid;
   });
@@ -161,7 +159,7 @@ export default function SingleDestinationScreen(props) {
             destinationUid: item.id,
             tripUid,
             destinations,
-            tripName,
+            tripName
           });
         }}
       >
@@ -250,9 +248,7 @@ export default function SingleDestinationScreen(props) {
               >
                 <Text style={styles.buttonText}>
                   Back to
-                  {tripName}
-                  {' '}
-                  trip!
+                  {tripName} trip!
                 </Text>
               </TouchableOpacity>
             </>
