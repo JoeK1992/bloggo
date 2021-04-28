@@ -5,9 +5,7 @@ import { faBold, faGlobeAmericas } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import 'firebase/firestore';
 import React from 'react';
-import {
-  ImageBackground, Text, TouchableOpacity, View,
-} from 'react-native';
+import { ImageBackground, Text, TouchableOpacity, View } from 'react-native';
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
@@ -16,12 +14,6 @@ import styles from './styles';
 
 export default function HomeScreen({ navigation }) {
   const userUID = firebase.auth().currentUser.uid;
-
-  const onLinkPress = () => {
-    navigation.navigate('Add Trip');
-  };
-
-  // const Stack = createStackNavigator();
 
   return (
     <View style={styles.container}>
@@ -43,20 +35,19 @@ export default function HomeScreen({ navigation }) {
         </View>
         <ProfileHeader userUID={userUID} />
 
-        <TouchableOpacity style={styles.button}>
-          <Text style={styles.buttonText} onPress={onLinkPress}>
-            Add Trip
-          </Text>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('Add Trip')}
+        >
+          <Text style={styles.buttonText}>Add Trip</Text>
         </TouchableOpacity>
 
         <View style={styles.header}>
-          <TouchableOpacity style={styles.button}>
-            <Text
-              style={styles.buttonText}
-              onPress={() => navigation.replace('Trips', { page: 'My Trips' })}
-            >
-              My Trips
-            </Text>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => navigation.replace('Trips', { page: 'My Trips' })}
+          >
+            <Text style={styles.buttonText}>My Trips</Text>
           </TouchableOpacity>
           {/* <AddAvatar /> */}
         </View>
