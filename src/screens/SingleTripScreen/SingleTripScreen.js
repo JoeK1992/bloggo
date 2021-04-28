@@ -1,21 +1,21 @@
-import 'firebase/auth';
-import 'firebase/firestore';
-import React, { Component } from 'react';
+import "firebase/auth";
+import "firebase/firestore";
+import React, { Component } from "react";
 import {
   Alert,
   FlatList,
   ImageBackground,
+  ScrollView,
   StatusBar,
   StyleSheet,
   Text,
   View,
-} from 'react-native';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import NavBar from '../../components/NavBar';
-import firebase from '../../firebase/config';
-import s from '../../styles/styles';
-
-import MapViewer from '../../components/MapViewer';
+} from "react-native";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import MapViewer from "../../components/MapViewer";
+import NavBar from "../../components/NavBar";
+import firebase from "../../firebase/config";
+import s from "../../styles/styles";
 
 class SingleTripScreen extends Component {
   state = {
@@ -29,22 +29,22 @@ class SingleTripScreen extends Component {
     const { route } = this.props;
     const { tripUid } = route.params;
 
-    const tripRef = db.collection('trips').doc(tripUid);
+    const tripRef = db.collection("trips").doc(tripUid);
     tripRef.get().then((doc) => {
       if (!doc.exists) {
-        console.log('No such document');
+        console.log("No such document");
       } else {
         this.setState({ trip: doc.data() });
       }
     });
 
     const destinationsRef = db
-      .collection('trips')
+      .collection("trips")
       .doc(tripUid)
-      .collection('destinations');
+      .collection("destinations");
     destinationsRef.get().then((snapshot) => {
       if (snapshot.empty) {
-        console.log('No matching documents.');
+        console.log("No matching documents.");
       } else {
         const newDestinations = [];
         snapshot.forEach((doc) => {
@@ -65,30 +65,30 @@ class SingleTripScreen extends Component {
       return trip.id !== tripUid;
     });
     Alert.alert(
-      'Delete',
-      'Are you sure you want to delete your trip?',
+      "Delete",
+      "Are you sure you want to delete your trip?",
       [
         {
-          text: 'Confirm',
+          text: "Confirm",
           onPress: () => {
             const { route, navigation } = this.props;
             const { tripUid } = route.params;
 
             const db = firebase.firestore();
-            const tripRef = db.collection('trips').doc(tripUid);
+            const tripRef = db.collection("trips").doc(tripUid);
             tripRef.delete().then(() => {
-              navigation.replace('My Trips', { trips: filteredTrips });
+              navigation.replace("My Trips", { trips: filteredTrips });
             });
           },
         },
         {
-          text: 'Cancel',
+          text: "Cancel",
           onPress: () => {
-            'cancel';
+            "cancel";
           },
         },
       ],
-      { cancelable: true },
+      { cancelable: true }
     );
   };
 
@@ -118,7 +118,7 @@ class SingleTripScreen extends Component {
         >
           <TouchableOpacity
             onPress={() => {
-              navigation.navigate('Single Destination', {
+              navigation.navigate("Single Destination", {
                 destinationUid: item.id,
                 tripUid,
                 destinations,
@@ -134,46 +134,54 @@ class SingleTripScreen extends Component {
     );
 
     return (
-      <FlatList
-        style={styles.page}
-        ListHeaderComponent={(
-          <>
-            <View>
-              {destinations
-                && destinations[0]
-                && destinations[0].destination && (
-                <MapViewer destinations={destinations} />
-              )}
-              <Text style={styles.stats}>
-                Places visited:
-                {' '}
-                {destinations.length}
-              </Text>
-            </View>
+      <View style={{ flex: 1, backgroundColor: "#1E6091" }}>
+        <ScrollView>
+          <FlatList
+            style={styles.page}
+            ListHeaderComponent={
+              <>
+                <View>
+                  {destinations &&
+                    destinations[0] &&
+                    destinations[0].destination && (
+                      <MapViewer destinations={destinations} />
+                    )}
+                  <Text style={styles.stats}>
+                    Places visited: {destinations.length}
+                  </Text>
+                </View>
 
-            {currentUserUID === trip.user && (
-              <View>
-                <TouchableOpacity
-                  style={s.button}
-                  onPress={() => {
-                    navigation.navigate('Add Destination', { tripUid });
-                  }}
-                >
-                  <TouchableOpacity />
-                  <Text style={s.buttonText}> Add Destination</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={s.button} onPress={this.deleteTrip}>
-                  <Text style={s.buttonText}> Delete Trip </Text>
-                </TouchableOpacity>
-              </View>
-            )}
-          </>
-        )}
-        data={destinations}
-        renderItem={renderItem}
-        keyExtractor={(item) => item.id}
-        ListFooterComponent={<NavBar />}
-      />
+                {currentUserUID === trip.user && (
+                  <View>
+                    <TouchableOpacity
+                      style={s.button}
+                      onPress={() => {
+                        navigation.navigate("Add Destination", { tripUid });
+                      }}
+                    >
+                      <TouchableOpacity />
+                      <Text style={s.buttonText}> Add Destination</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      style={s.button}
+                      onPress={this.deleteTrip}
+                    >
+                      <Text style={s.buttonText}> Delete Trip </Text>
+                    </TouchableOpacity>
+                  </View>
+                )}
+              </>
+            }
+            data={destinations}
+            renderItem={renderItem}
+            keyExtractor={(item) => item.id}
+            // ListFooterComponent={<NavBar />}
+          />
+        </ScrollView>
+        <View>
+          <NavBar />
+        </View>
+      </View>
     );
   }
 }
@@ -185,16 +193,16 @@ const styles = StyleSheet.create({
   },
 
   stats: {
-    color: 'white',
+    color: "white",
     fontSize: 20,
-    fontFamily: 'Nunito_600SemiBold',
-    alignSelf: 'center',
+    fontFamily: "Nunito_600SemiBold",
+    alignSelf: "center",
     marginVertical: 10,
   },
   item: {
     borderRadius: 5,
-    justifyContent: 'center',
-    textAlign: 'center',
+    justifyContent: "center",
+    textAlign: "center",
 
     // backgroundColor: "#f9c2ff",
     // padding: 20,
@@ -205,13 +213,13 @@ const styles = StyleSheet.create({
   itemContainer: {
     borderRadius: 5,
     width: 300,
-    alignSelf: 'center',
+    alignSelf: "center",
   },
   title: {
     fontSize: 20,
-    fontFamily: 'Nunito_600SemiBold',
-    color: 'white',
-    alignSelf: 'center',
+    fontFamily: "Nunito_600SemiBold",
+    color: "white",
+    alignSelf: "center",
   },
   mapDisplay: {
     height: 500,
@@ -220,11 +228,12 @@ const styles = StyleSheet.create({
   image: {
     borderRadius: 5,
     height: 80,
-    display: 'flex',
-    justifyContent: 'center',
+    display: "flex",
+    justifyContent: "center",
   },
   page: {
-    backgroundColor: '#1E6091',
+    backgroundColor: "#1E6091",
+    height: 580,
   },
 });
 
