@@ -204,7 +204,11 @@ export default class SingleDestinationScreen extends Component {
             <Text style={s.buttonText}>Edit Blog</Text>
           </TouchableOpacity>
         )}
-        <Places places={places} />
+        <Places
+          places={places}
+          tripUid={tripUid}
+          destinationUid={destinationUid}
+        />
         {destination && (
           <Comments destinationUid={destination.id} tripUid={tripUid} />
         )}

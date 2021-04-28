@@ -2,7 +2,9 @@ import React, { Fragment } from 'react';
 import SearchableDropdown from 'react-native-searchable-dropdown';
 
 export default function DestinationDropDown(props) {
-  const { results, fetchResults, setDestination, destination } = props;
+  const {
+    results, fetchResults, setDestination, destination,
+  } = props;
   const resultsType = results.map((destination, index) => {
     return { name: destination.formatted, id: index };
   });
@@ -30,7 +32,7 @@ export default function DestinationDropDown(props) {
           borderRadius: 5,
           color: '#113755',
           width: 300,
-          alignSelf: 'center'
+          alignSelf: 'center',
         }}
         itemTextStyle={{ color: '#113755' }}
         itemsContainerStyle={{ maxHeight: 140 }}
@@ -48,14 +50,14 @@ export default function DestinationDropDown(props) {
             borderRadius: 5,
             color: '#113755',
             width: 300,
-            alignSelf: 'center'
+            alignSelf: 'center',
           },
           onTextChange: (textInput) => {
             fetchResults(textInput);
-          }
+          },
         }}
         listProps={{
-          nestedScrollEnabled: true
+          nestedScrollEnabled: true,
         }}
       />
     </>

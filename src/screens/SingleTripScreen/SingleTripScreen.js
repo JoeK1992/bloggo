@@ -220,6 +220,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     alignItems: 'center',
     alignContent: 'center',
+    width: 300,
   },
   page: {
     backgroundColor: '#1E6091',
