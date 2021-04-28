@@ -1,9 +1,7 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
-import {
-  View, Text, TextInput, Alert,
-} from 'react-native';
+import { View, Text, TextInput, Alert, ScrollView } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 // import DestinationInputBar from '../../components/DestinationInputBar';
 import firebase from '../../firebase/config';
@@ -68,7 +66,7 @@ export default function AddDestinationScreen(props) {
         blogPost,
         startDate,
         endDate,
-        uploadedUrls,
+        uploadedUrls
       });
       setBlog('');
       setStartDate('');
@@ -80,38 +78,40 @@ export default function AddDestinationScreen(props) {
 
   return (
     <View style={styles.container}>
-      <DestinationDropDown
-        results={results}
-        fetchResults={fetchResults}
-        setDestination={setDestination}
-        destination={destination}
-      />
-      <Calendar
-        page="destination"
-        startDate={startDate}
-        endDate={endDate}
-        onDateChange={onDateChange}
-      />
+      <ScrollView>
+        <DestinationDropDown
+          results={results}
+          fetchResults={fetchResults}
+          setDestination={setDestination}
+          destination={destination}
+        />
+        <Calendar
+          page="destination"
+          startDate={startDate}
+          endDate={endDate}
+          onDateChange={onDateChange}
+        />
 
-      <TextInput
-        style={styles.input}
-        multiline
-        numberOfLines={6}
-        placeholder="Enter your blog post"
-        value={blogPost}
-        onChangeText={(blogPost) => setBlog(blogPost)}
-        autoCapitalize="none"
-      />
-      <PickImage uploadedUrl={uploadedUrl} setUploadedUrl={setUploadedUrl} />
-      <PickImages
-        uploadedUrls={uploadedUrls}
-        setUploadedUrls={setUploadedUrls}
-      />
-      <TouchableOpacity onPress={handlePress} style={styles.button}>
-        <Text style={styles.buttonText}>Submit</Text>
-      </TouchableOpacity>
-      <Text style={styles.successMessage}>{successMessage}</Text>
-      <NavBar />
+        <TextInput
+          style={styles.input}
+          multiline
+          numberOfLines={6}
+          placeholder="Enter your blog post"
+          value={blogPost}
+          onChangeText={(blogPost) => setBlog(blogPost)}
+          autoCapitalize="none"
+        />
+        <PickImage uploadedUrl={uploadedUrl} setUploadedUrl={setUploadedUrl} />
+        <PickImages
+          uploadedUrls={uploadedUrls}
+          setUploadedUrls={setUploadedUrls}
+        />
+        <TouchableOpacity onPress={handlePress} style={styles.button}>
+          <Text style={styles.buttonText}>Submit</Text>
+        </TouchableOpacity>
+        <Text style={styles.successMessage}>{successMessage}</Text>
+        <NavBar />
+      </ScrollView>
     </View>
   );
 }

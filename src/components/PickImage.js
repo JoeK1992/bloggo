@@ -64,24 +64,21 @@ export default function PickImage(props) {
         <Text style={addDesStyles.buttonText}>Pick Cover Image</Text>
       </TouchableOpacity>
       {uploadedUrl !== '' && (
-        <Text>
-          Cover Image{' '}
-          <TouchableOpacity
-            style={deleteStyles.button}
-            onPress={() => {
-              setUploadedUrl(null);
-            }}
-          >
-            <Text style={deleteStyles.title}>Delete Cover image</Text>
-          </TouchableOpacity>{' '}
-        </Text>
+        <TouchableOpacity
+          style={deleteStyles.button}
+          onPress={() => {
+            setUploadedUrl(null);
+          }}
+        >
+          <Text style={deleteStyles.title}>Delete Cover image</Text>
+        </TouchableOpacity>
       )}
     </View>
   );
 }
 const deleteStyles = StyleSheet.create({
   button: {
-    backgroundColor: '#34a0a4',
+    backgroundColor: '#ed6a5a',
     padding: 10,
     marginVertical: 8,
     marginHorizontal: 16,
