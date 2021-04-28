@@ -8,7 +8,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  ImageBackground
+  ImageBackground,
 } from 'react-native';
 import ColouredMap from '../../components/ColouredMap';
 // ActivityIndicator,
@@ -37,7 +37,7 @@ class UserScreen extends Component {
       tripUids: [],
       continents: [],
       countries: [],
-      flags: []
+      flags: [],
       // loading: true
       // user: null,
       // userUID: '',
@@ -97,7 +97,7 @@ class UserScreen extends Component {
                 this.setState({
                   countries,
                   flags,
-                  continents
+                  continents,
                   // loading: false
                 });
               }
@@ -119,14 +119,16 @@ class UserScreen extends Component {
       currentUserUID = firebase.auth().currentUser.uid;
       page = 'My Profile';
     }
-    const { trips, continents, countries, flags } = this.state;
+    const {
+      trips, continents, countries, flags,
+    } = this.state;
 
     const globePercentage = Math.round((countries.length / 195) * 100);
 
     const { navigation } = this.props;
 
     return (
-      // <View>
+    // <View>
 
       /* {loading ?  <ActivityIndicator /> :  */
       <ScrollView style={styles.userScreen}>
@@ -209,14 +211,14 @@ class UserScreen extends Component {
 const styles = StyleSheet.create({
   userScreen: {
     backgroundColor: '#113755',
-    flex: 1
+    flex: 1,
   },
   gamificationTitle: {
     fontSize: 20,
     textAlign: 'center',
     color: '#113755',
     paddingBottom: 5,
-    fontFamily: 'Nunito_600SemiBold'
+    fontFamily: 'Nunito_600SemiBold',
   },
   gamificationStat: {
     fontSize: 15,
@@ -224,23 +226,23 @@ const styles = StyleSheet.create({
     color: '#113755',
     padding: 2,
     marginBottom: 5,
-    fontFamily: 'Nunito_600SemiBold'
+    fontFamily: 'Nunito_600SemiBold',
   },
   gamificationFlags: {
     fontSize: 15,
     textAlign: 'center',
     marginHorizontal: 40,
-    letterSpacing: 8
+    letterSpacing: 8,
   },
 
   item: {
     backgroundColor: '#f9c2ff',
     padding: 20,
     marginVertical: 8,
-    marginHorizontal: 16
+    marginHorizontal: 16,
   },
   title: {
-    fontSize: 32
+    fontSize: 32,
   },
 
   flagBackground: {
@@ -249,16 +251,16 @@ const styles = StyleSheet.create({
     margin: 2,
     alignSelf: 'center',
     justifyContent: 'center',
-    alignContent: 'center'
+    alignContent: 'center',
   },
   flagText: {
     fontSize: 35,
-    textAlign: 'center'
+    textAlign: 'center',
   },
   statsCardContainer: {
     flex: 1,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
   },
   statsCard: {
     width: 88,
@@ -266,18 +268,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignContent: 'center',
-    margin: 2
+    margin: 2,
   },
   statsCardText: {
     color: 'white',
     textAlign: 'center',
     fontSize: 18,
-    fontFamily: 'Nunito_600SemiBold'
+    fontFamily: 'Nunito_600SemiBold',
   },
   mapDisplay: {
     height: 500,
     width: 500,
-    textAlign: 'center'
+    textAlign: 'center',
   },
 
   // mapDisplay: {
@@ -297,11 +299,11 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     width: 120,
     padding: 10,
-    fontFamily: 'Nunito_600SemiBold'
+    fontFamily: 'Nunito_600SemiBold',
   },
   btnContainer: {
     alignItems: 'center',
-    margin: 10
+    margin: 10,
   },
   text: {
     fontSize: 20,
@@ -309,14 +311,14 @@ const styles = StyleSheet.create({
     borderRadius: 3,
     textAlign: 'center',
     paddingVertical: 2,
-    fontFamily: 'Nunito_600SemiBold'
+    fontFamily: 'Nunito_600SemiBold',
   },
   gamificationContainer: {
     borderRadius: 10,
     backgroundColor: '#D4EDE2',
     textAlign: 'center',
-    paddingVertical: 2
-  }
+    paddingVertical: 2,
+  },
 });
 
 export default UserScreen;

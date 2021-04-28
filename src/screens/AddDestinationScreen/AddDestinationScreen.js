@@ -77,13 +77,14 @@ export default function AddDestinationScreen(props) {
       setStartDate('');
       setEndDate('');
       setUploadedUrls([]);
+      setUploadedUrl('');
       setSuccessMessage('Destination successfully submitted');
     }
   };
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView keyboardShouldPersistTaps="handled">
         <DestinationDropDown
           results={results}
           fetchResults={fetchResults}

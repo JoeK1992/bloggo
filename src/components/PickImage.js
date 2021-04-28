@@ -66,7 +66,7 @@ export default function PickImage(props) {
         <TouchableOpacity
           style={styles.button}
           onPress={() => {
-            setUploadedUrl(null);
+            setUploadedUrl('');
           }}
         >
           <Text style={styles.title}>Delete Cover image</Text>
