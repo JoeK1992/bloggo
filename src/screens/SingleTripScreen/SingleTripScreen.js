@@ -13,10 +13,9 @@ import {
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import NavBar from '../../components/NavBar';
 import firebase from '../../firebase/config';
-import image from '../../images/indo.jpeg';
 import s from '../../styles/styles';
 
-// import MapViewer from '../../components/MapViewer';
+import MapViewer from '../../components/MapViewer';
 
 class SingleTripScreen extends Component {
   state = {
@@ -111,8 +110,12 @@ class SingleTripScreen extends Component {
     );
 
     const renderItem = ({ item }) => (
-      <>
-        <ImageBackground source={image} style={styles.image}>
+      <View style={styles.itemContainer}>
+        <ImageBackground
+          source={{ uri: item.uploadedUrl }}
+          imageStyle={{ opacity: 0.5 }}
+          style={styles.image}
+        >
           <TouchableOpacity
             onPress={() => {
               navigation.navigate('Single Destination', {
@@ -127,7 +130,7 @@ class SingleTripScreen extends Component {
             <Item title={item.destination.formatted} />
           </TouchableOpacity>
         </ImageBackground>
-      </>
+      </View>
     );
 
     return (
@@ -136,8 +139,16 @@ class SingleTripScreen extends Component {
         ListHeaderComponent={(
           <>
             <View>
-              <Text>Map Goes Here</Text>
-              <Text>Trip Stats go Here</Text>
+              {destinations
+                && destinations[0]
+                && destinations[0].destination && (
+                <MapViewer destinations={destinations} />
+              )}
+              <Text style={styles.stats}>
+                Places visited:
+                {' '}
+                {destinations.length}
+              </Text>
             </View>
 
             {currentUserUID === trip.user && (
@@ -172,28 +183,45 @@ const styles = StyleSheet.create({
     flex: 1,
     marginTop: StatusBar.currentHeight || 0,
   },
+
+  stats: {
+    color: 'white',
+    fontSize: 20,
+    fontFamily: 'Nunito_600SemiBold',
+    alignSelf: 'center',
+    marginVertical: 10,
+  },
   item: {
+    borderRadius: 5,
+    justifyContent: 'center',
+    textAlign: 'center',
+
     // backgroundColor: "#f9c2ff",
     // padding: 20,
     // marginVertical: 8,
     // marginHorizontal: 16,
     // zIndex: 15,
   },
+  itemContainer: {
+    borderRadius: 5,
+    width: 300,
+    alignSelf: 'center',
+  },
   title: {
-    fontSize: 32,
+    fontSize: 20,
+    fontFamily: 'Nunito_600SemiBold',
+    color: 'white',
+    alignSelf: 'center',
   },
   mapDisplay: {
     height: 500,
     width: 500,
   },
   image: {
-    flex: 1,
-    width: 400,
-    height: 100,
-    padding: 20,
-    marginVertical: 8,
-    marginHorizontal: 16,
-    zIndex: 20,
+    borderRadius: 5,
+    height: 80,
+    display: 'flex',
+    justifyContent: 'center',
   },
   page: {
     backgroundColor: '#1E6091',

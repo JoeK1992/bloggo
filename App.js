@@ -15,7 +15,7 @@ import AppLoading from 'expo-app-loading';
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useEffect, useState } from 'react';
-import { Text } from 'react-native';
+import { ActivityIndicator } from 'react-native';
 import 'react-native-gesture-handler';
 import firebase from './src/firebase/config';
 import {
@@ -72,7 +72,7 @@ export default function App() {
     });
   }, []);
   if (loading) {
-    return <Text>Loading</Text>;
+    return <ActivityIndicator />;
   }
   if (!fontsLoaded) {
     return <AppLoading />;

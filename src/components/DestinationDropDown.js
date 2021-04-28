@@ -5,11 +5,9 @@ export default function DestinationDropDown(props) {
   const {
     results, fetchResults, setDestination, destination,
   } = props;
-
   const resultsType = results.map((destination, index) => {
     return { name: destination.formatted, id: index };
   });
-
   const whichPlaceholder = destination
     ? destination.formatted
     : 'Enter the name of your destination';
@@ -17,9 +15,6 @@ export default function DestinationDropDown(props) {
   return (
     <>
       <SearchableDropdown
-        onItemSelect={(item) => {
-          setDestination(results[item.id]);
-        }}
         containerStyle={{ padding: 5 }}
         // onRemoveItem={(item, index) => {
         //   const items = this.state.selectedItems.filter(
@@ -40,7 +35,8 @@ export default function DestinationDropDown(props) {
         itemsContainerStyle={{ maxHeight: 140 }}
         items={resultsType}
         defaultIndex={2}
-        resetValue={false}
+        resetValue
+        onItemSelect={(item) => setDestination(results[item.id])}
         textInputProps={{
           placeholder: whichPlaceholder,
           underlineColorAndroid: 'transparent',

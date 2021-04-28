@@ -28,7 +28,6 @@ export default StyleSheet.create({
     justifyContent: 'center',
     marginTop: 120,
     alignItems: 'center',
-    marginBottom: 10,
   },
   title: {
     fontSize: 15,

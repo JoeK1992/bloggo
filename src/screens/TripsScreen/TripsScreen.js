@@ -3,7 +3,11 @@ import 'firebase/firestore';
 import moment from 'moment';
 import React, { Component } from 'react';
 import {
-  FlatList, StyleSheet, Text, View,
+  FlatList,
+  StyleSheet,
+  Text,
+  View,
+  ActivityIndicator,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import NavBar from '../../components/NavBar';
@@ -61,12 +65,7 @@ class TripsScreen extends Component {
     const { page } = _this.props.route.params;
 
     const { order } = this.state;
-    let equalSign;
-    if (page === 'Explore') {
-      equalSign = '!=';
-    } else {
-      equalSign = '==';
-    }
+
     if (order === 'desc') {
       this.setState({ order: 'asc' });
     } else {
@@ -74,11 +73,8 @@ class TripsScreen extends Component {
     }
 
     const tripsRef = db.collection('trips');
-
     tripsRef
-      .where('user', equalSign, currentUserUID)
-      // .where('summary', '!=', false)
-      .orderBy('user')
+
       .orderBy('startDate', order)
       .get()
       .then((snapshot) => {
@@ -91,7 +87,14 @@ class TripsScreen extends Component {
             trip.id = doc.id;
             newTrips.push(trip);
           });
-          this.setState({ trips: newTrips });
+          const filtered = newTrips.filter((trip) => {
+            return trip.user !== currentUserUID;
+          });
+          const myTrips = newTrips.filter((trip) => {
+            return trip.user === currentUserUID;
+          });
+          const selectedTrips = page === 'Explore' ? filtered : myTrips;
+          this.setState({ trips: selectedTrips });
         }
       });
   };
@@ -157,7 +160,7 @@ class TripsScreen extends Component {
     return (
       <View style={styles.container}>
         {page === 'My Trips' && <ProfileHeader userUID={currentUserUID} />}
-
+        <ActivityIndicator />
         <Text style={styles.headTitle}>
           {' '}
           Explore your
@@ -220,26 +223,22 @@ const styles = StyleSheet.create({
 
   sortBtn: {
     flexDirection: 'row',
-    left: 90,
+    justifyContent: 'center',
   },
   sortText: {
     fontSize: 15,
-    color: '#F9FCED',
-    borderColor: '#52B69A',
-    borderWidth: 2,
-    borderRadius: 5,
-    backgroundColor: '#113755',
-    left: 10,
-    marginLeft: 2,
-    width: 90,
-    height: 20,
+    color: 'white',
+    marginLeft: 10,
     fontFamily: 'Nunito_600SemiBold',
+    paddingBottom: 3,
+    borderBottomWidth: 1,
+    borderBottomColor: 'white',
   },
   headTitle: {
     padding: 10,
     fontSize: 15,
     textAlign: 'center',
-    color: '#F9FCED',
+    color: 'white',
     fontFamily: 'Nunito_600SemiBold',
   },
 
@@ -251,8 +250,8 @@ const styles = StyleSheet.create({
   },
   sortBy: {
     fontSize: 15,
-    fontWeight: 'bold',
-    color: '#F9FCED',
+    fontFamily: 'Nunito_600SemiBold',
+    color: 'white',
   },
 });
 export default TripsScreen;

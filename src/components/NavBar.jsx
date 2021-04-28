@@ -78,7 +78,6 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     paddingVertical: 10,
     justifyContent: "space-around",
-
     marginTop: 10,
   },
   text: {
@@ -89,7 +88,7 @@ const styles = StyleSheet.create({
     fontFamily: "Nunito_600SemiBold",
   },
   logo: {
-    color: "#f9fced",
+    color: "white",
   },
 });
 

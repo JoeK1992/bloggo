@@ -18,6 +18,7 @@ import styles from './styles';
 import NavBar from '../../components/NavBar';
 import Comments from '../../components/Comments';
 import AddPlace from '../../components/AddPlace';
+import Places from '../../components/Places';
 
 LogBox.ignoreLogs([
   'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
@@ -31,6 +32,7 @@ export default class SingleDestinationScreen extends Component {
       editable: false,
       blogPost: '',
       openedMenu: false,
+      places: null,
     };
   }
 
@@ -51,6 +53,26 @@ export default class SingleDestinationScreen extends Component {
         const destination = doc.data();
         destination.id = doc.id;
         this.setState({ destination, blogPost: destination.blogPost });
+      }
+    });
+
+    const placesRef = db
+      .collection('trips')
+      .doc(tripUid)
+      .collection('destinations')
+      .doc(destinationUid)
+      .collection('places');
+    placesRef.get().then((snapshot) => {
+      if (snapshot.empty) {
+        console.log('No matching documents.');
+      } else {
+        const newPlaces = [];
+        snapshot.forEach((doc) => {
+          const place = doc.data();
+          place.id = doc.id;
+          newPlaces.push(place);
+        });
+        this.setState({ places: newPlaces });
       }
     });
   }
@@ -122,7 +144,7 @@ export default class SingleDestinationScreen extends Component {
   render() {
     const { navigation, route } = this.props;
     const {
-      destination, blogPost, editable, openedMenu,
+      destination, blogPost, editable, openedMenu, places,
     } = this.state;
     const {
       destinations, tripUid, destinationUid, tripName,
@@ -163,7 +185,7 @@ export default class SingleDestinationScreen extends Component {
 
     const Footer = () => (
       <View style={styles.container}>
-        <AddPlace />
+        <AddPlace tripUid={tripUid} destinationUid={destinationUid} />
 
         <TextInput
           value={blogPost}
@@ -182,6 +204,7 @@ export default class SingleDestinationScreen extends Component {
             <Text style={s.buttonText}>Edit Blog</Text>
           </TouchableOpacity>
         )}
+        <Places places={places} />
         {destination && (
           <Comments destinationUid={destination.id} tripUid={tripUid} />
         )}

@@ -13,24 +13,6 @@ export default function Comments(props) {
   const { tripUid, destinationUid } = props;
   const currentUserUID = firebase.auth().currentUser.uid;
 
-  // useEffect(() => {
-  //   const db = firebase.firestore();
-
-  //   const commentsRef = db
-  //     .collection('trips')
-  //     .doc(tripUid)
-  //     .collection('destinations')
-  //     .doc(destinationUid)
-  //     .collection('comments');
-  //   commentsRef.onSnapshot((querySnapshot) => {
-  //     querySnapshot.docChanges().forEach((change) => {
-  //       const comment = change.doc.data();
-  //       comment.id = change.doc.id;
-  //       setComments([comment, ...comments]);
-  //     });
-  //   });
-  // });
-
   useEffect(() => {
     const db = firebase.firestore();
     const commentsRef = db
@@ -39,6 +21,7 @@ export default function Comments(props) {
       .collection('destinations')
       .doc(destinationUid)
       .collection('comments');
+
     commentsRef.get().then((snapshot) => {
       if (snapshot.empty) {
         console.log('No matching documents.');
@@ -46,6 +29,7 @@ export default function Comments(props) {
         const newComments = [];
         snapshot.forEach((doc) => {
           const comment = doc.data();
+          console.log(doc.id);
           comment.id = doc.id;
           newComments.push(comment);
         });
@@ -53,11 +37,32 @@ export default function Comments(props) {
         setComments(newComments);
       }
     });
+
+    commentsRef.onSnapshot((querySnapshot) => {
+      querySnapshot.docChanges().forEach((change) => {
+        if (change.type === 'added') {
+          console.log('in added');
+          const newComment = change.doc.data();
+          newComment.id = change.doc.id;
+          setComments([newComment, ...comments]);
+        }
+        if (change.type === 'removed') {
+          console.log('removed');
+          const filteredComments = comments.filter((comment) => {
+            console.log(comment.id, '///', change.doc.id);
+            return comment.id !== change.doc.id;
+          });
+          setComments(filteredComments);
+        }
+      });
+    });
   }, []);
 
   const handlePress = () => {
     const db = firebase.firestore();
     const userRef = db.collection('users').doc(currentUserUID);
+    setComment('');
+
     userRef
       .get()
       .then((doc) => {
@@ -75,13 +80,7 @@ export default function Comments(props) {
           .collection('destinations')
           .doc(destinationUid)
           .collection('comments');
-        // const newComment = {
-        //   userName,
-        //   comment,
-        //   date: new Date().toUTCString(),
-        //   user: currentUserUID,
-        // };
-        // setComments([...comments, newComment]);
+
         commentsRef
           .add({
             comment,
@@ -89,15 +88,29 @@ export default function Comments(props) {
             date: new Date().toUTCString(),
             user: currentUserUID,
           })
+
           .catch((err) => {
             console.log(err);
           });
       });
   };
+
+  const deleteComment = (id) => {
+    const db = firebase.firestore();
+
+    const commentRef = db
+      .collection('trips')
+      .doc(tripUid)
+      .collection('destinations')
+      .doc(destinationUid)
+      .collection('comments')
+      .doc(id);
+    commentRef.delete();
+  };
   const Item = ({
-    comment, date, userName, user,
+    comment, date, userName, user, id,
   }) => (
-    <View>
+    <View style={styles.item}>
       <Text style={styles.comment}>{comment}</Text>
       <Text style={styles.comment}>
         Posted by
@@ -109,7 +122,12 @@ export default function Comments(props) {
         {date.slice(0, 16)}
       </Text>
       {user === currentUserUID && (
-        <TouchableOpacity style={styles.deleteBtn}>
+        <TouchableOpacity
+          style={styles.deleteBtn}
+          onPress={() => {
+            deleteComment(id);
+          }}
+        >
           <FontAwesomeIcon style={styles.deleteIcon} icon={faTimes} size={30} />
         </TouchableOpacity>
       )}
@@ -137,12 +155,15 @@ export default function Comments(props) {
         date={item.date}
         userName={item.userName}
         user={item.user}
+        id={item.id}
       />
     </>
   );
 
   return (
     <View>
+      <Text style={styles.title}>Comments</Text>
+
       <TextInput
         style={styles.input}
         placeholder="Type your comment"
@@ -162,8 +183,6 @@ export default function Comments(props) {
           <Text style={styles.buttonText}>Submit</Text>
         </TouchableOpacity>
       )}
-      <Text style={styles.title}>Comments</Text>
-
       <FlatList
         data={comments}
         renderItem={renderItem}
@@ -177,7 +196,11 @@ export default function Comments(props) {
 
 const styles = StyleSheet.create({
   listContainer: {
-    paddingBottom: 30,
+    paddingVertical: 30,
+  },
+  item: {
+    width: 300,
+    alignSelf: 'center',
   },
   input: {
     height: 48,

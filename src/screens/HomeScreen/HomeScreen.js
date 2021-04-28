@@ -11,7 +11,7 @@ import {
 import NavBar from '../../components/NavBar';
 import ProfileHeader from '../../components/ProfileHeader';
 import firebase from '../../firebase/config';
-import image from '../../images/mountain.jpeg';
+import image from '../../images/road.jpg';
 import styles from './styles';
 
 export default function HomeScreen({ navigation }) {
