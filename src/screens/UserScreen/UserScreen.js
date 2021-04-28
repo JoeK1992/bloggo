@@ -174,7 +174,7 @@ class UserScreen extends Component {
 
               <View style={styles.statsCardContainer}>
                 <ImageBackground
-                  imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                  imageStyle={{ opacity: 0.8 }}
                   source={third}
                   style={styles.statsCard}
                 >
@@ -186,7 +186,7 @@ class UserScreen extends Component {
                 </ImageBackground>
 
                 <ImageBackground
-                  imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                  imageStyle={{ opacity: 0.8 }}
                   source={fourth}
                   style={styles.statsCard}
                 >
@@ -198,7 +198,7 @@ class UserScreen extends Component {
                 </ImageBackground>
 
                 <ImageBackground
-                  imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                  imageStyle={{ opacity: 0.8 }}
                   source={first}
                   style={styles.statsCard}
                 >
@@ -208,7 +208,7 @@ class UserScreen extends Component {
                 </ImageBackground>
 
                 <ImageBackground
-                  imageStyle={{ borderRadius: 20, opacity: 0.8 }}
+                  imageStyle={{ opacity: 0.8 }}
                   source={second}
                   style={styles.statsCard}
                 >
@@ -218,7 +218,7 @@ class UserScreen extends Component {
                 </ImageBackground>
               </View>
               <ImageBackground
-                imageStyle={{ borderRadius: 20, opacity: 0.3 }}
+                imageStyle={{ opacity: 0.3 }}
                 source={flagBackground}
                 style={styles.flagBackground}
               >

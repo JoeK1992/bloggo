@@ -8,7 +8,7 @@ import {
   TextInput,
   View,
   ScrollView,
-  LogBox
+  LogBox,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
@@ -17,13 +17,13 @@ import {
   NavBar,
   Comments,
   AddPlace,
-  Places
+  Places,
 } from '../../components';
 import s from '../../styles/styles';
 import styles from './styles';
 
 LogBox.ignoreLogs([
-  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
 ]);
 
 export default function SingleDestinationScreen(props) {
@@ -45,7 +45,7 @@ export default function SingleDestinationScreen(props) {
       .doc(destinationUid)
       .collection('places');
 
-    placesRef.get().then((snapshot) => {
+    placesRef.onSnapshot((snapshot) => {
       if (snapshot.empty) {
         console.log('No matching documents.');
       } else {
@@ -115,7 +115,7 @@ export default function SingleDestinationScreen(props) {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          }
+          },
         },
         {
           text: 'Confirm',
@@ -129,19 +129,21 @@ export default function SingleDestinationScreen(props) {
             destinationRef.delete().then(() => {
               navigation.replace('Single Trip', {
                 tripUid,
-                destinations: filteredDestinations
+                destinations: filteredDestinations,
               });
             });
-          }
-        }
+          },
+        },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
   const { navigation, route } = props;
 
-  const { destinations, tripUid, destinationUid, tripName } = route.params;
+  const {
+    destinations, tripUid, destinationUid, tripName,
+  } = route.params;
   const filteredDestinations = destinations.filter((destination) => {
     return destination.id !== destinationUid;
   });
@@ -159,7 +161,7 @@ export default function SingleDestinationScreen(props) {
             destinationUid: item.id,
             tripUid,
             destinations,
-            tripName
+            tripName,
           });
         }}
       >
@@ -248,7 +250,9 @@ export default function SingleDestinationScreen(props) {
               >
                 <Text style={styles.buttonText}>
                   Back to
-                  {tripName} trip!
+                  {tripName}
+                  {' '}
+                  trip!
                 </Text>
               </TouchableOpacity>
             </>

@@ -11,7 +11,7 @@ import { NavBar, ProfileHeader } from '../../components';
 import firebase from '../../firebase/config';
 import image from '../../images/road.jpg';
 import styles from './styles';
-import logo from '../../images/bloggoLogo.png';
+import logo from '../../images/bloggowhite.png';
 
 export default function HomeScreen({ navigation }) {
   const userUID = firebase.auth().currentUser.uid;
