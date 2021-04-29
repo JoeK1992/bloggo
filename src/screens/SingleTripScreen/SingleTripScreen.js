@@ -8,7 +8,7 @@ import {
   ScrollView,
   Text,
   View,
-  ActivityIndicator,
+  ActivityIndicator
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MapViewer, NavBar, ProfileHeader } from '../../components';
@@ -21,7 +21,7 @@ class SingleTripScreen extends Component {
     trip: {},
     destinations: [],
     currentUserUID: firebase.auth().currentUser.uid,
-    loading: true,
+    loading: true
   };
 
   componentDidMount() {
@@ -65,7 +65,7 @@ class SingleTripScreen extends Component {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          },
+          }
         },
         {
           text: 'Confirm',
@@ -78,10 +78,10 @@ class SingleTripScreen extends Component {
             tripRef.delete().then(() => {
               navigation.navigate('Trips', { page: 'My Trips' });
             });
-          },
-        },
+          }
+        }
       ],
-      { cancelable: true },
+      { cancelable: true }
     );
   };
 
@@ -113,11 +113,10 @@ class SingleTripScreen extends Component {
                 destinationUid: item.id,
                 tripUid,
                 destinations,
-                tripName: trip.name,
+                tripName: trip.name
               });
             }}
           >
-            {/* <Image source={image} style={styles.image}></Image>; */}
             <Item title={item.destination.formatted} />
           </TouchableOpacity>
         </ImageBackground>
@@ -132,7 +131,7 @@ class SingleTripScreen extends Component {
                 flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-                zIndex: 20,
+                zIndex: 20
               }}
             >
               <ActivityIndicator size="large" color="#52b69a" />
@@ -140,24 +139,22 @@ class SingleTripScreen extends Component {
           ) : (
             <FlatList
               style={styles.page}
-              ListHeaderComponent={(
+              ListHeaderComponent={
                 <>
                   <View>
                     {trip.user && trip.user !== currentUserUID && (
                       <ProfileHeader userUID={trip.user} />
                     )}
                     <Text style={styles.stats}>{trip.name}</Text>
-                    <Text style={styles.stats}>{trip.summary}</Text>
+                    <Text style={styles.summary}>{trip.summary}</Text>
 
-                    {destinations
-                      && destinations[0]
-                      && destinations[0].destination && (
-                      <MapViewer destinations={destinations} />
-                    )}
+                    {destinations &&
+                      destinations[0] &&
+                      destinations[0].destination && (
+                        <MapViewer destinations={destinations} />
+                      )}
                     <Text style={styles.stats}>
-                      Places visited:
-                      {' '}
-                      {destinations.length}
+                      Places visited: {destinations.length}
                     </Text>
                   </View>
 
@@ -167,7 +164,7 @@ class SingleTripScreen extends Component {
                         style={s.button}
                         onPress={() => {
                           navigation.navigate('Add Destination', {
-                            tripUid,
+                            tripUid
                           });
                         }}
                       >
@@ -183,7 +180,7 @@ class SingleTripScreen extends Component {
                     </View>
                   )}
                 </>
-              )}
+              }
               data={destinations}
               renderItem={renderItem}
               keyExtractor={(item) => item.id}

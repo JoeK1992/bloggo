@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import {
-  Text, TextInput, TouchableOpacity, View, Image,
-} from 'react-native';
+import { Text, TextInput, TouchableOpacity, View, Image } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view';
 import styles from './styles';
 import firebase from '../../firebase/config';
@@ -15,7 +13,7 @@ export default function RegistrationScreen({ navigation }) {
 
   const onRegisterPress = () => {
     if (password !== confirmPassword) {
-      alert('Passwords don\'t match.');
+      alert("Passwords don't match.");
       return;
     }
     firebase
@@ -26,7 +24,7 @@ export default function RegistrationScreen({ navigation }) {
         const data = {
           id: uid,
           email,
-          fullName,
+          fullName
         };
         const usersRef = firebase.firestore().collection('users');
         usersRef
@@ -53,10 +51,6 @@ export default function RegistrationScreen({ navigation }) {
         style={{ flex: 1, width: '100%' }}
         keyboardShouldPersistTaps="always"
       >
-        {/* <Image
-          style={styles.logo}
-          source={require('g')}
-        /> */}
         <TextInput
           style={styles.input}
           placeholder="Full Name"
@@ -111,8 +105,7 @@ export default function RegistrationScreen({ navigation }) {
               style={styles.footerLink}
             >
               {' '}
-              Log in
-              {' '}
+              Log in{' '}
             </Text>
           </Text>
         </View>

@@ -13,9 +13,7 @@ class ProfileHeader extends Component {
   }
 
   componentDidMount() {
-    console.log(userUID)
     const { userUID } = this.props;
-        console.log(userUID, 'user')
 
     const db = firebase.firestore();
     if (userUID) {
@@ -31,7 +29,6 @@ class ProfileHeader extends Component {
     }
   }
   render() {
-    console.log(userInfo)
     const { userInfo } = this.state;
     return (
       <View style={styles.container}>

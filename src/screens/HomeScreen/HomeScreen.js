@@ -5,7 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image,
+  Image
 } from 'react-native';
 import { NavBar, ProfileHeader } from '../../components';
 import firebase from '../../firebase/config';
@@ -42,10 +42,7 @@ export default function HomeScreen({ navigation }) {
           >
             <Text style={styles.buttonText}>My Trips</Text>
           </TouchableOpacity>
-          {/* <AddAvatar /> */}
         </View>
-
-        {/* <Image style={styles.tinyLogo} source={image1} /> */}
       </ImageBackground>
 
       <NavBar />
