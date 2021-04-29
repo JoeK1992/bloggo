@@ -1,7 +1,9 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState, useEffect } from 'react';
-import { Alert, Text, TextInput, View, ScrollView, LogBox } from 'react-native';
+import {
+  Alert, Text, TextInput, View, ScrollView, LogBox,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
 import {
@@ -9,13 +11,13 @@ import {
   NavBar,
   Comments,
   AddPlace,
-  Places
+  Places,
 } from '../../components';
 import s from '../../styles/styles';
 import styles from './styles';
 
 LogBox.ignoreLogs([
-  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
 ]);
 
 export default function SingleDestinationScreen(props) {
@@ -99,7 +101,7 @@ export default function SingleDestinationScreen(props) {
           text: 'Cancel',
           onPress: () => {
             'cancel';
-          }
+          },
         },
         {
           text: 'Confirm',
@@ -113,13 +115,13 @@ export default function SingleDestinationScreen(props) {
             destinationRef.delete().then(() => {
               navigation.replace('Single Trip', {
                 tripUid,
-                destinations: filteredDestinations
+                destinations: filteredDestinations,
               });
             });
-          }
-        }
+          },
+        },
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
@@ -145,7 +147,9 @@ export default function SingleDestinationScreen(props) {
                 >
                   <Text style={styles.buttonText}>
                     Back to
-                    {tripName} trip!
+                    {tripName}
+                    {' '}
+                    trip!
                   </Text>
                 </TouchableOpacity>
               </>
