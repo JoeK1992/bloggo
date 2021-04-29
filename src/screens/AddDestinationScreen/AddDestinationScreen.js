@@ -92,8 +92,6 @@ export default function AddDestinationScreen(props) {
           fetchResults={fetchResults}
           setDestination={setDestination}
           destination={destination}
-          counter={counter}
-          incrementCounter={incrementCounter}
         />
         <Calendar
           page="destination"
@@ -115,6 +113,8 @@ export default function AddDestinationScreen(props) {
         <PickImages
           uploadedUrls={uploadedUrls}
           setUploadedUrls={setUploadedUrls}
+          counter={counter}
+          incrementCounter={incrementCounter}
         />
         <TouchableOpacity onPress={handlePress} style={styles.button}>
           <Text style={styles.buttonText}>Submit</Text>

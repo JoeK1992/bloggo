@@ -11,6 +11,7 @@ import * as ImagePicker from 'expo-image-picker';
 import addDesStyles from '../screens/AddDestinationScreen/styles';
 
 export default function PickImages(props) {
+  console.log(props);
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {

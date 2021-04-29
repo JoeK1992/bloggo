@@ -30,7 +30,7 @@ export default function ImagesCarousel(props) {
           height: 10,
           borderRadius: 5,
           marginHorizontal: 0,
-          backgroundColor: 'white'
+          backgroundColor: 'white',
         }}
         inactiveDotOpacity={0.4}
         inactiveDotScale={0.6}

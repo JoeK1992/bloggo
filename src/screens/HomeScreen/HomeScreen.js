@@ -5,7 +5,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  Image
+  Image,
 } from 'react-native';
 import { NavBar, ProfileHeader } from '../../components';
 import firebase from '../../firebase/config';
