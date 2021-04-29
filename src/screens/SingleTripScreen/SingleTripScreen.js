@@ -8,7 +8,7 @@ import {
   ScrollView,
   Text,
   View,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MapViewer, NavBar, ProfileHeader } from '../../components';
@@ -21,7 +21,7 @@ class SingleTripScreen extends Component {
     trip: {},
     destinations: [],
     currentUserUID: firebase.auth().currentUser.uid,
-    loading: false
+    loading: true,
   };
 
   componentDidMount() {
@@ -35,7 +35,7 @@ class SingleTripScreen extends Component {
       if (!doc.exists) {
         console.log('No such document');
       } else {
-        this.setState({ trip: doc.data() });
+        this.setState({ trip: doc.data(), loading: false });
       }
     });
 
@@ -57,16 +57,16 @@ class SingleTripScreen extends Component {
   }
 
   deleteTrip = () => {
-    const { route } = this.props;
-    const { trips, tripUid } = route.params;
-
-    const filteredTrips = trips.filter((trip) => {
-      return trip.id !== tripUid;
-    });
     Alert.alert(
       'Delete',
       'Are you sure you want to delete your trip?',
       [
+        {
+          text: 'Cancel',
+          onPress: () => {
+            'cancel';
+          },
+        },
         {
           text: 'Confirm',
           onPress: () => {
@@ -76,24 +76,18 @@ class SingleTripScreen extends Component {
             const db = firebase.firestore();
             const tripRef = db.collection('trips').doc(tripUid);
             tripRef.delete().then(() => {
-              navigation.navigate('Trips', { trips: filteredTrips });
+              navigation.navigate('Trips', { page: 'My Trips' });
             });
-          }
+          },
         },
-        {
-          text: 'Cancel',
-          onPress: () => {
-            'cancel';
-          }
-        }
       ],
-      { cancelable: true }
+      { cancelable: true },
     );
   };
 
   render() {
     const { navigation, route } = this.props;
-    const { tripUid, trips } = route.params;
+    const { tripUid } = route.params;
     const { trip, currentUserUID, loading } = this.state;
     let { destinations } = this.state;
     if (route.params.destinations) {
@@ -110,7 +104,7 @@ class SingleTripScreen extends Component {
       <View style={styles.itemContainer}>
         <ImageBackground
           source={{ uri: item.uploadedUrl }}
-          imageStyle={{ opacity: 0.5 }}
+          imageStyle={{ opacity: 0.5, borderRadius: 10 }}
           style={styles.image}
         >
           <TouchableOpacity
@@ -119,7 +113,7 @@ class SingleTripScreen extends Component {
                 destinationUid: item.id,
                 tripUid,
                 destinations,
-                tripName: trip.name
+                tripName: trip.name,
               });
             }}
           >
@@ -138,7 +132,7 @@ class SingleTripScreen extends Component {
                 flex: 1,
                 alignItems: 'center',
                 justifyContent: 'center',
-                zIndex: 20
+                zIndex: 20,
               }}
             >
               <ActivityIndicator size="large" color="#52b69a" />
@@ -146,20 +140,24 @@ class SingleTripScreen extends Component {
           ) : (
             <FlatList
               style={styles.page}
-              ListHeaderComponent={
+              ListHeaderComponent={(
                 <>
                   <View>
                     {trip.user && trip.user !== currentUserUID && (
                       <ProfileHeader userUID={trip.user} />
                     )}
+                    <Text style={styles.stats}>{trip.name}</Text>
+                    <Text style={styles.stats}>{trip.summary}</Text>
 
-                    {destinations &&
-                      destinations[0] &&
-                      destinations[0].destination && (
-                        <MapViewer destinations={destinations} />
-                      )}
+                    {destinations
+                      && destinations[0]
+                      && destinations[0].destination && (
+                      <MapViewer destinations={destinations} />
+                    )}
                     <Text style={styles.stats}>
-                      Places visited: {destinations.length}
+                      Places visited:
+                      {' '}
+                      {destinations.length}
                     </Text>
                   </View>
 
@@ -170,7 +168,6 @@ class SingleTripScreen extends Component {
                         onPress={() => {
                           navigation.navigate('Add Destination', {
                             tripUid,
-                            trips
                           });
                         }}
                       >
@@ -186,7 +183,7 @@ class SingleTripScreen extends Component {
                     </View>
                   )}
                 </>
-              }
+              )}
               data={destinations}
               renderItem={renderItem}
               keyExtractor={(item) => item.id}

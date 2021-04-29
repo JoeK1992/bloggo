@@ -27,11 +27,13 @@ export default function AddDestinationScreen(props) {
   const [successMessage, setSuccessMessage] = useState('');
   const [selectedStartDate, setStartDate] = useState(null);
   const [selectedEndDate, setEndDate] = useState(null);
+  const [counter, incrementCounter] = useState(1);
+
   const startDate = selectedStartDate ? selectedStartDate.toString() : '';
   const endDate = selectedEndDate ? selectedEndDate.toString() : '';
   const currentUserUID = firebase.auth().currentUser.uid;
   const { route, navigation } = props;
-  const { tripUid, trips } = route.params;
+  const { tripUid } = route.params;
   const fetchResults = (textInput) => {
     if (textInput.length > 1) {
       const search = textInput.split(' ').join('+');
@@ -77,6 +79,7 @@ export default function AddDestinationScreen(props) {
       setEndDate('');
       setUploadedUrls([]);
       setUploadedUrl('');
+      incrementCounter(1);
       setSuccessMessage('Destination successfully submitted');
     }
   };
@@ -89,6 +92,8 @@ export default function AddDestinationScreen(props) {
           fetchResults={fetchResults}
           setDestination={setDestination}
           destination={destination}
+          counter={counter}
+          incrementCounter={incrementCounter}
         />
         <Calendar
           page="destination"
@@ -116,11 +121,12 @@ export default function AddDestinationScreen(props) {
         </TouchableOpacity>
         <Text style={styles.successMessage}>{successMessage}</Text>
         <TouchableOpacity
+          style={styles.button}
           onPress={() => {
-            navigation.navigate('Single Trip', { tripUid, trips });
+            navigation.navigate('Single Trip', { tripUid });
           }}
         >
-          <Text>Go Back to Trip</Text>
+          <Text style={styles.buttonText}>Go Back to Trip</Text>
         </TouchableOpacity>
         <NavBar />
       </ScrollView>

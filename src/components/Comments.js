@@ -10,7 +10,6 @@ import firebase from '../firebase/config';
 export default function Comments(props) {
   const [comment, setComment] = useState('');
   const [comments, setComments] = useState([]);
-  const [username, setUsername] = useState('');
   const { tripUid, destinationUid } = props;
   const currentUserUID = firebase.auth().currentUser.uid;
 
@@ -23,7 +22,7 @@ export default function Comments(props) {
       .doc(destinationUid)
       .collection('comments');
 
-    commentsRef.get().then((snapshot) => {
+    commentsRef.onSnapshot((snapshot) => {
       if (snapshot.empty) {
         console.log('No matching documents.');
       } else {
@@ -44,13 +43,6 @@ export default function Comments(props) {
     const db = firebase.firestore();
     const userRef = db.collection('users').doc(currentUserUID);
     setComment('');
-    const newComment = {
-      comment,
-      username,
-      date: new Date().toUTCString(),
-      user: currentUserUID,
-    };
-    setComments([newComment, ...comments]);
 
     userRef
       .get()
@@ -69,7 +61,6 @@ export default function Comments(props) {
           .collection('destinations')
           .doc(destinationUid)
           .collection('comments');
-        setUsername(userName);
         commentsRef
           .add({
             comment,

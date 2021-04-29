@@ -2,7 +2,9 @@ import 'firebase/auth';
 import 'firebase/firestore';
 import moment from 'moment';
 import React, { Component } from 'react';
-import { FlatList, Text, View, ActivityIndicator } from 'react-native';
+import {
+  FlatList, Text, View, ActivityIndicator,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { NavBar, ProfileHeader } from '../../components';
 import firebase from '../../firebase/config';
@@ -15,7 +17,7 @@ class TripsScreen extends Component {
     this.state = {
       trips: [],
       order: 'desc',
-      currentUserUID: firebase.auth().currentUser.uid
+      currentUserUID: firebase.auth().currentUser.uid,
     };
   }
 
@@ -102,17 +104,19 @@ class TripsScreen extends Component {
       endDate,
       userName,
       userUid,
-      tripUid
+      tripUid,
     }) => (
       <View style={styles.item}>
         <TouchableOpacity
           onPress={() => {
-            navigation.navigate('Single Trip', { tripUid, trips });
+            navigation.navigate('Single Trip', { tripUid });
           }}
         >
           <Text style={styles.title}>{title}</Text>
           <Text style={styles.dates}>
-            {moment(startDate).format('MMM Do YYYY')} -
+            {moment(startDate).format('MMM Do YYYY')}
+            {' '}
+            -
             {moment(endDate).format('MMM Do YYYY')}
           </Text>
         </TouchableOpacity>
@@ -148,7 +152,12 @@ class TripsScreen extends Component {
         <ActivityIndicator />
         <Text style={styles.headTitle}>
           {' '}
-          Explore your {page === 'Explore' && <Text>friends'</Text>} trips{' '}
+          Explore your
+          {' '}
+          {page === 'Explore' && <Text>friends'</Text>}
+          {' '}
+          trips
+          {' '}
         </Text>
 
         <View style={styles.sortBtn}>

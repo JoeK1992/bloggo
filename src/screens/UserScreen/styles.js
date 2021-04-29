@@ -9,7 +9,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     textAlign: 'center',
     color: '#113755',
-    paddingBottom: 5,
+    paddingVertical: 5,
     fontFamily: 'Nunito_600SemiBold',
   },
   gamificationStat: {
@@ -52,20 +52,22 @@ const styles = StyleSheet.create({
   statsCardContainer: {
     flex: 1,
     flexDirection: 'row',
+    flexWrap: 'wrap',
     alignItems: 'center',
+    justifyContent: 'space-around',
   },
   statsCard: {
-    width: 88,
-    height: 150,
-    flex: 1,
+    height: 100,
+    width: 150,
+    marginVertical: 10,
+    alignSelf: 'center',
     justifyContent: 'center',
-    alignContent: 'center',
-    margin: 2,
   },
   statsCardText: {
     color: 'white',
     textAlign: 'center',
     fontSize: 18,
+    width: 150,
     fontFamily: 'Nunito_600SemiBold',
   },
   mapDisplay: {
@@ -75,19 +77,9 @@ const styles = StyleSheet.create({
     left: 25,
   },
 
-  // mapDisplay: {
-  //   height: 500,
-  //   width: 500,
-  // },
-
-  // map: {
-  //   width: "100%",
-  //   height: undefined,
-  //   aspectRatio: 1.5,
-  // },
   btn: {
     color: '#E8F3B9',
-    borderRadius: 3,
+    borderRadius: 5,
     backgroundColor: '#34A0A4',
     textAlign: 'center',
     width: 120,
@@ -99,7 +91,7 @@ const styles = StyleSheet.create({
     margin: 10,
   },
   text: {
-    fontSize: 20,
+    fontSize: 17,
     color: 'white',
     borderRadius: 3,
     textAlign: 'center',

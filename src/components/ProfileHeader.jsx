@@ -20,12 +20,11 @@ class ProfileHeader extends Component {
     const db = firebase.firestore();
     if (userUID) {
       const userRef = db.collection("users").doc(userUID);
-      userRef.get().then((doc) => {
+      userRef.onSnapshot((doc) => {
         if (!doc.exists) {
           console.log("No such user");
         } else {
           const userInfo = doc.data();
-
           this.setState({ userInfo });
         }
       });
@@ -57,10 +56,9 @@ class ProfileHeader extends Component {
 const styles = StyleSheet.create({
   logoContainer: {},
   container: {
-    paddingVertical: 10, 
+    paddingTop: 20, 
   },
 
-  userHeader: {},
   userHeaderLogo: {
     color: "#f9fced",
   },

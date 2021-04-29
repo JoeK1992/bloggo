@@ -28,6 +28,7 @@ export default StyleSheet.create({
   sortBtn: {
     flexDirection: 'row',
     justifyContent: 'center',
+    paddingBottom: 10,
   },
   sortText: {
     fontSize: 15,
@@ -39,7 +40,7 @@ export default StyleSheet.create({
     borderBottomColor: 'white',
   },
   headTitle: {
-    padding: 10,
+    paddingBottom: 10,
     fontSize: 15,
     textAlign: 'center',
     color: 'white',

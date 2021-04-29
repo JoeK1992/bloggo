@@ -48,9 +48,7 @@ export default function AddPlace(props) {
       Alert.alert('Please enter a valid url');
     } else {
       const db = firebase.firestore();
-      const {
-        tripUid, destinationUid, places, setPlaces,
-      } = props;
+      const { tripUid, destinationUid } = props;
       const placesRef = db
         .collection('trips')
         .doc(tripUid)
@@ -68,15 +66,7 @@ export default function AddPlace(props) {
         })
         .then(() => {
           setSuccessMessage('Place successfully submitted');
-          setPlaces([
-            {
-              destinationUid,
-              post,
-              url,
-              type,
-            },
-            ...places,
-          ]);
+
           setName('');
           setUrl('');
           setType('');

@@ -1,15 +1,16 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import {
-  View, Text, TouchableOpacity, Platform,
+  View,
+  Text,
+  TouchableOpacity,
+  Platform,
+  StyleSheet,
 } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import s from '../styles/styles';
 import firebase from '../firebase/config';
 import 'firebase/auth';
 
 export default function AddAvatar() {
-  const [profileImage, setProfileImage] = useState('');
-
   useEffect(() => {
     (async () => {
       if (Platform.OS !== 'web') {
@@ -50,36 +51,41 @@ export default function AddAvatar() {
       })
         .then(async (r) => {
           const data = await r.json();
-          setProfileImage(data.secure_url);
-          editUser();
+          const currentUserUID = firebase.auth().currentUser.uid;
+          const db = firebase.firestore();
+          const usersRef = db.collection('users').doc(currentUserUID);
+          usersRef.update({ profileImage: data.secure_url });
         })
         .catch((err) => console.log(err));
     }
   };
 
-  const editUser = () => {
-    const currentUserUID = firebase.auth().currentUser.uid;
-    const db = firebase.firestore();
-    const usersRef = db.collection('users').doc(currentUserUID);
-    usersRef.update({ profileImage }).then(() => {});
-  };
   return (
     <View>
-      <TouchableOpacity style={s.button} onPress={chooseImage}>
-        <Text style={s.buttonText}>Change Profile Image</Text>
+      <TouchableOpacity style={styles.btn} onPress={chooseImage}>
+        <Text style={styles.text}>Change Profile Image</Text>
       </TouchableOpacity>
-      {/* {profileImage && editable && (
-        <Text>
-          Profile Image
-          <TouchableOpacity
-            onPress={() => {
-              props.setProfileImage(null);
-            }}
-          >
-            <Text>Delete Profile image</Text>
-          </TouchableOpacity>
-        </Text>
-      )} */}
     </View>
   );
 }
+const styles = StyleSheet.create({
+  btn: {
+    borderRadius: 5,
+    backgroundColor: '#1a759f',
+    textAlign: 'center',
+    width: 200,
+    padding: 5,
+    fontFamily: 'Nunito_600SemiBold',
+    alignSelf: 'center',
+    marginVertical: 10,
+  },
+
+  text: {
+    fontSize: 15,
+    color: 'white',
+    borderRadius: 3,
+    textAlign: 'center',
+    paddingVertical: 2,
+    fontFamily: 'Nunito_600SemiBold',
+  },
+});
