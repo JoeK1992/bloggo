@@ -1,3 +1,4 @@
 babel.config.js
 src/components/MapDisplay.js
 src/components/utils/GeoJsonUtils.test.js
+src/utils/sortFunc.test.js
