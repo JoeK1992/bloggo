@@ -12,6 +12,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito_600SemiBold',
     alignSelf: 'center',
     marginVertical: 10,
+    textAlign: 'center',
   },
   item: {
     borderRadius: 5,
@@ -28,6 +29,7 @@ const styles = StyleSheet.create({
     fontFamily: 'Nunito_600SemiBold',
     color: 'white',
     alignSelf: 'center',
+    textAlign: 'center',
   },
   mapDisplay: {
     height: 500,
@@ -39,9 +41,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     marginVertical: 10,
     justifyContent: 'center',
-    textAlign: 'center',
     alignItems: 'center',
-    alignContent: 'center',
     width: 300,
   },
   page: {

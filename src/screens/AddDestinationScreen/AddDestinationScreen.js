@@ -1,9 +1,7 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
-import {
-  View, Text, TextInput, Alert, ScrollView, LogBox,
-} from 'react-native';
+import { View, Text, TextInput, Alert, ScrollView, LogBox } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import firebase from '../../firebase/config';
 import {
@@ -11,13 +9,13 @@ import {
   PickImages,
   Calendar,
   NavBar,
-  DestinationDropDown,
+  DestinationDropDown
 } from '../../components';
 import getDestination from '../../utils/InputDestinationFuncs';
 import styles from './styles';
 
 LogBox.ignoreLogs([
-  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.',
+  'VirtualizedLists should never be nested inside plain ScrollViews with the same orientation - use another VirtualizedList-backed container instead.'
 ]);
 export default function AddDestinationScreen(props) {
   const db = firebase.firestore();
@@ -29,6 +27,8 @@ export default function AddDestinationScreen(props) {
   const [successMessage, setSuccessMessage] = useState('');
   const [selectedStartDate, setStartDate] = useState(null);
   const [selectedEndDate, setEndDate] = useState(null);
+  const [counter, incrementCounter] = useState(1);
+
   const startDate = selectedStartDate ? selectedStartDate.toString() : '';
   const endDate = selectedEndDate ? selectedEndDate.toString() : '';
   const currentUserUID = firebase.auth().currentUser.uid;
@@ -72,13 +72,14 @@ export default function AddDestinationScreen(props) {
         startDate,
         endDate,
         uploadedUrl,
-        uploadedUrls,
+        uploadedUrls
       });
       setBlog('');
       setStartDate('');
       setEndDate('');
       setUploadedUrls([]);
       setUploadedUrl('');
+      incrementCounter(1);
       setSuccessMessage('Destination successfully submitted');
     }
   };
@@ -91,6 +92,8 @@ export default function AddDestinationScreen(props) {
           fetchResults={fetchResults}
           setDestination={setDestination}
           destination={destination}
+          counter={counter}
+          incrementCounter={incrementCounter}
         />
         <Calendar
           page="destination"

@@ -6,7 +6,7 @@ import {
   Text,
   Pressable,
   View,
-  TextInput
+  TextInput,
 } from 'react-native';
 import { FontAwesomeIcon } from '@fortawesome/react-native-fontawesome';
 import { faTimes } from '@fortawesome/free-solid-svg-icons';
@@ -25,14 +25,14 @@ export default function AddPlace(props) {
 
   const types = [
     {
-      value: 'To eat'
+      value: 'To eat',
     },
     {
-      value: 'To sleep'
+      value: 'To sleep',
     },
     {
-      value: 'To visit'
-    }
+      value: 'To visit',
+    },
   ];
 
   const handlePress = () => {
@@ -62,7 +62,7 @@ export default function AddPlace(props) {
           name,
           post,
           url,
-          type
+          type,
         })
         .then(() => {
           setSuccessMessage('Place successfully submitted');
@@ -167,7 +167,7 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    marginTop: 22
+    marginTop: 22,
   },
   modalView: {
     margin: 20,
@@ -178,32 +178,32 @@ const styles = StyleSheet.create({
     shadowColor: '#000',
     shadowOffset: {
       width: 0,
-      height: 2
+      height: 2,
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5
+    elevation: 5,
   },
   button: {
     borderRadius: 20,
     padding: 10,
-    elevation: 2
+    elevation: 2,
   },
   buttonOpen: {
-    backgroundColor: '#52b69a'
+    backgroundColor: '#52b69a',
   },
   buttonClose: {
-    backgroundColor: '#52b69a'
+    backgroundColor: '#52b69a',
   },
   textStyle: {
     color: 'white',
     fontFamily: 'Nunito_600SemiBold',
-    textAlign: 'center'
+    textAlign: 'center',
   },
   modalText: {
     marginBottom: 15,
     textAlign: 'center',
-    fontFamily: 'Nunito_600SemiBold'
+    fontFamily: 'Nunito_600SemiBold',
   },
   input: {
     height: 48,
@@ -213,11 +213,11 @@ const styles = StyleSheet.create({
     width: 250,
     marginTop: 10,
     marginBottom: 10,
-    paddingLeft: 16
+    paddingLeft: 16,
   },
   deleteIcon: {
     color: '#ed6a5a',
-    fontSize: 12
+    fontSize: 12,
   },
   dropdown: {
     height: 60,
@@ -227,6 +227,6 @@ const styles = StyleSheet.create({
     width: 250,
     marginTop: 10,
     marginBottom: 10,
-    paddingLeft: 10
-  }
+    paddingLeft: 10,
+  },
 });

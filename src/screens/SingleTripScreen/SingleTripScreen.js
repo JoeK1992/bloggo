@@ -21,7 +21,7 @@ class SingleTripScreen extends Component {
     trip: {},
     destinations: [],
     currentUserUID: firebase.auth().currentUser.uid,
-    loading: false,
+    loading: true,
   };
 
   componentDidMount() {
@@ -35,7 +35,7 @@ class SingleTripScreen extends Component {
       if (!doc.exists) {
         console.log('No such document');
       } else {
-        this.setState({ trip: doc.data() });
+        this.setState({ trip: doc.data(), loading: false });
       }
     });
 
@@ -146,6 +146,8 @@ class SingleTripScreen extends Component {
                     {trip.user && trip.user !== currentUserUID && (
                       <ProfileHeader userUID={trip.user} />
                     )}
+                    <Text style={styles.stats}>{trip.name}</Text>
+                    <Text style={styles.stats}>{trip.summary}</Text>
 
                     {destinations
                       && destinations[0]
