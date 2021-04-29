@@ -1,7 +1,9 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
-import { Alert, ScrollView, Text, TextInput, View } from 'react-native';
+import {
+  Alert, ScrollView, Text, TextInput, View,
+} from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Calendar, NavBar } from '../../components';
 import firebase from '../../firebase/config';
@@ -64,7 +66,7 @@ export default function AddTripScreen({ navigation }) {
               name: tripName,
               startDate,
               endDate,
-              userName
+              userName,
             })
             .then((data) => {
               setTripUid(data.id);

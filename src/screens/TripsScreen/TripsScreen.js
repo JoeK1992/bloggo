@@ -10,6 +10,7 @@ import { NavBar, ProfileHeader } from '../../components';
 import firebase from '../../firebase/config';
 import s from '../../styles/styles';
 import styles from './styles';
+import { sortTrips } from '../../utils/sortFunc';
 
 class TripsScreen extends Component {
   constructor(props) {
@@ -51,10 +52,8 @@ class TripsScreen extends Component {
   }
 
   reverseOrder = () => {
-    const db = firebase.firestore();
-
     const _this = this;
-    const { currentUserUID, order } = this.state;
+    const { currentUserUID, order, trips } = this.state;
     const { page } = _this.props.route.params;
 
     if (order === 'desc') {
@@ -63,40 +62,25 @@ class TripsScreen extends Component {
       this.setState({ order: 'desc' });
     }
 
-    const tripsRef = db.collection('trips');
-    tripsRef
+    const sorted = sortTrips(trips, order);
 
-      .orderBy('startDate', order)
-      .get()
-      .then((snapshot) => {
-        if (snapshot.empty) {
-          console.log('No matching documents.');
-        } else {
-          const newTrips = [];
-          snapshot.forEach((doc) => {
-            const trip = doc.data();
-            trip.id = doc.id;
-            newTrips.push(trip);
-          });
-          const filtered = newTrips.filter((trip) => {
-            return trip.user !== currentUserUID;
-          });
-          const myTrips = newTrips.filter((trip) => {
-            return trip.user === currentUserUID;
-          });
-          const selectedTrips = page === 'Explore' ? filtered : myTrips;
-          this.setState({ trips: selectedTrips });
-        }
-      });
+    const filtered = sorted.filter((trip) => {
+      return trip.user !== currentUserUID;
+    });
+    const myTrips = sorted.filter((trip) => {
+      return trip.user === currentUserUID;
+    });
+    const selectedTrips = page === 'Explore' ? filtered : myTrips;
+    this.setState({ trips: selectedTrips });
   };
 
   render() {
-    let { trips } = this.state;
-    const { order, currentUserUID } = this.state;
+    const { order, currentUserUID, trips } = this.state;
+    let userTrips = [...trips];
     const { route, navigation } = this.props;
     const { page } = route.params;
     if (route.params.trips) {
-      trips = route.params.trips;
+      userTrips = route.params.trips;
     }
     const Item = ({
       title,
@@ -175,7 +159,7 @@ class TripsScreen extends Component {
 
         <FlatList
           style={styles.text}
-          data={trips}
+          data={userTrips}
           renderItem={renderItem}
           keyExtractor={(item) => item.id}
         />

@@ -7,13 +7,13 @@ import {
   TouchableOpacity,
   View,
   ImageBackground,
-  ActivityIndicator
+  ActivityIndicator,
 } from 'react-native';
 import {
   AddAvatar,
   NavBar,
   ProfileHeader,
-  ColouredMap
+  ColouredMap,
 } from '../../components';
 import firebase from '../../firebase/config';
 import first from '../../images/1.jpeg';
@@ -32,7 +32,7 @@ class UserScreen extends Component {
       continents: [],
       countries: [],
       flags: [],
-      loading: true
+      loading: true,
     };
   }
 
@@ -95,7 +95,7 @@ class UserScreen extends Component {
                   return {
                     countries: [...currState.countries, ...countries],
                     continents: [...currState.continents, ...continents],
-                    flags: [...currState.flags, ...flags]
+                    flags: [...currState.flags, ...flags],
                   };
                 });
               }
@@ -110,7 +110,9 @@ class UserScreen extends Component {
 
   render() {
     const { route, navigation } = this.props;
-    const { trips, continents, countries, flags, loading } = this.state;
+    const {
+      trips, continents, countries, flags, loading,
+    } = this.state;
     const { page } = route.params;
 
     let currentUserUID;
@@ -132,7 +134,7 @@ class UserScreen extends Component {
               flex: 1,
               alignItems: 'center',
               justifyContent: 'center',
-              zIndex: 20
+              zIndex: 20,
             }}
           >
             <ActivityIndicator size="large" color="#52b69a" />
@@ -149,9 +151,7 @@ class UserScreen extends Component {
             {page === 'My Profile' ? (
               <View style={styles.btnContainer}>
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('Trips', { page: 'My Trips' })
-                  }
+                  onPress={() => navigation.navigate('Trips', { page: 'My Trips' })}
                   style={styles.btn}
                 >
                   <Text style={styles.text}>My Trips</Text>
@@ -160,9 +160,7 @@ class UserScreen extends Component {
             ) : (
               <View style={styles.btnContainer}>
                 <TouchableOpacity
-                  onPress={() =>
-                    navigation.navigate('Trips', { page: 'Explore' })
-                  }
+                  onPress={() => navigation.navigate('Trips', { page: 'Explore' })}
                   style={styles.btn}
                 >
                   <Text style={styles.text}>Explore trips</Text>

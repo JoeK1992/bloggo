@@ -8,7 +8,9 @@ import { faTimes } from '@fortawesome/free-solid-svg-icons';
 import styles from '../screens/AddDestinationScreen/styles';
 
 export default function Calendar(props) {
-  const { page, startDate, endDate, onDateChange } = props;
+  const {
+    page, startDate, endDate, onDateChange,
+  } = props;
   const [calendarPressed, setCalendar] = useState(false);
   let text;
   if (page === 'trip') {
@@ -52,10 +54,14 @@ export default function Calendar(props) {
       )}
       <View>
         <Text style={styles.titles}>
-          Start Date: {startDate ? moment(startDate).format('MMM Do YYYY') : ''}
+          Start Date:
+          {' '}
+          {startDate ? moment(startDate).format('MMM Do YYYY') : ''}
         </Text>
         <Text style={styles.titles}>
-          End Date: {endDate ? moment(endDate).format('MMM Do YYYY') : ''}
+          End Date:
+          {' '}
+          {endDate ? moment(endDate).format('MMM Do YYYY') : ''}
         </Text>
       </View>
     </View>
