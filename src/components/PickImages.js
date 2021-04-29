@@ -57,7 +57,6 @@ export default function PickImages(props) {
             url: data.secure_url
           };
           const newArray = [...props.uploadedUrls, newImage];
-          console.log(newArray);
           props.setUploadedUrls(newArray);
           return data.secure_url;
         })
@@ -117,8 +116,6 @@ const styles = StyleSheet.create({
   container: {
     paddingTop: 50,
     fontFamily: 'Nunito_400Regular'
-    // flex: 1,
-    // marginTop: StatusBar.currentHeight || 0,
   },
   pic: {
     width: 100,

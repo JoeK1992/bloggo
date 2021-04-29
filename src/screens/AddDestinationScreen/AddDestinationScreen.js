@@ -128,8 +128,8 @@ export default function AddDestinationScreen(props) {
         >
           <Text style={styles.buttonText}>Go Back to Trip</Text>
         </TouchableOpacity>
-        <NavBar />
       </ScrollView>
+      <NavBar />
     </View>
   );
 }

@@ -8,7 +8,6 @@ export default function ImagesCarousel(props) {
   const [index, setIndex] = useState(0);
   const { destination } = props;
   const urls = [...destination.uploadedUrls, { url: destination.uploadedUrl }];
-  console.log(urls, 'here');
   return (
     <View>
       <Carousel
@@ -31,7 +30,7 @@ export default function ImagesCarousel(props) {
           height: 10,
           borderRadius: 5,
           marginHorizontal: 0,
-          backgroundColor: 'white',
+          backgroundColor: 'white'
         }}
         inactiveDotOpacity={0.4}
         inactiveDotScale={0.6}

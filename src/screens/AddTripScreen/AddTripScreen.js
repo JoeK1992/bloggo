@@ -1,9 +1,7 @@
 import 'firebase/auth';
 import 'firebase/firestore';
 import React, { useState } from 'react';
-import {
-  Alert, ScrollView, Text, TextInput, View,
-} from 'react-native';
+import { Alert, ScrollView, Text, TextInput, View } from 'react-native';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { Calendar, NavBar } from '../../components';
 import firebase from '../../firebase/config';
@@ -55,13 +53,10 @@ export default function AddTripScreen({ navigation }) {
             return 'No such user';
           }
           const userInfo = doc.data();
-          console.log(userInfo);
           const userName = `${userInfo.firstName} ${userInfo.lastName}`;
-          console.log(userName);
           return userName;
         })
         .then((userName) => {
-          console.log(userName);
           db.collection('trips')
             .add({
               user: currentUserUID,
@@ -69,7 +64,7 @@ export default function AddTripScreen({ navigation }) {
               name: tripName,
               startDate,
               endDate,
-              userName,
+              userName
             })
             .then((data) => {
               setTripUid(data.id);

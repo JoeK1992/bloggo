@@ -10,7 +10,6 @@ class MapViewer extends React.Component {
     this.state = {
     popUpVisible: false,
     modalDestination: {},
-    // initialRegion: this.props.destinations ? this.props.destinations[0].destination ? {latitude: this.props.destinations[0].destination.geometry.lat, longitude: this.props.destinations[0].destination.geometry.lng } : {} : {}
   };
 }
 
