@@ -6,7 +6,7 @@ Welcome to Bloggo
 
 👤 **Elena Cavallero, Duncan Crawley, Alex Tristram, Gary O'Connor and Joe Kelly**
 
-Bloggo is an Android app designed to be an user-friendly, fun and interactive way for users to store their travel history, blogs and photos. The app was created during the project phase on the Northcoders bootcamp.
+Bloggo is a mobile designed to be an user-friendly, fun and interactive way for users to store their travel history, blogs and photos. The app was created during the project phase on the Northcoders bootcamp.
 
 ## Functionality
 
