@@ -49,7 +49,11 @@ npm install
 
 ```sh
 npm start
+
+Before using this command expoGo must be installed on a mobile phone. Use npm start, scan the QR code on the expo site and create an account. You will then be able to add destinations and view the app's functionality.
 ```
+
+
 
 ## Run tests
 
